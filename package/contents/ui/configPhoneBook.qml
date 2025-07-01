@@ -24,7 +24,7 @@ KCM.SimpleKCM {
 
             text: "Get Phonebook"
             onClicked: {
-                cfg_Phonebooks = plugin.fetchPhonebookList(cfg_Host, cfg_Port, cfg_Login, cfg_Password).join(", ");
+                cfg_Phonebooks = plugin.getPhonebookList(cfg_Host, cfg_Port, cfg_Login, cfg_Password).join(", ");
             }
         }
 

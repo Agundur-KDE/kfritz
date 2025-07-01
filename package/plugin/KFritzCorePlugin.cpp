@@ -17,33 +17,15 @@
 #include <QStringLiteral>
 #include <QTextStream>
 
-KFritzCorePlugin::KFritzCorePlugin(QObject* parent)
+KFritzCorePlugin::KFritzCorePlugin(QObject *parent)
     : QObject(parent)
 {
 }
-
-QStringList FritzPhonebookFetcher::getPhonebookList()
+QStringList KFritzCorePlugin::getPhonebookList(const QString &host, int port, const QString &user, const QString &password)
 {
-    QNetworkAccessManager nam;
-
-    QString body = QString(
-        "<u:GetPhonebookList xmlns:u=\"urn:dslforum-org:service:X_AVM-DE_OnTel:1\"/>");
-
-    QString response = sendSoapRequest(
-        "urn:dslforum-org:service:X_AVM-DE_OnTel:1",
-        "GetPhonebookList",
-        body,
-        "/upnp/control/x_contact");
-
-    // Beispielhafte einfache XML-Auswertung (todo: robuster machen)
-    QStringList phonebooks;
-    QXmlStreamReader xml(response);
-    while (!xml.atEnd()) {
-        xml.readNext();
-        if (xml.isStartElement() && xml.name() == "NewPhonebookList") {
-            phonebooks = xml.readElementText().split(',');
-            break;
-        }
-    }
-    return phonebooks;
+    m_fetcher.setHost(host);
+    m_fetcher.setPort(port);
+    m_fetcher.setUsername(user);
+    m_fetcher.setPassword(password);
+    return m_fetcher.getPhonebookList();
 }
