@@ -27,7 +27,7 @@ KCM.SimpleKCM {
             inputMask: "000.000.000.000"
             readOnly: false
             Layout.fillWidth: true
-            Kirigami.FormData.label: "EZ1 IP:"
+            Kirigami.FormData.label: "FritzBox IP:"
             text: cfg_Host
             onEditingFinished: cfg_Host = text
         }
@@ -36,7 +36,7 @@ KCM.SimpleKCM {
             id: portSpinBox
 
             value: cfg_Port
-            Kirigami.FormData.label: "EZ1 Port:"
+            Kirigami.FormData.label: "FritzBox Port:"
             from: 1
             to: 65535
             stepSize: 1

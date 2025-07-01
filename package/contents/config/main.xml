@@ -3,18 +3,10 @@
   <kcfgfile name=""/>
   <group name="Network">
     <entry name="Host" type="String">
-      <default>192.168.178.38</default>
+      <default>192.168.178.1</default>
     </entry>
     <entry name="Port" type="Int">
-      <default>8050</default>
-    </entry>
-  </group>
-  <group name="Appearance">
-    <entry name="bckgColor" type="Color">
-      <default>#2a2e32</default>
-    </entry>
-    <entry name="viewMode" type="String">
-      <default>Full</default>
+      <default>49000</default>
     </entry>
   </group>
 </kcfg>
