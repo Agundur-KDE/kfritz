@@ -1,7 +1,10 @@
 #include "FritzPhonebookFetcher.h"
 
+#include <QAuthenticator>
+#include <QCoreApplication>
 #include <QDebug>
 #include <QEventLoop>
+#include <QFile>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
@@ -58,12 +61,22 @@ QString FritzPhonebookFetcher::sendSoapRequest(const QString &service, const QSt
 {
     QNetworkAccessManager nam;
     const QUrl url = QUrl(u"http://"_s + m_host + u":"_s + QString::number(m_port) + controlUrl);
+    qDebug() << " URL:" << url;
 
     QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, u"text/xml; charset=\"utf-8\""_s);
 
-    const QString soapAction = u"\""_s + service + u"#"_s + action + u"\""_s;
-    request.setRawHeader("SOAPACTION", soapAction.toUtf8());
+    // 🔐 HTTP Basic Auth einfügen
+    QString credentials = m_user + u":"_s + m_pass;
+
+    qDebug() << " CRED:" << credentials;
+    QByteArray auth = "Basic " + credentials.toUtf8().toBase64();
+    request.setRawHeader("Authorization", auth);
+    qDebug() << "Auth header:" << auth;
+
+    // 📄 SOAP-spezifische Header
+    request.setHeader(QNetworkRequest::ContentTypeHeader, u"text/xml; charset=\"utf-8\""_s);
+    QByteArray soapAction = "\"" + service.toUtf8() + "#" + action.toUtf8() + "\"";
+    request.setRawHeader("SOAPACTION", soapAction);
 
     const QString envelope =
         uR"(<?xml version="1.0" encoding="utf-8"?>

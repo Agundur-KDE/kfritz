@@ -21,11 +21,17 @@ KFritzCorePlugin::KFritzCorePlugin(QObject *parent)
     : QObject(parent)
 {
 }
-QStringList KFritzCorePlugin::getPhonebookList(const QString &host, int port, const QString &user, const QString &password)
+
+QVariantList KFritzCorePlugin::getPhonebookList(const QString &host, int port, const QString &user, const QString &password)
 {
     m_fetcher.setHost(host);
     m_fetcher.setPort(port);
     m_fetcher.setUsername(user);
     m_fetcher.setPassword(password);
-    return m_fetcher.getPhonebookList();
+
+    QStringList list = m_fetcher.getPhonebookList();
+    QVariantList result;
+    for (const QString &s : list)
+        result << s;
+    return result;
 }

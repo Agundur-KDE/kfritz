@@ -20,8 +20,8 @@ class KFritzCorePlugin : public QObject
 public:
     explicit KFritzCorePlugin(QObject *parent = nullptr);
 
+    Q_INVOKABLE QVariantList getPhonebookList(const QString &host, int port, const QString &user, const QString &password);
+
 private:
     FritzPhonebookFetcher m_fetcher;
-
-    Q_INVOKABLE QStringList getPhonebookList(const QString &host, int port, const QString &user, const QString &password);
 };

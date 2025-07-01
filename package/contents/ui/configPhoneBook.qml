@@ -23,6 +23,10 @@ KCM.SimpleKCM {
     property string cfg_Login
     property string cfg_Password
 
+    Component.onCompleted: {
+        console.log(cfg_Login);
+    }
+
     Kirigami.FormLayout {
         QtControls.Button {
             id: getPhonebooks
@@ -30,6 +34,7 @@ KCM.SimpleKCM {
             text: "Get Phonebook"
             onClicked: {
                 cfg_Phonebooks = plugin.getPhonebookList(cfg_Host, cfg_Port, cfg_Login, cfg_Password).join(", ");
+                console.log(cfg_Phonebooks);
             }
         }
 
