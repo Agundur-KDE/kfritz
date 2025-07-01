@@ -18,6 +18,10 @@ import org.kde.plasma.plasmoid
 
 KCM.SimpleKCM {
     property string cfg_Phonebooks
+    property int cfg_Port
+    property string cfg_Host
+    property string cfg_Login
+    property string cfg_Password
 
     Kirigami.FormLayout {
         QtControls.Button {
