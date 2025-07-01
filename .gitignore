@@ -1,3 +1,6 @@
 build
 .clang-format
+.cache/
+.kateproject.build
+compile_commands.json
 
