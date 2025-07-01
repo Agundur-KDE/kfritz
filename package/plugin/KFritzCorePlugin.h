@@ -11,12 +11,13 @@
 #include <QQmlEngine>
 #include <QStringList>
 
-class KFritzCorePlugin : public QObject {
+class KFritzCorePlugin : public QObject
+{
     Q_OBJECT
     QML_ELEMENT
 
 public:
-    explicit KFritzCorePlugin(QObject* parent = nullptr);
+    explicit KFritzCorePlugin(QObject *parent = nullptr);
 
-    Q_INVOKABLE QStringList fetchPhonebookList(const QString& host, int port, const QString& user, const QString& pass);
-}
+    Q_INVOKABLE QStringList fetchPhonebookList(const QString &host, int port, const QString &user, const QString &pass);
+};
