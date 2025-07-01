@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+  <kcfgfile name=""/>
+  <group name="Network">
+    <entry name="Host" type="String">
+      <default>192.168.178.38</default>
+    </entry>
+    <entry name="Port" type="Int">
+      <default>8050</default>
+    </entry>
+  </group>
+  <group name="Appearance">
+    <entry name="bckgColor" type="Color">
+      <default>#2a2e32</default>
+    </entry>
+    <entry name="viewMode" type="String">
+      <default>Full</default>
+    </entry>
+  </group>
+</kcfg>
