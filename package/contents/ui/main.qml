@@ -5,10 +5,10 @@
  *
  */
 
-import KFritzCorePlugin
 import QtQuick
 import QtQuick.Controls 2.15
 import QtQuick.Layouts
+import de.agundur.kfritz 0.1
 import org.kde.kirigami as Kirigami
 import org.kde.plasma.components as PlasmaComponents
 import org.kde.plasma.core as PlasmaCore
