@@ -7,7 +7,7 @@
       "Plasma/Applet"
     ],
     "Name": "KPictureFrame",
-    "Icon": "folder-picture-symbolic",
+    "Icon": "call-incomming",
     "Description": "A FritzBox callmonitor for your Desktop",
     "Authors": [
       {
