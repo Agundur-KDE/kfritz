@@ -18,6 +18,7 @@ PlasmoidItem {
 
     property string host: Plasmoid.configuration.Host //"192.168.178.1"
     property int port: Plasmoid.configuration.Port //49000
+    property string cfg_viewMode: "fullRepresentation"
 
     toolTipMainText: Plasmoid.title
     preferredRepresentation: {
