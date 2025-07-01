@@ -13,6 +13,7 @@ import QtQuick.Layouts 1.15
 import org.kde.kcmutils as KCM
 import org.kde.kirigami 2.20 as Kirigami
 import org.kde.kquickcontrols 2.0 as KQC
+import org.kde.plasma.plasmoid
 
 KCM.SimpleKCM {
     property string cfg_Phonebooks
@@ -27,6 +28,10 @@ KCM.SimpleKCM {
             }
         }
 
+    }
+
+    KFritzCorePlugin {
+        id: plugin
     }
 
 }

@@ -5,6 +5,7 @@
  *
  */
 
+import KFritzCorePlugin
 import QtQuick
 import QtQuick.Controls 2.15
 import QtQuick.Layouts
@@ -31,15 +32,8 @@ PlasmoidItem {
     Plasmoid.status: PlasmaCore.Types.ActiveStatus
     Plasmoid.backgroundHints: PlasmaCore.Types.DefaultBackground | PlasmaCore.Types.ConfigurableBackground
 
-    Component {
-        id: windowIconComponent
-
-        Kirigami.Icon {
-            source: "call-incomming"
-            width: 22
-            height: 22
-        }
-
+    KFritzCorePlugin {
+        id: plugin
     }
 
     fullRepresentation: Item {
@@ -47,6 +41,18 @@ PlasmoidItem {
 
         Layout.minimumWidth: 300
         Layout.minimumHeight: 200
+
+        Component {
+            id: windowIconComponent
+
+            Kirigami.Icon {
+                source: "call-incomming"
+                width: 22
+                height: 22
+            }
+
+        }
+
     }
 
     compactRepresentation: Item {
