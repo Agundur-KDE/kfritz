@@ -16,9 +16,13 @@ import org.kde.kquickcontrols 2.0 as KQC
 
 KCM.SimpleKCM {
     property int cfg_Port
+    property int cfg_PortDefault
     property string cfg_Host
     property string cfg_HostDefault
-    property int cfg_PortDefault
+    property string cfg_Login
+    property string cfg_LoginDefault
+    property string cfg_Password
+    property string cfg_PasswordDefault
 
     Kirigami.FormLayout {
         QtControls.TextField {
@@ -44,6 +48,26 @@ KCM.SimpleKCM {
                 return value;
             }
             onValueChanged: cfg_Port = textFromValue(value)
+        }
+
+        QtControls.TextField {
+            id: loginTextField
+
+            readOnly: false
+            Layout.fillWidth: true
+            Kirigami.FormData.label: "FritzBox user:"
+            text: cfg_Login
+            onEditingFinished: cfg_Login = text
+        }
+
+        QtControls.TextField {
+            id: passwordTextField
+
+            readOnly: false
+            Layout.fillWidth: true
+            Kirigami.FormData.label: "FritzBox password:"
+            text: cfg_Password
+            onEditingFinished: cfg_Password = text
         }
 
     }

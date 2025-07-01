@@ -8,5 +8,11 @@
     <entry name="Port" type="Int">
       <default>49000</default>
     </entry>
+    <entry name="Login" type="String">
+      <default>TR064</default>
+    </entry>
+    <entry name="Password" type="String">
+      <default>be6Ru6ShSaeD7iQu</default>
+    </entry>
   </group>
 </kcfg>

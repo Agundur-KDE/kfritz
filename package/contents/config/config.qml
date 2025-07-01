@@ -9,11 +9,11 @@ import QtQuick 2.15
 import org.kde.plasma.configuration 2.0
 
 ConfigModel {
-    // ConfigCategory {
-    //     name: i18nc("@title", "Appearance")
-    //     icon: "preferences-desktop-color"
-    //     source: "configAppearance.qml"
-    // }
+    ConfigCategory {
+        name: i18nc("@title", "Phonebooks")
+        icon: "kaddressbook"
+        source: "configPhoneBook.qml"
+    }
 
     ConfigCategory {
         name: i18nc("@title", "Network")
