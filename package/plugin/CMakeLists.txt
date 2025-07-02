@@ -14,5 +14,7 @@ target_sources(kfritzplugin PRIVATE
 target_link_libraries(kfritzplugin PRIVATE
     Qt6::Core
     Qt6::Qml
+     Qt6::Network
+    KF6::CoreAddons
 )
 ecm_finalize_qml_module(kfritzplugin)

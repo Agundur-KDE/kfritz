@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.31)
 
 project(kfritz)
 
-set(PROJECT_VERSION "6.3.80")
+set(PROJECT_VERSION "0.0.1")
 
 set(PROJECT_DEP_VERSION "6.2.90")
 set(QT_MIN_VERSION "6.7.0")
@@ -36,10 +36,13 @@ include(ECMConfiguredInstall)
 
 option(BUILD_KCM_MOUSE_X11 "Build the Mouse KCM's X11 backend" ON)
 
+
+
 find_package(Qt6 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
-    Quick
+   Core
+   Quick
     QuickWidgets
-    # DBus
+    Network
     Widgets
     # Svg
     #Concurrent

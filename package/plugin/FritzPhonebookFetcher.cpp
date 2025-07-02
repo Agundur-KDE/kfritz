@@ -59,45 +59,43 @@ QStringList FritzPhonebookFetcher::getPhonebookList()
 
 QString FritzPhonebookFetcher::sendSoapRequest(const QString &service, const QString &action, const QString &body, const QString &controlUrl)
 {
-    QNetworkAccessManager nam;
     const QUrl url = QUrl(u"http://"_s + m_host + u":"_s + QString::number(m_port) + controlUrl);
-    qDebug() << " URL:" << url;
+    qDebug() << "URL:" << url;
 
     QNetworkRequest request(url);
 
-    // 🔐 HTTP Basic Auth einfügen
+    // 🔐 Authorization
     QString credentials = m_user + u":"_s + m_pass;
-
-    qDebug() << " CRED:" << credentials;
     QByteArray auth = "Basic " + credentials.toUtf8().toBase64();
-    request.setRawHeader("Authorization", auth);
     qDebug() << "Auth header:" << auth;
+    request.setRawHeader("Authorization", auth);
 
-    // 📄 SOAP-spezifische Header
-    request.setHeader(QNetworkRequest::ContentTypeHeader, u"text/xml; charset=\"utf-8\""_s);
-    QByteArray soapAction = "\"" + service.toUtf8() + "#" + action.toUtf8() + "\"";
-    request.setRawHeader("SOAPACTION", soapAction);
+    // 📄 Content & SOAP
+    request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("text/xml; charset=\"utf-8\""));
+
+    request.setRawHeader("SOAPACTION", "\"" + service.toUtf8() + "#" + action.toUtf8() + "\"");
 
     const QString envelope =
         uR"(<?xml version="1.0" encoding="utf-8"?>
-        <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"
-                    s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-            <s:Body>)"_s
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"
+            s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+  <s:Body>)"_s
         + body + u"</s:Body></s:Envelope>"_s;
 
+    QNetworkAccessManager nam;
     QNetworkReply *reply = nam.post(request, envelope.toUtf8());
 
     QEventLoop loop;
     QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
     loop.exec();
 
-    QString response;
+    QString result;
     if (reply->error() != QNetworkReply::NoError) {
         qWarning() << "SOAP request failed:" << reply->errorString();
     } else {
-        response = QString::fromUtf8(reply->readAll());
+        result = QString::fromUtf8(reply->readAll());
     }
 
     reply->deleteLater();
-    return response;
+    return result;
 }
