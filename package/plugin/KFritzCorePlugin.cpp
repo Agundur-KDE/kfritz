@@ -101,6 +101,7 @@ QVariantList KFritzCorePlugin::listLocalPhonebooks()
 
         QVariantMap entry;
         entry[QStringLiteral("id")] = id;
+        qDebug() << phonebookName;
         entry[QStringLiteral("name")] = phonebookName;
         result << entry;
     }

@@ -27,6 +27,7 @@ KCM.SimpleKCM {
     function updatePhonebooks() {
         phonebookModel.clear();
         const books = plugin.listLocalPhonebooks();
+        console.log(books);
         for (let i = 0; i < books.length; ++i) {
             phonebookModel.append({
                 "id": books[i].id,
