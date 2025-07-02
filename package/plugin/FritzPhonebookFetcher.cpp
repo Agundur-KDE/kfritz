@@ -83,6 +83,14 @@ QString FritzPhonebookFetcher::sendSoapRequest(const QString &service, const QSt
         + body + u"</s:Body></s:Envelope>"_s;
 
     QNetworkAccessManager nam;
+
+    // 🔐 Optional: Auth-Fallback über QAuthenticator (nur wenn RawHeader nicht greift)
+    QObject::connect(&nam, &QNetworkAccessManager::authenticationRequired, [this](QNetworkReply * /*reply*/, QAuthenticator *authenticator) {
+        qDebug() << "authenticationRequired() triggered!";
+        authenticator->setUser(m_user);
+        authenticator->setPassword(m_pass);
+    });
+
     QNetworkReply *reply = nam.post(request, envelope.toUtf8());
 
     QEventLoop loop;
