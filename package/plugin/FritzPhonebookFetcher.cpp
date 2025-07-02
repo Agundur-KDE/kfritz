@@ -1,13 +1,14 @@
 #include "FritzPhonebookFetcher.h"
-
 #include <QAuthenticator>
 #include <QCoreApplication>
 #include <QDebug>
+#include <QDir>
 #include <QEventLoop>
 #include <QFile>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QStandardPaths>
 #include <QUrl>
 #include <QXmlStreamReader>
 
@@ -54,20 +55,104 @@ QStringList FritzPhonebookFetcher::getPhonebookList()
         qWarning() << "XML Parse Error:" << xml.errorString();
     }
 
+    QStringList ids = phonebooks;
+
+    for (const QString &idStr : ids) {
+        bool ok = false;
+        int id = idStr.toInt(&ok);
+        if (!ok) {
+            qWarning() << "Invalid phonebook ID:" << idStr;
+            continue;
+        }
+
+        QString url = getPhonebookUrl(id);
+        if (!url.isEmpty()) {
+            qDebug() << "Phonebook ID" << id << "→ URL:" << url;
+            downloadPhonebook(id, QUrl(url));
+        } else {
+            qWarning() << "No URL for phonebook ID" << id;
+        }
+    }
+
     return phonebooks;
+}
+
+bool FritzPhonebookFetcher::downloadPhonebook(int id, const QUrl &url)
+{
+    qDebug() << "Downloading phonebook ID" << id << "from" << url;
+
+    QNetworkAccessManager nam;
+    QNetworkRequest request(url);
+    QNetworkReply *reply = nam.get(request);
+
+    QEventLoop loop;
+    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec();
+
+    if (reply->error() != QNetworkReply::NoError) {
+        qWarning() << "Download failed:" << reply->errorString();
+        reply->deleteLater();
+        return false;
+    }
+
+    QByteArray data = reply->readAll();
+    reply->deleteLater();
+
+    QString baseDir = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + u"/phonebooks"_s;
+    QDir().mkpath(baseDir);
+    QString filePath = baseDir + u"/phonebook_"_s + QString::number(id) + u".xml"_s;
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        qWarning() << "Failed to write file:" << filePath;
+        return false;
+    }
+
+    file.write(data);
+    file.close();
+    qDebug() << "Saved phonebook ID" << id << "to" << filePath;
+
+    return true;
+}
+
+QString FritzPhonebookFetcher::getPhonebookUrl(int phonebookId)
+{
+    const QString body = u"<u:GetPhonebook xmlns:u=\"urn:dslforum-org:service:X_AVM-DE_OnTel:1\">"
+                         u"<NewPhonebookID>"_s + QString::number(phonebookId) + u"</NewPhonebookID>"
+                         u"</u:GetPhonebook>"_s;
+
+    const QString response = sendSoapRequest(u"urn:dslforum-org:service:X_AVM-DE_OnTel:1"_s, u"GetPhonebook"_s, body, u"/upnp/control/x_contact"_s);
+
+    if (response.isEmpty()) {
+        qWarning() << "Empty SOAP response for GetPhonebook";
+        return {};
+    }
+
+    QXmlStreamReader xml(response);
+    while (!xml.atEnd()) {
+        xml.readNext();
+        if (xml.isStartElement() && xml.name() == u"NewPhonebookURL") {
+            return xml.readElementText().trimmed();
+        }
+    }
+
+    if (xml.hasError()) {
+        qWarning() << "XML Parse Error:" << xml.errorString();
+    }
+
+    return {};
 }
 
 QString FritzPhonebookFetcher::sendSoapRequest(const QString &service, const QString &action, const QString &body, const QString &controlUrl)
 {
     const QUrl url = QUrl(u"http://"_s + m_host + u":"_s + QString::number(m_port) + controlUrl);
-    qDebug() << "URL:" << url;
 
     QNetworkRequest request(url);
 
     // 🔐 Authorization
     QString credentials = m_user + u":"_s + m_pass;
     QByteArray auth = "Basic " + credentials.toUtf8().toBase64();
-    qDebug() << "Auth header:" << auth;
+
     request.setRawHeader("Authorization", auth);
 
     // 📄 Content & SOAP

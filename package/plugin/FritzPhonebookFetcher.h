@@ -24,6 +24,8 @@ public:
     void setPassword(const QString &pass);
 
     Q_INVOKABLE QStringList getPhonebookList();
+    Q_INVOKABLE QString getPhonebookUrl(int phonebookId);
+    Q_INVOKABLE bool downloadPhonebook(int id, const QUrl &url);
 
 private:
     QString m_host, m_user, m_pass;
