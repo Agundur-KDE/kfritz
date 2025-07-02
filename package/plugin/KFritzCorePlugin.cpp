@@ -11,11 +11,16 @@
 #include <QDir>
 #include <QFile>
 #include <QProcess>
+#include <QRegularExpression>
 #include <QStandardPaths>
 #include <QString>
 #include <QStringList>
 #include <QStringLiteral>
 #include <QTextStream>
+#include <QVariantList>
+// #include <QXmlStreamReader>
+#include <QDomDocument>
+
 using namespace Qt::StringLiterals;
 
 KFritzCorePlugin::KFritzCorePlugin(QObject *parent)
@@ -38,16 +43,26 @@ QVariantList KFritzCorePlugin::getPhonebookList(const QString &host, int port, c
     return result;
 }
 
-#include "KFritzCorePlugin.h"
-#include <QDebug>
-#include <QDir>
-#include <QFile>
-#include <QRegularExpression>
-#include <QStandardPaths>
-#include <QVariantList>
-#include <QXmlStreamReader>
+QString extractPhonebookNameFromFile(const QString &filePath)
+{
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly))
+        return {};
 
-using namespace Qt::StringLiterals;
+    QDomDocument doc;
+    if (!doc.setContent(&file)) {
+        qWarning() << "Could not parse XML content from" << filePath;
+        return {};
+    }
+
+    QDomElement root = doc.documentElement();
+    QDomNodeList phonebooks = root.elementsByTagName(u"phonebook"_s);
+    if (phonebooks.isEmpty())
+        return {};
+
+    QDomElement pb = phonebooks.at(0).toElement();
+    return pb.attribute(u"name"_s).trimmed();
+}
 
 QVariantList KFritzCorePlugin::listLocalPhonebooks()
 {
@@ -62,28 +77,8 @@ QVariantList KFritzCorePlugin::listLocalPhonebooks()
 
     QStringList files = dir.entryList(QStringList() << u"phonebook_*.xml"_s, QDir::Files);
     for (const QString &fileName : files) {
-        QFile file(dir.absoluteFilePath(fileName));
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            qWarning() << "Failed to open" << file.fileName();
-            continue;
-        }
-
-        QXmlStreamReader xml(&file);
-        QString phonebookName;
-        while (!xml.atEnd()) {
-            xml.readNext();
-            if (xml.isStartElement() && xml.name() == u"name") {
-                phonebookName = xml.readElementText().trimmed();
-                break;
-            }
-        }
-
-        file.close();
-
-        if (xml.hasError()) {
-            qWarning() << "XML parse error in" << file.fileName() << ":" << xml.errorString();
-            continue;
-        }
+        QString fullPath = dir.absoluteFilePath(fileName);
+        QString phonebookName = extractPhonebookNameFromFile(fullPath);
 
         QRegularExpression re(u"phonebook_(\\d+)\\.xml"_s);
         QRegularExpressionMatch match = re.match(fileName);
@@ -101,7 +96,7 @@ QVariantList KFritzCorePlugin::listLocalPhonebooks()
 
         QVariantMap entry;
         entry[QStringLiteral("id")] = id;
-        qDebug() << phonebookName;
+        qDebug() << id;
         entry[QStringLiteral("name")] = phonebookName;
         result << entry;
     }

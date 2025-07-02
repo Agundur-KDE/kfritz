@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: 2025 Agundur <info@agundur.de>
+#
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+
+
 cmake_minimum_required(VERSION 3.31)
 
 project(kfritz)
@@ -43,6 +48,7 @@ find_package(Qt6 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
    Quick
     QuickWidgets
     Network
+    Xml
     Widgets
     # Svg
     #Concurrent
