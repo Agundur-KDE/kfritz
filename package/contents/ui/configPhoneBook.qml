@@ -22,9 +22,27 @@ KCM.SimpleKCM {
     property string cfg_Host
     property string cfg_Login
     property string cfg_Password
+    property int cfg_SelectedPhonebook: 0
 
-    Component.onCompleted: {
-        console.log(cfg_Login);
+    function updatePhonebooks() {
+        phonebookModel.clear();
+        const books = plugin.listLocalPhonebooks();
+        for (let i = 0; i < books.length; ++i) {
+            phonebookModel.append({
+                "id": books[i].id,
+                "name": books[i].name
+            });
+        }
+    }
+
+    Component.onCompleted: updatePhonebooks()
+
+    Connections {
+        function onPhonebookDownloaded(id, path) {
+            updatePhonebooks();
+        }
+
+        target: plugin
     }
 
     Kirigami.FormLayout {
@@ -34,7 +52,23 @@ KCM.SimpleKCM {
             text: "Get Phonebook"
             onClicked: {
                 cfg_Phonebooks = plugin.getPhonebookList(cfg_Host, cfg_Port, cfg_Login, cfg_Password).join(", ");
-                console.log(cfg_Phonebooks);
+            }
+        }
+
+        QtControls.ComboBox {
+            model: phonebookModel
+            textRole: "name"
+            valueRole: "id"
+            currentIndex: {
+                for (var i = 0; i < phonebookModel.count; ++i) {
+                    if (phonebookModel.get(i).id === cfg_SelectedPhonebook)
+                        return i;
+
+                }
+                return 0;
+            }
+            onActivated: {
+                cfg_SelectedPhonebook = phonebookModel.get(currentIndex).id;
             }
         }
 
@@ -42,6 +76,10 @@ KCM.SimpleKCM {
 
     KFritzCorePlugin {
         id: plugin
+    }
+
+    ListModel {
+        id: phonebookModel
     }
 
 }

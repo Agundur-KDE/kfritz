@@ -11,6 +11,7 @@
 #include <QObject>
 #include <QQmlEngine>
 #include <QStringList>
+#include <QVariantList>
 
 class KFritzCorePlugin : public QObject
 {
@@ -21,6 +22,10 @@ public:
     explicit KFritzCorePlugin(QObject *parent = nullptr);
 
     Q_INVOKABLE QVariantList getPhonebookList(const QString &host, int port, const QString &user, const QString &password);
+    Q_INVOKABLE QVariantList listLocalPhonebooks();
+
+Q_SIGNALS:
+    void phonebookDownloaded(int id, const QString &path);
 
 private:
     FritzPhonebookFetcher m_fetcher;
