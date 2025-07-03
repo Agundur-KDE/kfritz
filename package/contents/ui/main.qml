@@ -45,6 +45,14 @@ PlasmoidItem {
         id: plugin
     }
 
+    Connections {
+        function onCallerInfoChanged() {
+            console.log("📞 QML: callerInfo changed to", plugin.currentCaller);
+        }
+
+        target: plugin
+    }
+
     fullRepresentation: Item {
         id: fullView
 
@@ -84,6 +92,19 @@ PlasmoidItem {
                     border.width: 1
                 }
 
+            }
+
+            Text {
+                id: callerText
+
+                text: plugin.currentCaller
+                // text: "Received: 03.07.25 17:48:36;RING;0;01746515062;43749560;SIP0;"
+                font.pixelSize: 16
+                color: "green"
+                wrapMode: Text.Wrap
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                visible: true
             }
 
         }
