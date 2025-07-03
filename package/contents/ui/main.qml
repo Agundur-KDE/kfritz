@@ -60,7 +60,11 @@ PlasmoidItem {
         Layout.preferredHeight: 300
 
         ColumnLayout {
-            anchors.top: parent.top
+            // anchors.top: parent.top
+
+            anchors.fill: parent
+            spacing: Kirigami.Units.smallSpacing
+            anchors.margins: Kirigami.Units.largeSpacing
 
             Kirigami.Heading {
                 // horizontalAlignment: Text.AlignHCenter
@@ -71,13 +75,14 @@ PlasmoidItem {
             }
 
             RowLayout {
+                Layout.fillWidth: true
+
                 PlasmaComponents.Label {
                     id: fritzIp
 
                     font.pointSize: 8
                     color: "lightgray"
-                    horizontalAlignment: Text.AlignRight
-                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignLeft
                     text: Plasmoid.configuration.Host
                 }
 
@@ -90,21 +95,30 @@ PlasmoidItem {
                     color: plugin.callMonitorConnected ? "green" : "red"
                     border.color: "grey"
                     border.width: 1
+                    Layout.alignment: Qt.AlignLeft
                 }
 
             }
 
-            Text {
-                id: callerText
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                color: "transparent"
 
-                text: plugin.currentCaller
-                // text: "Received: 03.07.25 17:48:36;RING;0;01746515062;43749560;SIP0;"
-                font.pixelSize: 16
-                color: "green"
-                wrapMode: Text.Wrap
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                visible: true
+                Text {
+                    id: callerText
+
+                    anchors.centerIn: parent
+                    text: plugin.currentCaller
+                    font.pixelSize: 16
+                    color: "green"
+                    wrapMode: Text.Wrap
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    visible: true
+                    width: parent.width * 0.9
+                }
+
             }
 
         }
