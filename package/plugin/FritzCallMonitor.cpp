@@ -34,7 +34,7 @@ void FritzCallMonitor::setPassword(const QString &pass)
 
 void FritzCallMonitor::connectToFritzBox()
 {
-    qDebug() << "Connecting to FritzBox CallMonitor...";
+    qDebug() << "Connecting to FritzBox CallMonitor..." << m_host;
     if (!m_socket) {
         m_socket = new QTcpSocket(this);
     }

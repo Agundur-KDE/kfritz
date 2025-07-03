@@ -42,6 +42,10 @@ PlasmoidItem {
     Layout.fillHeight: true
     width: 400
     height: 300
+    Component.onCompleted: {
+        plugin.setHost(Plasmoid.configuration.Host);
+        plugin.connectToFritzBox();
+    }
 
     KFritzCorePlugin {
         id: plugin

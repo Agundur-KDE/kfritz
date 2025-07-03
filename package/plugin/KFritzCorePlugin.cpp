@@ -28,8 +28,6 @@ KFritzCorePlugin::KFritzCorePlugin(QObject *parent)
     , m_callMonitor(this)
 {
     connect(&m_fetcher, &FritzPhonebookFetcher::phonebookDownloaded, this, &KFritzCorePlugin::phonebookDownloaded);
-
-    // m_callMonitor.connectToFritzBox();
 }
 
 /************************* Phonebook *******************************/
@@ -111,6 +109,11 @@ QVariantList KFritzCorePlugin::listLocalPhonebooks()
 
 /************************* Callmonitor *******************************/
 
+void KFritzCorePlugin::setHost(const QString &host)
+{
+    m_host = host;
+}
+
 QObject *KFritzCorePlugin::callMonitor()
 {
     return &m_callMonitor;
@@ -118,5 +121,11 @@ QObject *KFritzCorePlugin::callMonitor()
 
 void KFritzCorePlugin::connectToFritzBox()
 {
+    if (!m_host.isEmpty()) {
+        m_callMonitor.setHost(m_host);
+    } else {
+        m_callMonitor.setHost(QStringLiteral("fritz.box"));
+    }
+
     m_callMonitor.connectToFritzBox();
 }

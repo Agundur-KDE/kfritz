@@ -27,6 +27,7 @@ public:
     Q_INVOKABLE QVariantList getPhonebookList(const QString &host, int port, const QString &user, const QString &password);
     Q_INVOKABLE QVariantList listLocalPhonebooks();
     Q_INVOKABLE void connectToFritzBox();
+    Q_INVOKABLE void setHost(const QString &host);
 
 public Q_SLOTS:
     // void connectToFritzBox();
@@ -37,4 +38,5 @@ Q_SIGNALS:
 private:
     FritzPhonebookFetcher m_fetcher;
     FritzCallMonitor m_callMonitor;
+    QString m_host;
 };
