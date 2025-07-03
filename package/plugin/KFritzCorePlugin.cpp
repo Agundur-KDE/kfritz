@@ -25,9 +25,14 @@ using namespace Qt::StringLiterals;
 
 KFritzCorePlugin::KFritzCorePlugin(QObject *parent)
     : QObject(parent)
+    , m_callMonitor(this)
 {
     connect(&m_fetcher, &FritzPhonebookFetcher::phonebookDownloaded, this, &KFritzCorePlugin::phonebookDownloaded);
+
+    // m_callMonitor.connectToFritzBox();
 }
+
+/************************* Phonebook *******************************/
 
 QVariantList KFritzCorePlugin::getPhonebookList(const QString &host, int port, const QString &user, const QString &password)
 {
@@ -102,4 +107,16 @@ QVariantList KFritzCorePlugin::listLocalPhonebooks()
     }
 
     return result;
+}
+
+/************************* Callmonitor *******************************/
+
+QObject *KFritzCorePlugin::callMonitor()
+{
+    return &m_callMonitor;
+}
+
+void KFritzCorePlugin::connectToFritzBox()
+{
+    m_callMonitor.connectToFritzBox();
 }

@@ -82,7 +82,7 @@ PlasmoidItem {
                     height: 10
                     radius: 5 // macht es rund
                     color: callMonitorConnected ? "green" : "red"
-                    border.color: "white"
+                    border.color: "grey"
                     border.width: 1
                 }
 

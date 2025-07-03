@@ -5,6 +5,7 @@
  */
 
 #include "FritzCallMonitor.h"
+#include <QDebug>
 #include <QTcpSocket>
 
 using namespace Qt::StringLiterals;
@@ -29,4 +30,50 @@ void FritzCallMonitor::setUsername(const QString &user)
 void FritzCallMonitor::setPassword(const QString &pass)
 {
     m_pass = pass;
+}
+
+void FritzCallMonitor::connectToFritzBox()
+{
+    qDebug() << "Connecting to FritzBox CallMonitor...";
+    if (!m_socket) {
+        m_socket = new QTcpSocket(this);
+    }
+
+    connect(m_socket, &QTcpSocket::readyRead, this, &FritzCallMonitor::onReadyRead);
+    connect(m_socket, &QTcpSocket::errorOccurred, this, &FritzCallMonitor::onSocketError);
+
+    m_socket->connectToHost(m_host, 1012);
+}
+
+QString FritzCallMonitor::callerInfo() const
+{
+    return m_callerInfo;
+}
+
+void FritzCallMonitor::onReadyRead()
+{
+    while (m_socket->canReadLine()) {
+        QByteArray line = m_socket->readLine().trimmed();
+        QString lineStr = QString::fromUtf8(line);
+
+        qDebug() << "Received:" << lineStr;
+
+        if (lineStr.contains(QStringLiteral("RING"))) {
+            // Beispielzeile: 14.06.24 10:55:01;RING;0;01701234567;Max Mustermann;
+            QStringList parts = lineStr.split(QLatin1Char(';'));
+            if (parts.size() >= 5) {
+                QString number = parts.at(3);
+                QString name = parts.at(4);
+
+                m_callerInfo = QStringLiteral("Anruf von %1 (%2)").arg(name, number);
+                Q_EMIT callerInfoChanged();
+            }
+        }
+    }
+}
+
+void FritzCallMonitor::onSocketError(QAbstractSocket::SocketError socketError)
+{
+    qWarning() << "Socket error:" << m_socket->errorString();
+    qWarning() << "Socket Error:" << socketError;
 }
