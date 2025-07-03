@@ -4,12 +4,6 @@
  * SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
  *
  */
-/*
- * SPDX-FileCopyrightText: 2025 Agundur <info@agundur.de>
- *
- * SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
- *
- */
 
 import QtQuick
 import QtQuick.Controls 2.15
@@ -85,7 +79,7 @@ PlasmoidItem {
                     width: 10
                     height: 10
                     radius: 5 // macht es rund
-                    color: callMonitorConnected ? "green" : "red"
+                    color: plugin.callMonitorConnected ? "green" : "red"
                     border.color: "grey"
                     border.width: 1
                 }
@@ -126,7 +120,7 @@ PlasmoidItem {
                 width: 10
                 height: 10
                 radius: 5 // macht es rund
-                color: callMonitorConnected ? "green" : "red"
+                color: plugin.callMonitorConnected ? "green" : "red"
                 border.color: "white"
                 border.width: 1
             }
