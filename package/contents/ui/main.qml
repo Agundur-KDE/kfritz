@@ -45,14 +45,6 @@ PlasmoidItem {
         id: plugin
     }
 
-    Connections {
-        function onCallerInfoChanged() {
-            console.log("📞 QML: callerInfo changed to", plugin.currentCaller);
-        }
-
-        target: plugin
-    }
-
     fullRepresentation: Item {
         id: fullView
 
