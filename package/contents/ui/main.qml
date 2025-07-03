@@ -39,16 +39,56 @@ PlasmoidItem {
     fullRepresentation: Item {
         id: fullView
 
-        Layout.minimumWidth: 300
-        Layout.minimumHeight: 200
+        Layout.minimumWidth: fritzIp.implicitWidth + 200
+        Layout.minimumHeight: logoWrapper.implicitHeight + 200
+        implicitWidth: 320
+        implicitHeight: 300
 
-        Component {
-            id: windowIconComponent
+        ColumnLayout {
+            anchors.fill: parent
+            // spacing: 12
+            anchors.margins: Kirigami.Units.largeSpacing
 
-            Kirigami.Icon {
-                source: "call-incomming"
-                width: 22
-                height: 22
+            RowLayout {
+                Item {
+                    id: logoWrapper
+
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    width: 64
+                    height: 64
+                    // ToolTip.visible: kcastIcon.containsMouse
+                    ToolTip.delay: 500
+                    ToolTip.text: "KFritz"
+
+                    Image {
+                        id: kfritzIcon
+
+                        source: Qt.resolvedUrl("../icons/kfritz_icon_64x64.png")
+                        width: 64
+                        height: 64
+                        fillMode: Image.PreserveAspectFit
+                    }
+
+                }
+
+                Kirigami.Heading {
+                    text: "KCFritz"
+                    level: 2
+                    Layout.fillWidth: true
+                }
+
+            }
+
+            RowLayout {
+                id: fritzIp
+
+                PlasmaComponents.Label {
+                    text: Plasmoid.configuration.Host
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
             }
 
         }
