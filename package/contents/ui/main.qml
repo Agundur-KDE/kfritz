@@ -4,6 +4,12 @@
  * SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
  *
  */
+/*
+ * SPDX-FileCopyrightText: 2025 Agundur <info@agundur.de>
+ *
+ * SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+ *
+ */
 
 import QtQuick
 import QtQuick.Controls 2.15
@@ -20,6 +26,7 @@ PlasmoidItem {
     property string host: Plasmoid.configuration.Host //"192.168.178.1"
     property int port: Plasmoid.configuration.Port //49000
     property string cfg_viewMode: "fullRepresentation"
+    property bool callMonitorConnected: false // später dynamisch setzen
 
     toolTipMainText: Plasmoid.title
     preferredRepresentation: {
@@ -28,9 +35,13 @@ PlasmoidItem {
 
         return compactRepresentation;
     }
-    Plasmoid.icon: "call-incomming"
+    Plasmoid.icon: "call-incoming"
     Plasmoid.status: PlasmaCore.Types.ActiveStatus
     Plasmoid.backgroundHints: PlasmaCore.Types.DefaultBackground | PlasmaCore.Types.ConfigurableBackground
+    Layout.fillWidth: true
+    Layout.fillHeight: true
+    width: 400
+    height: 300
 
     KFritzCorePlugin {
         id: plugin
@@ -39,54 +50,40 @@ PlasmoidItem {
     fullRepresentation: Item {
         id: fullView
 
-        Layout.minimumWidth: fritzIp.implicitWidth + 200
-        Layout.minimumHeight: logoWrapper.implicitHeight + 200
-        implicitWidth: 320
-        implicitHeight: 300
+        Layout.preferredWidth: 400
+        Layout.preferredHeight: 300
 
         ColumnLayout {
-            anchors.fill: parent
-            // spacing: 12
-            anchors.margins: Kirigami.Units.largeSpacing
+            anchors.top: parent.top
 
-            RowLayout {
-                Item {
-                    id: logoWrapper
+            Kirigami.Heading {
+                // horizontalAlignment: Text.AlignHCenter
 
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    width: 64
-                    height: 64
-                    // ToolTip.visible: kcastIcon.containsMouse
-                    ToolTip.delay: 500
-                    ToolTip.text: "KFritz"
-
-                    Image {
-                        id: kfritzIcon
-
-                        source: Qt.resolvedUrl("../icons/kfritz_icon_64x64.png")
-                        width: 64
-                        height: 64
-                        fillMode: Image.PreserveAspectFit
-                    }
-
-                }
-
-                Kirigami.Heading {
-                    text: "KCFritz"
-                    level: 2
-                    Layout.fillWidth: true
-                }
-
+                text: "KFritz"
+                level: 2
+                Layout.alignment: Qt.AlignHCenter
             }
 
             RowLayout {
-                id: fritzIp
-
                 PlasmaComponents.Label {
-                    text: Plasmoid.configuration.Host
+                    id: fritzIp
+
+                    font.pointSize: 8
+                    color: "lightgray"
+                    horizontalAlignment: Text.AlignRight
                     Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
+                    text: Plasmoid.configuration.Host
+                }
+
+                Rectangle {
+                    id: ledIndicator
+
+                    width: 10
+                    height: 10
+                    radius: 5 // macht es rund
+                    color: callMonitorConnected ? "green" : "red"
+                    border.color: "white"
+                    border.width: 1
                 }
 
             }
@@ -110,12 +107,26 @@ PlasmoidItem {
             cursorShape: Qt.PointingHandCursor
         }
 
-        Kirigami.Icon {
-            id: iconItem
+        RowLayout {
+            Kirigami.Icon {
+                id: iconItem
 
-            source: "call-incomming"
-            implicitWidth: Kirigami.Units.iconSizes.sizeForLabels
-            implicitHeight: Kirigami.Units.iconSizes.sizeForLabels
+                source: "call-incoming"
+                implicitWidth: Kirigami.Units.iconSizes.sizeForLabels
+                implicitHeight: Kirigami.Units.iconSizes.sizeForLabels
+            }
+
+            Rectangle {
+                id: ledIndicator
+
+                width: 10
+                height: 10
+                radius: 5 // macht es rund
+                color: callMonitorConnected ? "green" : "red"
+                border.color: "white"
+                border.width: 1
+            }
+
         }
 
     }

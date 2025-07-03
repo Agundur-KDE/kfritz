@@ -6,8 +6,8 @@
     "ServiceTypes": [
       "Plasma/Applet"
     ],
-    "Name": "KPictureFrame",
-    "Icon": "call-incomming",
+    "Name": "KKFritz",
+    "Icon": "call-incoming",
     "Description": "A FritzBox callmonitor for your Desktop",
     "Authors": [
       {
