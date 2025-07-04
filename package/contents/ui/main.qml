@@ -99,22 +99,16 @@ PlasmoidItem {
                 color: "transparent"
 
                 Text {
-                    text: "Test:" + plugin.resolveName(plugin.currentCaller)
-                    font.pixelSize: 16
-                    color: "green"
-                }
-
-                Text {
                     id: callerText
 
                     anchors.centerIn: parent
-                    text: plugin.currentCaller
+                    text: plugin.resolveName(plugin.currentCaller) + " ( " + plugin.currentCaller + " )"
                     font.pixelSize: 16
                     color: "green"
                     wrapMode: Text.Wrap
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
-                    visible: true
+                    visible: plugin.currentCaller
                     width: parent.width * 0.9
                 }
 

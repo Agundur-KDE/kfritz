@@ -55,7 +55,7 @@ void FritzCallMonitor::onReadyRead()
                 QString number = parts.at(3);
                 QString name = parts.at(4);
 
-                m_callerInfo = QStringLiteral("Anruf von %1 (%2)").arg(name, number);
+                m_callerInfo = QStringLiteral("%1").arg(number);
                 Q_EMIT callerInfoChanged();
             }
         }
