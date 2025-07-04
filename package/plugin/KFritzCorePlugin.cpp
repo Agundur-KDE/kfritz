@@ -152,3 +152,35 @@ void KFritzCorePlugin::handleCallerInfoChanged()
 {
     Q_EMIT currentCallerChanged();
 }
+
+/************************* Number matcher *******************************/
+
+QString KFritzCorePlugin::callerInfo() const
+{
+    return m_callerInfo;
+}
+
+void KFritzCorePlugin::loadPhonebook(int phonebookId)
+{
+    QString baseDir = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + u"/phonebooks"_s;
+    QString path = baseDir + u"/phonebook_"_s + QString::number(phonebookId) + u".xml"_s;
+
+    qDebug() << "Lade Telefonbuch:" << path;
+    m_lookup.loadFromFile(path);
+}
+
+void KFritzCorePlugin::handleIncomingCall(const QString &number)
+{
+    QString name = m_lookup.resolveName(number);
+    if (!name.isEmpty()) {
+        m_callerInfo = u"%1 (%2)"_s.arg(name, number);
+    } else {
+        m_callerInfo = number;
+    }
+    Q_EMIT callerInfoChanged();
+}
+
+QString KFritzCorePlugin::resolveName(const QString &number) const
+{
+    return m_lookup.resolveName(number);
+}

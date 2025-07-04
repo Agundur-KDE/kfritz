@@ -39,6 +39,7 @@ PlasmoidItem {
     Component.onCompleted: {
         plugin.setHost(Plasmoid.configuration.Host);
         plugin.connectToFritzBox();
+        plugin.loadPhonebook(Plasmoid.configuration.SelectedPhonebook);
     }
 
     KFritzCorePlugin {
@@ -96,6 +97,12 @@ PlasmoidItem {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 color: "transparent"
+
+                Text {
+                    text: "Test:" + plugin.resolveName(plugin.currentCaller)
+                    font.pixelSize: 16
+                    color: "green"
+                }
 
                 Text {
                     id: callerText
