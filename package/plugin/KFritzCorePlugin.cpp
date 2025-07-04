@@ -25,12 +25,14 @@ using namespace Qt::StringLiterals;
 
 KFritzCorePlugin::KFritzCorePlugin(QObject *parent)
     : QObject(parent)
-    , m_callMonitor(this)
-{
-    connect(&m_fetcher, &FritzPhonebookFetcher::phonebookDownloaded, this, &KFritzCorePlugin::phonebookDownloaded);
-    connect(&m_callMonitor, &FritzCallMonitor::connectedChanged, this, &KFritzCorePlugin::handleConnectionChanged);
 
-    connect(&m_callMonitor, &FritzCallMonitor::callerInfoChanged, this, &KFritzCorePlugin::handleCallerInfoChanged);
+{
+    m_callMonitor = new FritzCallMonitor(this);
+    m_callMonitor->setCorePlugin(this);
+
+    connect(&m_fetcher, &FritzPhonebookFetcher::phonebookDownloaded, this, &KFritzCorePlugin::phonebookDownloaded);
+    connect(m_callMonitor, &FritzCallMonitor::connectedChanged, this, &KFritzCorePlugin::handleConnectionChanged);
+    connect(m_callMonitor, &FritzCallMonitor::callerInfoChanged, this, &KFritzCorePlugin::handleCallerInfoChanged);
 }
 
 /************************* Phonebook *******************************/
@@ -119,28 +121,28 @@ void KFritzCorePlugin::setHost(const QString &host)
 
 QObject *KFritzCorePlugin::callMonitor()
 {
-    return &m_callMonitor;
+    return m_callMonitor;
 }
 
 void KFritzCorePlugin::connectToFritzBox()
 {
     if (!m_host.isEmpty()) {
-        m_callMonitor.setHost(m_host);
+        m_callMonitor->setHost(m_host);
     } else {
-        m_callMonitor.setHost(QStringLiteral("fritz.box"));
+        m_callMonitor->setHost(QStringLiteral("fritz.box"));
     }
 
-    m_callMonitor.connectToFritzBox();
+    m_callMonitor->connectToFritzBox();
 }
 
 bool KFritzCorePlugin::callMonitorConnected() const
 {
-    return m_callMonitor.isConnected();
+    return m_callMonitor->isConnected();
 }
 
 QString KFritzCorePlugin::currentCaller() const
 {
-    return m_callMonitor.callerInfo();
+    return m_callMonitor->callerInfo();
 }
 
 void KFritzCorePlugin::handleConnectionChanged()
@@ -170,18 +172,41 @@ void KFritzCorePlugin::loadPhonebook(int phonebookId, int countryCode)
     m_lookup.loadFromFile(path, countryPrefix);
 }
 
-void KFritzCorePlugin::handleIncomingCall(const QString &number)
-{
-    QString name = m_lookup.resolveName(number);
-    if (!name.isEmpty()) {
-        m_callerInfo = u"%1 (%2)"_s.arg(name, number);
-    } else {
-        m_callerInfo = number;
-    }
-    Q_EMIT callerInfoChanged();
-}
+// void KFritzCorePlugin::handleIncomingCall(const QString &number)
+// {
+//     QString name = m_lookup.resolveName(number);
+//     if (!name.isEmpty()) {
+//         m_callerInfo = u"%1 (%2)"_s.arg(name, number);
+//     } else {
+//         m_callerInfo = number;
+//     }
+//     Q_EMIT callerInfoChanged();
+// }
 
 QString KFritzCorePlugin::resolveName(const QString &number) const
 {
     return m_lookup.resolveName(number);
+}
+/************************* Call history *******************************/
+
+QStringList KFritzCorePlugin::recentCalls() const
+{
+    return m_recentCalls;
+}
+
+void KFritzCorePlugin::handleIncomingCall(const QString &number)
+{
+    QString name = m_lookup.resolveName(number);
+    QString timestamp = QDateTime::currentDateTime().toString(u"hh:mm:ss"_s);
+    QString entry = timestamp + u" – "_s + (!name.isEmpty() ? name + u" (" + number + u")" : number);
+
+    m_callerInfo = !name.isEmpty() ? name + u" (" + number + u")" : number;
+    Q_EMIT callerInfoChanged();
+
+    m_recentCalls.prepend(entry);
+    if (m_recentCalls.size() > 20) // nur letzte 20 anzeigen
+        m_recentCalls.removeLast();
+    qDebug() << "📞 Neuer Anruf:" << number << "→ recentCalls:" << m_recentCalls;
+
+    Q_EMIT recentCallsChanged();
 }

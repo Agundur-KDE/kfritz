@@ -3,8 +3,8 @@
  *
  * SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
  */
-
 #include "FritzCallMonitor.h"
+#include "KFritzCorePlugin.h"
 #include <QDebug>
 #include <QObject>
 #include <QTcpSocket>
@@ -14,6 +14,8 @@ using namespace Qt::StringLiterals;
 FritzCallMonitor::FritzCallMonitor(QObject *parent)
     : QObject(parent)
 {
+    // m_callMonitor = new FritzCallMonitor(this);
+    // m_callMonitor->setCorePlugin(this);
 }
 
 void FritzCallMonitor::setHost(const QString &host)
@@ -55,6 +57,11 @@ void FritzCallMonitor::onReadyRead()
                 QString name = parts.at(4);
 
                 m_callerInfo = QStringLiteral("%1").arg(number);
+
+                if (m_corePlugin) {
+                    m_corePlugin->handleIncomingCall(number);
+                }
+
                 Q_EMIT callerInfoChanged();
             }
         }
@@ -82,4 +89,9 @@ bool FritzCallMonitor::isConnected() const
 QString FritzCallMonitor::callerInfo() const
 {
     return m_callerInfo;
+}
+
+void FritzCallMonitor::setCorePlugin(KFritzCorePlugin *plugin)
+{
+    m_corePlugin = plugin;
 }

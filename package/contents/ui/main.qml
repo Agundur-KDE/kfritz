@@ -6,7 +6,7 @@
  */
 
 import QtQuick
-import QtQuick.Controls 2.15
+import QtQuick.Controls 6.5
 import QtQuick.Layouts
 import de.agundur.kfritz 0.1
 import org.kde.kirigami as Kirigami
@@ -54,6 +54,13 @@ PlasmoidItem {
 
         ColumnLayout {
             // anchors.top: parent.top
+            // Button {
+            //     text: "recentCalls testen"
+            //     onClicked: {
+            //         console.log("🔍 Aktuelle recentCalls:", plugin.recentCalls);
+            //         console.log("📏 Anzahl:", plugin.recentCalls.length);
+            //     }
+            // }
 
             anchors.fill: parent
             spacing: Kirigami.Units.smallSpacing
@@ -94,9 +101,8 @@ PlasmoidItem {
             }
 
             Rectangle {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                color: "transparent"
+                width: parent.width
+                height: parent.height * 0.8
 
                 Text {
                     id: callerText
@@ -109,7 +115,29 @@ PlasmoidItem {
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                     visible: plugin.currentCaller
-                    width: parent.width * 0.9
+                }
+
+                ListView {
+                    // model: ["09:15 – Test A", "10:22 – Test B"]
+
+                    anchors.fill: parent
+                    clip: true
+                    model: plugin.recentCalls
+
+                    delegate: Rectangle {
+                        width: ListView.view.width
+                        height: Kirigami.Units.gridUnit * 1.2
+                        border.color: "grey"
+                        radius: Kirigami.Units.smallSpacing
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: modelData
+                            color: "black"
+                        }
+
+                    }
+
                 }
 
             }

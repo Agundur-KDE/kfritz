@@ -22,6 +22,7 @@ class KFritzCorePlugin : public QObject
     Q_PROPERTY(bool callMonitorConnected READ callMonitorConnected NOTIFY callMonitorConnectedChanged)
     Q_PROPERTY(QString currentCaller READ currentCaller NOTIFY currentCallerChanged)
     Q_PROPERTY(QString callerInfo READ callerInfo NOTIFY callerInfoChanged)
+    Q_PROPERTY(QStringList recentCalls READ recentCalls NOTIFY recentCallsChanged)
     QML_ELEMENT
 
 public:
@@ -29,7 +30,7 @@ public:
     QObject *callMonitor();
     bool callMonitorConnected() const;
     QString currentCaller() const;
-
+    QStringList recentCalls() const;
     QString callerInfo() const;
 
     Q_INVOKABLE QVariantList getPhonebookList(const QString &host, int port, const QString &user, const QString &password);
@@ -47,13 +48,15 @@ Q_SIGNALS:
     void callMonitorConnectedChanged();
     void currentCallerChanged();
     void callerInfoChanged();
+    void recentCallsChanged();
 
 private:
     FritzPhonebookFetcher m_fetcher;
-    FritzCallMonitor m_callMonitor;
+    FritzCallMonitor *m_callMonitor = nullptr;
     QString m_host;
     QString m_callerInfo;
     PhonebookLookup m_lookup;
+    QStringList m_recentCalls;
 
 private Q_SLOTS:
 

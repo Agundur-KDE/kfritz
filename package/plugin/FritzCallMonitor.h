@@ -11,6 +11,7 @@
 #include <QString>
 #include <QTcpSocket>
 
+class KFritzCorePlugin; // ✅ Forward Declaration
 class FritzCallMonitor : public QObject
 {
     Q_OBJECT
@@ -26,6 +27,8 @@ public:
     bool isConnected() const;
     QString callerInfo() const;
 
+    void setCorePlugin(KFritzCorePlugin *plugin);
+
 Q_SIGNALS:
     void connectedChanged();
     void callerInfoChanged();
@@ -37,6 +40,7 @@ private Q_SLOTS:
 
 private:
     QTcpSocket *m_socket = nullptr;
+    KFritzCorePlugin *m_corePlugin = nullptr;
     bool m_connected = false;
     QString m_callerInfo;
     QString m_message;
