@@ -180,7 +180,6 @@ PlasmoidItem {
 
         Layout.minimumWidth: iconItem.implicitWidth
         Layout.minimumHeight: iconItem.implicitHeight
-        Plasmoid.toolTipMainText: plugin.currentCaller ? "📞: " + plugin.resolveName(plugin.currentCaller)
 
         MouseArea {
             anchors.fill: parent
