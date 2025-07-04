@@ -20,7 +20,8 @@ PlasmoidItem {
     property string host: Plasmoid.configuration.Host //"192.168.178.1"
     property int port: Plasmoid.configuration.Port //49000
     property string cfg_viewMode: "fullRepresentation"
-    property bool callMonitorConnected: false // später dynamisch setzen
+    property bool callMonitorConnected: false
+    property bool showCallerInfo: false
 
     toolTipMainText: Plasmoid.title
     preferredRepresentation: {
@@ -44,6 +45,24 @@ PlasmoidItem {
 
     KFritzCorePlugin {
         id: plugin
+    }
+
+    Connections {
+        function onCurrentCallerChanged() {
+            showCallerInfo = true;
+            hideTimer.restart();
+        }
+
+        target: plugin
+    }
+
+    Timer {
+        id: hideTimer
+
+        interval: 10000 // 10 Sekunden
+        running: false
+        repeat: false
+        onTriggered: showCallerInfo = false
     }
 
     fullRepresentation: Item {
@@ -114,7 +133,17 @@ PlasmoidItem {
                     wrapMode: Text.Wrap
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
-                    visible: plugin.currentCaller
+                    visible: showCallerInfo
+                    opacity: showCallerInfo ? 1 : 0
+
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: 600
+                            easing.type: Easing.InOutQuad
+                        }
+
+                    }
+
                 }
 
                 ListView {
