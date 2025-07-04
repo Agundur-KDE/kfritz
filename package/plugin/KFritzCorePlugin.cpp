@@ -160,13 +160,14 @@ QString KFritzCorePlugin::callerInfo() const
     return m_callerInfo;
 }
 
-void KFritzCorePlugin::loadPhonebook(int phonebookId)
+void KFritzCorePlugin::loadPhonebook(int phonebookId, int countryCode)
 {
     QString baseDir = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + u"/phonebooks"_s;
     QString path = baseDir + u"/phonebook_"_s + QString::number(phonebookId) + u".xml"_s;
 
     qDebug() << "Lade Telefonbuch:" << path;
-    m_lookup.loadFromFile(path);
+    QString countryPrefix = u"+" + QString::number(countryCode);
+    m_lookup.loadFromFile(path, countryPrefix);
 }
 
 void KFritzCorePlugin::handleIncomingCall(const QString &number)

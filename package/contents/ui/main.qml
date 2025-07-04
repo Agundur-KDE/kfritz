@@ -39,7 +39,7 @@ PlasmoidItem {
     Component.onCompleted: {
         plugin.setHost(Plasmoid.configuration.Host);
         plugin.connectToFritzBox();
-        plugin.loadPhonebook(Plasmoid.configuration.SelectedPhonebook);
+        plugin.loadPhonebook(Plasmoid.configuration.SelectedPhonebook, Plasmoid.configuration.CountryCode);
     }
 
     KFritzCorePlugin {

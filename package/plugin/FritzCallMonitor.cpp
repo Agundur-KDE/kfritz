@@ -49,7 +49,6 @@ void FritzCallMonitor::onReadyRead()
         qDebug() << "Received:" << lineStr;
 
         if (lineStr.contains(QStringLiteral("RING"))) {
-            // Beispielzeile: 14.06.24 10:55:01;RING;0;01701234567;Max Mustermann;
             QStringList parts = lineStr.split(QLatin1Char(';'));
             if (parts.size() >= 5) {
                 QString number = parts.at(3);

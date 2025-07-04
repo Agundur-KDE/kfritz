@@ -14,8 +14,10 @@
 
 using namespace Qt::StringLiterals;
 
-void PhonebookLookup::loadFromFile(const QString &xmlFilePath)
+void PhonebookLookup::loadFromFile(const QString &xmlFilePath, const QString &countryCode)
 {
+    m_countryCode = countryCode;
+
     QFile file(xmlFilePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qWarning() << "❌ Could not open phonebook XML:" << xmlFilePath;
@@ -52,7 +54,7 @@ void PhonebookLookup::loadFromFile(const QString &xmlFilePath)
         for (int j = 0; j < telList.count(); ++j) {
             QDomElement numberElement = telList.at(j).toElement();
             QString raw = numberElement.text().trimmed();
-            QString normalized = normalizeNumber(raw);
+            QString normalized = normalizeNumber(raw, countryCode);
             if (!normalized.isEmpty() && !name.isEmpty()) {
                 numberToName.insert(normalized, name);
             }
@@ -64,17 +66,29 @@ void PhonebookLookup::loadFromFile(const QString &xmlFilePath)
 
 QString PhonebookLookup::resolveName(const QString &number) const
 {
-    return numberToName.value(normalizeNumber(number), QString{});
+    return numberToName.value(normalizeNumber(number, m_countryCode), QString{});
 }
 
-QString PhonebookLookup::normalizeNumber(QString number) const
+QString PhonebookLookup::normalizeNumber(QString number, const QString &countryCode) const
 {
-    number.remove(QRegularExpression(u"[^\\d+]"_s)); // remove everything but digits and plus
+    // 1. Entferne alle Zeichen außer Ziffern und "+"
+    number.remove(QRegularExpression(u"[\\s\\-\\(\\)]"_s));
 
-    if (number.startsWith(u"0049"_s))
-        number.replace(0, 4, u"+49"_s);
-    else if (number.startsWith(u"0"_s))
-        number.replace(0, 1, u"+49"_s);
+    // 2. "0049..." → "+49..."
+    if (number.startsWith(u"00"_s)) {
+        number.replace(0, 2, u"+"_s);
+    }
 
-    return number;
+    // 3. Wenn mit "+" beginnt → gültig, unverändert zurückgeben
+    if (number.startsWith(u"+"_s)) {
+        return number;
+    }
+
+    // 4. Wenn mit 0 beginnt → lokale Nummer → ersetze führende 0 mit Landesvorwahl
+    if (number.startsWith(u"0"_s)) {
+        return countryCode + number.mid(1);
+    }
+
+    // 5. Sonst: keine führende 0, kein + → trotzdem lokale Nummer annehmen
+    return countryCode + number;
 }

@@ -22,6 +22,7 @@ KCM.SimpleKCM {
     property string cfg_Host
     property string cfg_Login
     property string cfg_Password
+    property int cfg_CountryCode: 49
     property int cfg_SelectedPhonebook: 0
 
     function updatePhonebooks() {
@@ -46,6 +47,40 @@ KCM.SimpleKCM {
     }
 
     Kirigami.FormLayout {
+        anchors.margins: Kirigami.Units.largeSpacing
+
+        QtControls.SpinBox {
+            id: countrySpinBox
+
+            value: cfg_CountryCode
+            Kirigami.FormData.label: "Country code: +"
+            from: 1
+            to: 999
+            stepSize: 1
+            textFromValue: function(value) {
+                return value;
+            }
+            onValueChanged: cfg_CountryCode = textFromValue(value)
+        }
+
+        Item {
+            Kirigami.FormData.label: "" // leere Spalte 1
+            implicitHeight: Kirigami.Units.largeSpacing
+        }
+
+        Kirigami.Separator {
+            // implicitHeight: Kirigami.Units.largeSpacing
+
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignVCenter
+            Layout.topMargin: Kirigami.Units.largeSpacing
+        }
+
+        Item {
+            Kirigami.FormData.label: "" // leere Spalte 1
+            implicitHeight: Kirigami.Units.largeSpacing
+        }
+
         QtControls.Button {
             id: getPhonebooks
 
@@ -53,12 +88,14 @@ KCM.SimpleKCM {
             onClicked: {
                 cfg_Phonebooks = plugin.getPhonebookList(cfg_Host, cfg_Port, cfg_Login, cfg_Password).join(", ");
             }
+            Layout.topMargin: Kirigami.Units.largeSpacing
         }
 
         QtControls.ComboBox {
             model: phonebookModel
             textRole: "name"
             valueRole: "id"
+            Kirigami.FormData.label: "Phonebook:"
             currentIndex: {
                 for (var i = 0; i < phonebookModel.count; ++i) {
                     if (phonebookModel.get(i).id === cfg_SelectedPhonebook)

@@ -13,11 +13,12 @@
 class PhonebookLookup
 {
 public:
-    void loadFromFile(const QString &xmlFilePath);
+    void loadFromFile(const QString &xmlFilePath, const QString &countryCode);
     QString resolveName(const QString &number) const;
 
 private:
     QHash<QString, QString> numberToName;
+    QString m_countryCode;
 
-    QString normalizeNumber(QString number) const;
+    QString normalizeNumber(QString number, const QString &countryCode) const;
 };

@@ -19,5 +19,7 @@
     <entry name="SelectedPhonebook" type="Int">
       <default>0</default>
     </entry>
-  </group>
+    <entry name="CountryCode" type="Int">
+      <default>49</default>
+    </entry>
 </kcfg>

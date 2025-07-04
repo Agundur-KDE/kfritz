@@ -39,7 +39,7 @@ public:
     Q_INVOKABLE QString resolveName(const QString &number) const;
 
 public Q_SLOTS:
-    void loadPhonebook(int phonebookId);
+    void loadPhonebook(int phonebookId, int countryCode);
     void handleIncomingCall(const QString &number);
 
 Q_SIGNALS:
