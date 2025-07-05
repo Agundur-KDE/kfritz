@@ -74,27 +74,14 @@ PlasmoidItem {
         // Optionaler Seitentitel (erscheint z.B. in der mobilen Toolbar)
         title: i18n("Recent Calls")
 
-        // ListView der letzten Anrufe
         ListView {
-            // Optional: mit KirigamiAddons.Avatar ein echtes Initialen-Icon einbinden:
-            // contentItem: RowLayout {
-            //     KirigamiAddons.Avatar {
-            //         name: name
-            //         size: Kirigami.Units.iconSizes.medium
-            //     }
-            //     Controls.Label {
-            //         text: qsTr("%1 (%2)\n%3").arg(name, number, time)
-            //         verticalAlignment: Text.AlignVCenter
-            //         wrapMode: Text.WordWrap
-            //     }
-            // }
-
             id: callsList
 
             model: plugin.recentCallsModel // Datenmodell (z.B. ein ListModel oder QStringList vom Plugin)
 
             // Delegate-Komponente für jeden Listeneintrag
             delegate: Kirigami.InlineMessage {
+                // Diese drei musst du explizit deklarieren:
                 required property string name
                 required property string number
                 required property string time
@@ -103,7 +90,25 @@ PlasmoidItem {
                 visible: true
                 type: Kirigami.MessageType.Information
                 icon.source: "user"
-                text: "<b>" + name + " </b> " + number + " – " + time
+
+                contentItem: RowLayout {
+                    Kirigami.Icon {
+                        source: "user"
+                        Layout.alignment: Qt.AlignVCenter
+                    }
+
+                    Text {
+                        text: "<b>" + name + "</b> " + number + " – " + time
+                        textFormat: Text.RichText
+                        wrapMode: Text.NoWrap
+                        elide: Text.ElideRight
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignVCenter
+                        color: Kirigami.Theme.textColor
+                    }
+
+                }
+
             }
 
         }
