@@ -27,29 +27,58 @@ void FritzCallMonitor::setHost(const QString &host)
 
 void FritzCallMonitor::connectToFritzBox()
 {
-    if (QNetworkInformation::instance()->reachability() < QNetworkInformation::Reachability::Online) {
-        qDebug() << "🌐 Kein Internetzugang – neuer Versuch in 5 Sekunden...";
-        QTimer::singleShot(5000, this, &FritzCallMonitor::connectToFritzBox);
+    static int m_retryCount = 0;
+    static constexpr int maxRetries = 12;
+
+    if (m_socket && m_socket->state() == QAbstractSocket::ConnectedState) {
+        qDebug() << "✅ Bereits verbunden mit FritzBox.";
         return;
     }
 
-    qDebug() << "Connecting to FritzBox CallMonitor..." << m_host;
+    QNetworkInformation *netInfo = QNetworkInformation::instance();
+
+    if (!netInfo) {
+        qWarning() << "⚠️ Kein Netzwerk-Backend – versuche Verbindung trotzdem...";
+    } else if (netInfo->reachability() < QNetworkInformation::Reachability::Online) {
+        qDebug() << "📡 Netzwerk offline – neuer Versuch in 10 Sekunden...";
+        QTimer::singleShot(10000, this, &FritzCallMonitor::connectToFritzBox);
+        return;
+    }
+
+    if (m_retryCount >= maxRetries) {
+        qWarning() << "❌ Verbindung zur FritzBox nach" << maxRetries << "Versuchen aufgegeben.";
+        return;
+    }
+
+    if (m_host.isEmpty())
+        m_host = u"fritz.box"_s;
 
     if (!m_socket) {
         m_socket = new QTcpSocket(this);
+        connect(m_socket, &QTcpSocket::readyRead, this, &FritzCallMonitor::onReadyRead);
+        connect(m_socket, &QTcpSocket::errorOccurred, this, &FritzCallMonitor::onSocketError);
+        connect(m_socket, &QTcpSocket::connected, this, &FritzCallMonitor::onConnected);
+        connect(m_socket, &QTcpSocket::disconnected, this, &FritzCallMonitor::onDisconnected);
     }
 
-    connect(m_socket, &QTcpSocket::readyRead, this, &FritzCallMonitor::onReadyRead);
-    connect(m_socket, &QTcpSocket::errorOccurred, this, &FritzCallMonitor::onSocketError);
-    connect(m_socket, &QTcpSocket::connected, this, &FritzCallMonitor::onConnected);
-
+    qDebug() << "🔌 Versuche Verbindung zur FritzBox @ " << m_host;
+    m_retryCount++;
+    m_socket->abort(); // falls vorher halb offen
     m_socket->connectToHost(m_host, 1012);
 }
 
-// QString FritzCallMonitor::callerInfo() const
-// {
-//     return m_callerInfo;
-// }
+void FritzCallMonitor::onDisconnected()
+{
+    qWarning() << "🔌 Verbindung zur FritzBox verloren – versuche Reconnect...";
+    QTimer::singleShot(5000, this, &FritzCallMonitor::connectToFritzBox);
+}
+
+void FritzCallMonitor::onConnected()
+{
+    qDebug() << "🟢 Erfolgreich verbunden zur FritzBox.";
+    m_retryCount = 0; // reset Retry-Zähler
+    Q_EMIT connectedChanged(true);
+}
 
 void FritzCallMonitor::onReadyRead()
 {
@@ -81,13 +110,6 @@ void FritzCallMonitor::onSocketError(QAbstractSocket::SocketError socketError)
 {
     qWarning() << "Socket error:" << m_socket->errorString();
     qWarning() << "Socket Error:" << socketError;
-}
-
-void FritzCallMonitor::onConnected()
-{
-    m_connected = true;
-    Q_EMIT connectedChanged();
-    qDebug() << "✔️ FritzCallMonitor: Verbunden zur FritzBox.";
 }
 
 bool FritzCallMonitor::isConnected() const

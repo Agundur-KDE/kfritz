@@ -30,12 +30,13 @@ public:
     void setCorePlugin(KFritzCorePlugin *plugin);
 
 Q_SIGNALS:
-    void connectedChanged();
+    void connectedChanged(bool connected);
     void callerInfoChanged();
 
 private Q_SLOTS:
     void onReadyRead();
     void onConnected();
+    void onDisconnected();
     void onSocketError(QAbstractSocket::SocketError socketError);
 
 private:
@@ -46,4 +47,7 @@ private:
     QString m_message;
     QString m_host, m_user, m_pass;
     int m_port = 49000;
+
+    int m_retryCount = 0;
+    static constexpr int MAX_RETRIES = 12;
 };
