@@ -70,6 +70,8 @@ void FritzCallMonitor::connectToFritzBox()
 void FritzCallMonitor::onDisconnected()
 {
     qWarning() << "🔌 Verbindung zur FritzBox verloren – versuche Reconnect...";
+    m_connected = false;
+    Q_EMIT connectedChanged(false); // 🔥 Jetzt auch der Disconnect signalisiert!
     QTimer::singleShot(5000, this, &FritzCallMonitor::connectToFritzBox);
 }
 
@@ -77,6 +79,7 @@ void FritzCallMonitor::onConnected()
 {
     qDebug() << "🟢 Erfolgreich verbunden zur FritzBox.";
     m_retryCount = 0; // reset Retry-Zähler
+    m_connected = true;
     Q_EMIT connectedChanged(true);
 }
 

@@ -35,6 +35,9 @@ KFritzCorePlugin::KFritzCorePlugin(QObject *parent)
     connect(&m_fetcher, &FritzPhonebookFetcher::phonebookDownloaded, this, &KFritzCorePlugin::phonebookDownloaded);
     connect(m_callMonitor, &FritzCallMonitor::connectedChanged, this, &KFritzCorePlugin::handleConnectionChanged);
     connect(m_callMonitor, &FritzCallMonitor::callerInfoChanged, this, &KFritzCorePlugin::handleCallerInfoChanged);
+    connect(m_callMonitor, &FritzCallMonitor::connectedChanged, this, [this](bool) {
+        Q_EMIT callMonitorConnectedChanged();
+    });
 }
 
 /************************* Phonebook *******************************/
@@ -139,7 +142,7 @@ void KFritzCorePlugin::connectToFritzBox()
 
 bool KFritzCorePlugin::callMonitorConnected() const
 {
-    return m_callMonitor->isConnected();
+    return m_callMonitor && m_callMonitor->isConnected();
 }
 
 QString KFritzCorePlugin::currentCaller() const

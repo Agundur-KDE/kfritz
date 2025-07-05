@@ -15,7 +15,8 @@ class KFritzCorePlugin; // ✅ Forward Declaration
 class FritzCallMonitor : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(bool connected READ isConnected NOTIFY connectedChanged)
+    Q_PROPERTY(bool isConnected READ isConnected NOTIFY connectedChanged)
+
     Q_PROPERTY(QString callerInfo READ callerInfo NOTIFY callerInfoChanged FINAL)
     QML_ELEMENT
 

@@ -111,7 +111,7 @@ PlasmoidItem {
                     width: 10
                     height: 10
                     radius: 5 // macht es rund
-                    color: plugin.callMonitorConnected ? "green" : "red"
+                    color: plugin.callMonitor.isConnected ? "green" : "red"
                     border.color: "grey"
                     border.width: 1
                     Layout.alignment: Qt.AlignLeft
