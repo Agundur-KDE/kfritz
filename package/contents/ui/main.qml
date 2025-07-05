@@ -178,9 +178,6 @@ PlasmoidItem {
     compactRepresentation: Item {
         id: compactView
 
-        Layout.minimumWidth: iconItem.implicitWidth
-        Layout.minimumHeight: iconItem.implicitHeight
-
         MouseArea {
             anchors.fill: parent
             hoverEnabled: true
@@ -190,25 +187,11 @@ PlasmoidItem {
             cursorShape: Qt.PointingHandCursor
         }
 
-        RowLayout {
-            // Rectangle {
-            //     id: ledIndicator
-            //     width: 10
-            //     height: 10
-            //     radius: 5 // macht es rund
-            //     color: plugin.callMonitorConnected ? "green" : "red"
-            //     border.color: "white"
-            //     border.width: 1
-            // }
+        Kirigami.Icon {
+            id: iconItem
 
-            Kirigami.Icon {
-                id: iconItem
-
-                source: "call-incoming"
-                implicitWidth: Kirigami.Units.iconSizes.sizeForLabels
-                implicitHeight: Kirigami.Units.iconSizes.sizeForLabels
-            }
-
+            source: "call-incoming"
+            anchors.fill: parent
         }
 
     }
