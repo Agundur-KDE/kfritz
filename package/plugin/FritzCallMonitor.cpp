@@ -6,9 +6,10 @@
 #include "FritzCallMonitor.h"
 #include "KFritzCorePlugin.h"
 #include <QDebug>
-#include <QNetworkConfigurationManager>
+#include <QNetworkInformation>
 #include <QObject>
 #include <QTcpSocket>
+#include <QTimer>
 
 using namespace Qt::StringLiterals;
 
@@ -26,9 +27,8 @@ void FritzCallMonitor::setHost(const QString &host)
 
 void FritzCallMonitor::connectToFritzBox()
 {
-    QNetworkConfigurationManager manager;
-    if (!manager.isOnline()) {
-        qDebug() << "🌐 Netzwerk noch nicht verfügbar. Neuer Versuch in 5 Sekunden...";
+    if (QNetworkInformation::instance()->reachability() < QNetworkInformation::Reachability::Online) {
+        qDebug() << "🌐 Kein Internetzugang – neuer Versuch in 5 Sekunden...";
         QTimer::singleShot(5000, this, &FritzCallMonitor::connectToFritzBox);
         return;
     }
