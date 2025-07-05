@@ -19,6 +19,8 @@
 #include <QTextStream>
 #include <QVariantList>
 // #include <QXmlStreamReader>
+#include <KLocalizedString>
+#include <KNotification>
 #include <QDomDocument>
 
 using namespace Qt::StringLiterals;
@@ -172,17 +174,6 @@ void KFritzCorePlugin::loadPhonebook(int phonebookId, int countryCode)
     m_lookup.loadFromFile(path, countryPrefix);
 }
 
-// void KFritzCorePlugin::handleIncomingCall(const QString &number)
-// {
-//     QString name = m_lookup.resolveName(number);
-//     if (!name.isEmpty()) {
-//         m_callerInfo = u"%1 (%2)"_s.arg(name, number);
-//     } else {
-//         m_callerInfo = number;
-//     }
-//     Q_EMIT callerInfoChanged();
-// }
-
 QString KFritzCorePlugin::resolveName(const QString &number) const
 {
     return m_lookup.resolveName(number);
@@ -198,6 +189,16 @@ void KFritzCorePlugin::handleIncomingCall(const QString &number)
 {
     QString name = m_lookup.resolveName(number);
     QString timestamp = QDateTime::currentDateTime().toString(u"hh:mm:ss"_s);
+
+    QString message = name.isEmpty() ? i18n("Incoming call from %1", number) : i18n("Incoming call from %1 (%2)", name, number);
+
+    auto *notification = new KNotification(QStringLiteral("incomingCall"), KNotification::CloseOnTimeout);
+    notification->setComponentName(QStringLiteral("kfritz"));
+    notification->setTitle(i18n("FritzBox Call"));
+    notification->setText(message);
+    notification->setIconName(QStringLiteral("call-incoming")); // z. B. phone-incoming-symbolic
+    notification->sendEvent();
+
     QString entry = timestamp + u" – "_s + (!name.isEmpty() ? name + u" (" + number + u")" : number);
 
     m_callerInfo = !name.isEmpty() ? name + u" (" + number + u")" : number;
@@ -206,7 +207,7 @@ void KFritzCorePlugin::handleIncomingCall(const QString &number)
     m_recentCalls.prepend(entry);
     if (m_recentCalls.size() > 20) // nur letzte 20 anzeigen
         m_recentCalls.removeLast();
-    qDebug() << "📞 Neuer Anruf:" << number << "→ recentCalls:" << m_recentCalls;
+    qDebug() << "📞 :" << number << "→ recentCalls:" << m_recentCalls;
 
     Q_EMIT recentCallsChanged();
 }

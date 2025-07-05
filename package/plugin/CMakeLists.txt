@@ -22,5 +22,7 @@ target_link_libraries(kfritzplugin PRIVATE
     Qt6::Network
     KF6::CoreAddons
     Qt6::Xml
+    KF6::I18n
+    KF6::Notifications
   )
 ecm_finalize_qml_module(kfritzplugin)

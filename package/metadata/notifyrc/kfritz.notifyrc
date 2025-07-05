@@ -1,0 +1,8 @@
+[Global]
+Icon=call-start
+Name=KFritz
+
+[incomingCall]
+Name=Incoming Call
+Comment=Incoming FritzBox call
+Icon=phone-incoming-symbolic

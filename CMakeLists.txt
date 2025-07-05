@@ -121,6 +121,10 @@ if(X11_FOUND)
   set(HAVE_X11 1)
 endif()
 
+install(FILES
+    ${CMAKE_SOURCE_DIR}/package/metadata/notifyrc/kfritz.notifyrc
+    DESTINATION ${KDE_INSTALL_KNOTIFYRCDIR}
+)
 
 install(DIRECTORY contents/
     DESTINATION ${KDE_INSTALL_DATADIR}/plasma/plasmoids/de.agundur.kfritz/
