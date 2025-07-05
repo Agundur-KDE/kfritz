@@ -16,8 +16,10 @@ using namespace Qt::StringLiterals;
 FritzCallMonitor::FritzCallMonitor(QObject *parent)
     : QObject(parent)
 {
-    // m_callMonitor = new FritzCallMonitor(this);
-    // m_callMonitor->setCorePlugin(this);
+    m_reconnectTimer = new QTimer(this);
+    m_reconnectTimer->setInterval(3 * 60 * 1000); // 3 Minuten
+    m_reconnectTimer->setSingleShot(false);
+    connect(m_reconnectTimer, &QTimer::timeout, this, &FritzCallMonitor::connectToFritzBox);
 }
 
 void FritzCallMonitor::setHost(const QString &host)
@@ -70,9 +72,14 @@ void FritzCallMonitor::connectToFritzBox()
 void FritzCallMonitor::onDisconnected()
 {
     qWarning() << "🔌 Verbindung zur FritzBox verloren – versuche Reconnect...";
+
     m_connected = false;
-    Q_EMIT connectedChanged(false); // 🔥 Jetzt auch der Disconnect signalisiert!
-    QTimer::singleShot(5000, this, &FritzCallMonitor::connectToFritzBox);
+    Q_EMIT connectedChanged(false);
+
+    if (!m_reconnectTimer->isActive()) {
+        qDebug() << "⏳ Starte Reconnect-Timer (3 Min Intervall)";
+        m_reconnectTimer->start(); // übernimmt alle Reconnects
+    }
 }
 
 void FritzCallMonitor::onConnected()
@@ -111,6 +118,10 @@ void FritzCallMonitor::onReadyRead()
 
 void FritzCallMonitor::onSocketError(QAbstractSocket::SocketError socketError)
 {
+    if (!m_reconnectTimer->isActive()) {
+        qDebug() << "⏳ Starte Reconnect-Timer (3 Min Intervall)";
+        m_reconnectTimer->start();
+    }
     qWarning() << "Socket error:" << m_socket->errorString();
     qWarning() << "Socket Error:" << socketError;
 }

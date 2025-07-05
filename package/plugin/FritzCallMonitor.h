@@ -10,6 +10,7 @@
 #include <QQmlEngine>
 #include <QString>
 #include <QTcpSocket>
+#include <QTimer>
 
 class KFritzCorePlugin; // ✅ Forward Declaration
 class FritzCallMonitor : public QObject
@@ -44,6 +45,7 @@ private:
     QTcpSocket *m_socket = nullptr;
     KFritzCorePlugin *m_corePlugin = nullptr;
     bool m_connected = false;
+    QTimer *m_reconnectTimer = nullptr;
     QString m_callerInfo;
     QString m_message;
     QString m_host, m_user, m_pass;
