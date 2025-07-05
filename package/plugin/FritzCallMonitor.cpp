@@ -6,6 +6,7 @@
 #include "FritzCallMonitor.h"
 #include "KFritzCorePlugin.h"
 #include <QDebug>
+#include <QNetworkConfigurationManager>
 #include <QObject>
 #include <QTcpSocket>
 
@@ -25,7 +26,15 @@ void FritzCallMonitor::setHost(const QString &host)
 
 void FritzCallMonitor::connectToFritzBox()
 {
+    QNetworkConfigurationManager manager;
+    if (!manager.isOnline()) {
+        qDebug() << "🌐 Netzwerk noch nicht verfügbar. Neuer Versuch in 5 Sekunden...";
+        QTimer::singleShot(5000, this, &FritzCallMonitor::connectToFritzBox);
+        return;
+    }
+
     qDebug() << "Connecting to FritzBox CallMonitor..." << m_host;
+
     if (!m_socket) {
         m_socket = new QTcpSocket(this);
     }
