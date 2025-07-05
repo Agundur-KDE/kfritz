@@ -191,23 +191,22 @@ PlasmoidItem {
         }
 
         RowLayout {
+            // Rectangle {
+            //     id: ledIndicator
+            //     width: 10
+            //     height: 10
+            //     radius: 5 // macht es rund
+            //     color: plugin.callMonitorConnected ? "green" : "red"
+            //     border.color: "white"
+            //     border.width: 1
+            // }
+
             Kirigami.Icon {
                 id: iconItem
 
                 source: "call-incoming"
                 implicitWidth: Kirigami.Units.iconSizes.sizeForLabels
                 implicitHeight: Kirigami.Units.iconSizes.sizeForLabels
-            }
-
-            Rectangle {
-                id: ledIndicator
-
-                width: 10
-                height: 10
-                radius: 5 // macht es rund
-                color: plugin.callMonitorConnected ? "green" : "red"
-                border.color: "white"
-                border.width: 1
             }
 
         }

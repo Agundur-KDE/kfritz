@@ -192,7 +192,7 @@ void KFritzCorePlugin::handleIncomingCall(const QString &number)
 
     QString message = name.isEmpty() ? i18n("Incoming call from %1", number) : i18n("Incoming call from %1 (%2)", name, number);
 
-    auto *notification = new KNotification(QStringLiteral("incomingCall"), KNotification::CloseOnTimeout);
+    auto *notification = new KNotification(QStringLiteral("callReceived"), KNotification::CloseOnTimeout);
     notification->setComponentName(QStringLiteral("kfritz"));
     notification->setTitle(i18n("FritzBox Call"));
     notification->setText(message);
