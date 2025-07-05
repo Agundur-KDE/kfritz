@@ -31,6 +31,7 @@ KFritzCorePlugin::KFritzCorePlugin(QObject *parent)
 {
     m_callMonitor = new FritzCallMonitor(this);
     m_callMonitor->setCorePlugin(this);
+    m_recentCallsModel = new RecentCallsModel(this);
 
     connect(&m_fetcher, &FritzPhonebookFetcher::phonebookDownloaded, this, &KFritzCorePlugin::phonebookDownloaded);
     connect(m_callMonitor, &FritzCallMonitor::connectedChanged, this, &KFritzCorePlugin::handleConnectionChanged);
@@ -208,9 +209,18 @@ void KFritzCorePlugin::handleIncomingCall(const QString &number)
     Q_EMIT callerInfoChanged();
 
     m_recentCalls.prepend(entry);
-    if (m_recentCalls.size() > 20) // nur letzte 20 anzeigen
-        m_recentCalls.removeLast();
+
+    if (m_recentCallsModel)
+        m_recentCallsModel->addCall(name, number, timestamp);
+
+    // if (m_recentCalls.size() > 20) // nur letzte 20 anzeigen
+    //     m_recentCalls.removeLast();
     qDebug() << "📞 :" << number << "→ recentCalls:" << m_recentCalls;
 
     Q_EMIT recentCallsChanged();
+}
+
+QAbstractListModel *KFritzCorePlugin::recentCallsModel() const
+{
+    return m_recentCallsModel;
 }

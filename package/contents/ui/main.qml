@@ -6,15 +6,18 @@
  */
 
 import QtQuick
-import QtQuick.Controls 6.5
+import QtQuick.Controls 6.5 as Controls
 import QtQuick.Layouts
 import de.agundur.kfritz 0.1
-import org.kde.kirigami as Kirigami
+import org.kde.kirigami 2.20 as Kirigami
+import org.kde.kirigamiaddons.components 1.0 as KirigamiAddons
 import org.kde.plasma.components as PlasmaComponents
 import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.plasmoid
 
 PlasmoidItem {
+    // Trennlinie unter dem Header
+
     id: root
 
     property string host: Plasmoid.configuration.Host //"192.168.178.1"
@@ -65,110 +68,74 @@ PlasmoidItem {
         onTriggered: showCallerInfo = false
     }
 
-    fullRepresentation: Item {
-        id: fullView
+    fullRepresentation: Kirigami.ScrollablePage {
+        id: fullPage
 
-        Layout.preferredWidth: 400
-        Layout.preferredHeight: 300
+        // Optionaler Seitentitel (erscheint z.B. in der mobilen Toolbar)
+        title: i18n("Recent Calls")
 
-        ColumnLayout {
-            // anchors.top: parent.top
-            // Button {
-            //     text: "recentCalls testen"
-            //     onClicked: {
-            //         console.log("🔍 Aktuelle recentCalls:", plugin.recentCalls);
-            //         console.log("📏 Anzahl:", plugin.recentCalls.length);
+        // ListView der letzten Anrufe
+        ListView {
+            // Optional: mit KirigamiAddons.Avatar ein echtes Initialen-Icon einbinden:
+            // contentItem: RowLayout {
+            //     KirigamiAddons.Avatar {
+            //         name: name
+            //         size: Kirigami.Units.iconSizes.medium
+            //     }
+            //     Controls.Label {
+            //         text: qsTr("%1 (%2)\n%3").arg(name, number, time)
+            //         verticalAlignment: Text.AlignVCenter
+            //         wrapMode: Text.WordWrap
             //     }
             // }
 
-            anchors.fill: parent
-            spacing: Kirigami.Units.smallSpacing
-            anchors.margins: Kirigami.Units.largeSpacing
+            id: callsList
 
+            model: plugin.recentCallsModel // Datenmodell (z.B. ein ListModel oder QStringList vom Plugin)
+
+            // Delegate-Komponente für jeden Listeneintrag
+            delegate: Kirigami.InlineMessage {
+                required property string name
+                required property string number
+                required property string time
+
+                Layout.fillWidth: true
+                visible: true
+                type: Kirigami.MessageType.Information
+                icon.source: "user"
+                text: "<b>" + name + " </b> " + number + " – " + time
+            }
+
+        }
+
+        // Header-Bereich oben: Überschrift + Statuszeile (aus Kirigami Gallery übernommenes Muster)
+        header: ColumnLayout {
             Kirigami.Heading {
-                // horizontalAlignment: Text.AlignHCenter
-
-                text: "KFritz"
                 level: 2
-                Layout.alignment: Qt.AlignHCenter
+                text: i18n("Recent Calls") // Überschrift der Seite
+                Layout.alignment: Qt.AlignHCenter // zentriert
             }
 
             RowLayout {
                 Layout.fillWidth: true
 
-                PlasmaComponents.Label {
-                    id: fritzIp
-
-                    font.pointSize: 8
-                    color: "lightgray"
-                    horizontalAlignment: Text.AlignLeft
+                Controls.Label {
                     text: Plasmoid.configuration.Host
+                    horizontalAlignment: Text.AlignLeft
+                    font.pointSize: 10
+                    color: Kirigami.Theme.subtitleColor ?? "#666666"
                 }
 
                 Rectangle {
-                    id: ledIndicator
-
-                    width: 10
-                    height: 10
-                    radius: 5 // macht es rund
-                    color: plugin.callMonitor.isConnected ? "green" : "red"
-                    border.color: "grey"
-                    border.width: 1
-                    Layout.alignment: Qt.AlignLeft
+                    width: Kirigami.Units.gridUnit
+                    height: Kirigami.Units.gridUnit
+                    radius: Kirigami.Units.gridUnit / 2
+                    color: plugin.callMonitorConnected ? "green" : "red"
                 }
 
             }
 
-            Rectangle {
-                width: parent.width
-                height: parent.height * 0.8
-
-                Text {
-                    id: callerText
-
-                    anchors.centerIn: parent
-                    text: plugin.resolveName(plugin.currentCaller) + " ( " + plugin.currentCaller + " )"
-                    font.pixelSize: 16
-                    color: "green"
-                    wrapMode: Text.Wrap
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    visible: showCallerInfo
-                    opacity: showCallerInfo ? 1 : 0
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: 600
-                            easing.type: Easing.InOutQuad
-                        }
-
-                    }
-
-                }
-
-                ListView {
-                    // model: ["09:15 – Test A", "10:22 – Test B"]
-
-                    anchors.fill: parent
-                    clip: true
-                    model: plugin.recentCalls
-
-                    delegate: Rectangle {
-                        width: ListView.view.width
-                        height: Kirigami.Units.gridUnit * 1.2
-                        border.color: "grey"
-                        radius: Kirigami.Units.smallSpacing
-
-                        Text {
-                            anchors.centerIn: parent
-                            text: modelData
-                            color: "black"
-                        }
-
-                    }
-
-                }
-
+            Kirigami.Separator {
             }
 
         }

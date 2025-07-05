@@ -14,6 +14,7 @@ target_sources(kfritzplugin PRIVATE
     FritzPhonebookFetcher.cpp
     KFritzCorePlugin.cpp
     PhonebookCache.cpp
+    RecentCallsModel.cpp
   )
 
 target_link_libraries(kfritzplugin PRIVATE

@@ -10,6 +10,7 @@
 #include "FritzCallMonitor.h"
 #include "FritzPhonebookFetcher.h"
 #include "PhonebookCache.h"
+#include "RecentCallsModel.h"
 #include <QObject>
 #include <QQmlEngine>
 #include <QStringList>
@@ -23,6 +24,8 @@ class KFritzCorePlugin : public QObject
     Q_PROPERTY(QString currentCaller READ currentCaller NOTIFY currentCallerChanged)
     Q_PROPERTY(QString callerInfo READ callerInfo NOTIFY callerInfoChanged)
     Q_PROPERTY(QStringList recentCalls READ recentCalls NOTIFY recentCallsChanged)
+    Q_PROPERTY(QAbstractListModel *recentCallsModel READ recentCallsModel NOTIFY recentCallsChanged)
+
     QML_ELEMENT
 
 public:
@@ -32,6 +35,7 @@ public:
     QString currentCaller() const;
     QStringList recentCalls() const;
     QString callerInfo() const;
+    QAbstractListModel *recentCallsModel() const;
 
     Q_INVOKABLE QVariantList getPhonebookList(const QString &host, int port, const QString &user, const QString &password);
     Q_INVOKABLE QVariantList listLocalPhonebooks();
@@ -57,6 +61,7 @@ private:
     QString m_callerInfo;
     PhonebookLookup m_lookup;
     QStringList m_recentCalls;
+    RecentCallsModel *m_recentCallsModel = nullptr;
 
 private Q_SLOTS:
 
