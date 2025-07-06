@@ -79,6 +79,18 @@ sudo zypper ref
 sudo zypper in kfritz
 ```
 
+## KFritz Runtime Installer
+
+This archive contains everything needed to install the **KFritz Plasmoid** and its corresponding **QML plugin** on a KDE Plasma system.
+
+# 📦 Content
+
+The package [kfritz-installer-package.tar.gz](https://github.com/Agundur-KDE/kfritz/releases/download/v0.0.1/kfritz-installer-package.tar.gz) includes:
+
+- `kfritz-runtime.tar.gz`: Contains the compiled `.so`, `qmldir`, and QML files
+- `installer.sh`: Installs everything into the appropriate user directories
+
+
 ### Required
     
 - KDE Plasma 6.4+
