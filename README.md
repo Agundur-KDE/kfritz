@@ -61,7 +61,7 @@ make install (as root)
 ```
 ## 🛠️ Installing KFritz via the openSUSE Build Service Repository
 
-[![build result](https://build.opensuse.org/projects/home:Agundur/packages/kfritz/badge.svg?type=default)](https://build.opensuse.org/package/show/home:Agundur/kfritz)
+[![build result](https://build.opensuse.org/projects/home:Agundur/packages/KFritz/badge.svg?type=default)](https://build.opensuse.org/package/show/home:Agundur/KFritz)
 
 For openSUSE Tumbleweed (and compatible systems):
 
