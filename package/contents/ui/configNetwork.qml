@@ -63,6 +63,7 @@ KCM.SimpleKCM {
         QtControls.TextField {
             id: passwordTextField
 
+            echoMode: TextInput.PasswordEchoOnEdit
             readOnly: false
             Layout.fillWidth: true
             Kirigami.FormData.label: "FritzBox password:"
