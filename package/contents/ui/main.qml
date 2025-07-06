@@ -17,6 +17,24 @@ import org.kde.plasma.plasmoid
 
 PlasmoidItem {
     // Trennlinie unter dem Header
+    //  ListModel {
+    //     id: dummyModel
+    //     ListElement {
+    //         name: "Granny"
+    //         number: "+49 999 1234567"
+    //         time: "12:30"
+    //     }
+    //     ListElement {
+    //         name: "El jefe"
+    //         number: "+1 555-0199"
+    //         time: "11:05"
+    //     }
+    //     ListElement {
+    //         name: "ACME limited"
+    //         number: "+44 7700 900000"
+    //         time: "09:50"
+    //     }
+    // }
 
     id: root
 
@@ -25,6 +43,7 @@ PlasmoidItem {
     property string cfg_viewMode: "fullRepresentation"
     property bool callMonitorConnected: false
     property bool showCallerInfo: false
+    property bool testMode: false
 
     toolTipMainText: Plasmoid.title
     preferredRepresentation: {
@@ -75,9 +94,11 @@ PlasmoidItem {
         title: i18n("Recent Calls")
 
         ListView {
+            // model: testMode ? dummyModel : plugin.recentCallsModel
+
             id: callsList
 
-            model: plugin.recentCallsModel // Datenmodell (z.B. ein ListModel oder QStringList vom Plugin)
+            model: plugin.recentCallsModel
 
             // Delegate-Komponente für jeden Listeneintrag
             delegate: Kirigami.InlineMessage {
