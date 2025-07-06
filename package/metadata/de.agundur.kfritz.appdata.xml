@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+    <id>de.agundur.kfritz</id>
+    <name>KFritz</name>
+    <summary>FritzBox Call Monitor Widget for KDE Plasma</summary>
+    <description>
+        <p>
+      KFritz is a KDE Plasma 6 Plasmoid that connects to your AVM Fritz!Box and displays real-time incoming calls. It shows the caller name and number, maintains a history of recent calls, and integrates with the KDE notification system for alerts.
+    </p>
+        <p>
+      Developed for privacy-conscious users, KFritz uses the local TR-064 interface and stores no data in the cloud.
+    </p>
+    </description>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>GPL-3.0-or-later</project_license>
+    <url type="homepage">https://github.com/Agundur-KDE/kfritz</url>
+    <url type="bugtracker">https://github.com/Agundur-KDE/kfritz/issues</url>
+    <url type="donation">https://liberapay.com/Agundur/donate</url>
+    <url type="vcs-browser">https://github.com/Agundur-KDE/KFritz</url>
+    <url type="contact">https://github.com/Agundur-KDE</url>
+    <extends>org.kde.plasma.desktop</extends>
+    <screenshots>
+        <screenshot type="default">
+            <image>https://raw.githubusercontent.com/Agundur-KDE/kfritz/main/KFritz1.png</image>
+        </screenshot>
+    </screenshots>
+    <developer_name>Alec (Agundur)</developer_name>
+    <!-- <developer id="de.agundur">Alec (Agundur)</developer> -->
+    <provides>
+        <id>plasma-applet-de.agundur.kfritz</id>
+    </provides>
+    <keywords>
+        <keyword>FritzBox</keyword>
+        <keyword>VoIP</keyword>
+        <keyword>Call monitor</keyword>
+        <keyword>TR-064</keyword>
+        <keyword>AVM</keyword>
+        <keyword>Phonebook</keyword>
+        <keyword>Telephony</keyword>
+    </keywords>
+</component>
