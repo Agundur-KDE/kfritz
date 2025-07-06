@@ -13,7 +13,7 @@
   <img src="https://img.shields.io/badge/donate-PayPal-%2337a556" alt="PayPal">
 </a>
   </a>
-  <a href="https://store.kde.org/p/2290729">
+  <a href="https://www.pling.com/p/2300820">
   <img src="https://img.shields.io/badge/KDE%20Plasma-1D99F3?logo=kdeplasma&logoColor=fff" alt="kdeplasma">
 
 <noscript><a href="https://liberapay.com/Agundur/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
