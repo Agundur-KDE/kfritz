@@ -38,6 +38,8 @@ include(KDEClangFormat)
 include(KDEGitCommitHooks)
 include(ECMQmlModule)
 include(ECMConfiguredInstall)
+include(GNUInstallDirs)
+
 
 option(BUILD_KCM_MOUSE_X11 "Build the Mouse KCM's X11 backend" ON)
 
@@ -139,3 +141,6 @@ install(DIRECTORY contents/
 add_subdirectory(package)
 
 install(DIRECTORY package/ DESTINATION ${KDE_INSTALL_DATADIR}/plasma/plasmoids/de.agundur.kfritz)
+
+install(FILES package/metadata/de.agundur.kfritz.appdata.xml
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
