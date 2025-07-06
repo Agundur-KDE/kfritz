@@ -125,15 +125,15 @@ PlasmoidItem {
                 Layout.fillWidth: true
 
                 Controls.Label {
-                    text: Plasmoid.configuration.Host
+                    text: "FRITZ!Box"
                     horizontalAlignment: Text.AlignLeft
                     font.pointSize: 10
                     color: Kirigami.Theme.subtitleColor ?? "#666666"
                 }
 
                 Rectangle {
-                    width: Kirigami.Units.gridUnit
-                    height: Kirigami.Units.gridUnit
+                    width: Kirigami.Units.gridUnit / 2
+                    height: Kirigami.Units.gridUnit / 2
                     radius: Kirigami.Units.gridUnit / 2
                     color: plugin.callMonitorConnected ? "green" : "red"
                 }
