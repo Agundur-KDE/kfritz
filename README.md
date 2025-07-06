@@ -2,7 +2,7 @@
 <div align="center">
 
 <img src="/package/contents/icons/kfritz_icon_128x128.png" width="80" alt="KFritz Logo" /> 
-  <h1>KFritz</h1> <p><strong>Version: 0.1.0</strong></p>
+  <h1>KFritz</h1> <p><strong>Version: 0.0.1</strong></p>
   <a href="https://kde.org/de/">
   <img src="https://img.shields.io/badge/KDE_Plasma-6.1+-blue?style=flat&logo=kde" alt="KFritz">
 </a>
@@ -22,9 +22,9 @@
 
 
 ## Description
-**KFast** **Version:** 0.0.1
+**KFritz** **Version:** 0.0.1
 
-KFritz is a KDE Plasma 6 Plasmoid that connects to your AVM Fritz!Box and displays real-time incoming call notifications. It shows the caller name and number, maintains a history of recent calls, and integrates with the KDE notification system for alerts.
+KFritz is a KDE Plasma 6 Plasmoid that connects to your AVM Fritz!Box and displays real-time incoming calls. It shows the caller name and number, maintains a history of recent calls, and integrates with the KDE notification system for alerts.
 
 Designed for modern Plasma 6 environments, KFritz supports:
 - Real-time call monitoring via the FritzBox CallMonitor 
@@ -184,9 +184,7 @@ This only needs to be done once. The setting persists after reboot.
 
 ## Roadmap
 
-- Add config options like default devie
-- Try add youtube support
-
+Tell me what you would like to see
 
 ## Contributing
 accepting contributions ...
