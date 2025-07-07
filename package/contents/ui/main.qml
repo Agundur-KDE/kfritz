@@ -146,7 +146,7 @@ PlasmoidItem {
                 Layout.fillWidth: true
 
                 Controls.Label {
-                    text: "FRITZ!Box"
+                    text: i18n("FRITZ!Box")
                     horizontalAlignment: Text.AlignLeft
                     font.pointSize: 10
                     color: Kirigami.Theme.subtitleColor ?? "#666666"
