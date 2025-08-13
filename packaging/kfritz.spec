@@ -52,7 +52,7 @@ kfritz A KDE Plasma 6 callmonitor plasmoid for the AVM FRITZ!Box on your desktop
 %cmake_install
 
 
-
+%files
 %license LICENSE*
 %doc README*
 %{_datadir}/plasma/plasmoids/de.agundur.kfritz/
