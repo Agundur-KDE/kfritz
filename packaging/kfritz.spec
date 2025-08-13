@@ -1,5 +1,5 @@
 Name:           kfritz
-Version:        0.0.1
+Version:        0.0.2
 
 Release:        1%{?dist}
 URL:            https://github.com/Agundur-KDE/kfritz
@@ -61,6 +61,6 @@ kfritz A KDE Plasma 6 callmonitor plasmoid for the AVM FRITZ!Box on your desktop
 
 
 %changelog
-* Wed Aug 13 2025 Agundur <info@agundur.de> - 0.0.1
+* Wed Aug 13 2025 Agundur <info@agundur.de> - 0.0.2
 -1
 - Initial Fedora/Copr build
