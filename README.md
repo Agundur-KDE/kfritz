@@ -79,6 +79,18 @@ sudo zypper ref
 sudo zypper in kfritz
 ```
 
+## 🛠️ Installing KFritz via my COPR repository (Fedora)
+
+
+```bash
+# Enable repository
+sudo dnf copr enable agundur/kfritz
+# Install package
+sudo dnf install kfritz
+```
+
+
+
 ## KFritz Runtime Installer
 
 This archive contains everything needed to install the **KFritz Plasmoid** and its corresponding **QML plugin** on a KDE Plasma system.
