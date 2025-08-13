@@ -56,9 +56,9 @@ kfritz A KDE Plasma 6 callmonitor plasmoid for the AVM FRITZ!Box on your desktop
 %license LICENSE*
 %doc README*
 %{_datadir}/plasma/plasmoids/de.agundur.kfritz/
-
 %{_libdir}/qt6/qml/de/agundur/kfritz*/**
-
+%{_datadir}/knotifications6/kfritz.notifyrc
+%{_datadir}/metainfo/de.agundur.kfritz.appdata.xml
 
 %changelog
 * Wed Aug 13 2025 Agundur <info@agundur.de> - 0.0.2
