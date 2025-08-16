@@ -123,6 +123,11 @@ if(X11_FOUND)
   set(HAVE_X11 1)
 endif()
 
+ki18n_install(translate
+    INSTALL_DESTINATION ${KDE_INSTALL_LOCALEDIR}
+)
+
+
 install(FILES
     ${CMAKE_SOURCE_DIR}/package/metadata/notifyrc/kfritz.notifyrc
     DESTINATION ${KDE_INSTALL_KNOTIFYRCDIR}
