@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KFritz 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-23 13:46+0200\n"
-"PO-Revision-Date: 2025-07-23 22:17+0200\n"
+"POT-Creation-Date: 2025-08-16 18:52+0200\n"
+"PO-Revision-Date: 2025-08-16 20:26+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -17,3 +17,52 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.6\n"
 
+#: contents/ui/configNetwork.qml:34
+msgid "FritzBox IP:"
+msgstr "Ip-adres van Fritz!Box:"
+
+#: contents/ui/configNetwork.qml:43
+msgid "FritzBox Port:"
+msgstr "Fritz!Box-poort:"
+
+#: contents/ui/configNetwork.qml:58
+msgid "You need to enable TR-064 on your Fritz!Box and configure an user"
+msgstr "Schakel TR-064 in op je Fritz!Box en voeg een gebruiker toe"
+
+#: contents/ui/configNetwork.qml:67
+msgid "FritzBox user:"
+msgstr "Fritz!Box-gebruikersnaam:"
+
+#: contents/ui/configNetwork.qml:78
+msgid "FritzBox password:"
+msgstr "Fritz!Box-wachtwoord:"
+
+#: contents/ui/configPhoneBook.qml:56
+msgid "Country code: +"
+msgstr "Landcode: +"
+
+#: contents/ui/configPhoneBook.qml:87
+msgid "Get Phonebook"
+msgstr "Telefoonboek opvragen"
+
+#: contents/ui/configPhoneBook.qml:98
+msgid "Phonebook:"
+msgstr "Telefoonboek:"
+
+#: contents/ui/main.qml:97 contents/ui/main.qml:152
+msgid "Recent Calls"
+msgstr "Onlangs gebeld"
+
+#: contents/ui/main.qml:184
+msgid "Dial: #96*5* to enable the CallMonitor on your Fritz!Box"
+msgstr "Toets #96*5* in om de gespreksmonitor van je Fritz!Box in te schakelen"
+
+#: contents/config/config.qml:13
+msgctxt "@title"
+msgid "Phonebooks"
+msgstr "Telefoonboeken"
+
+#: contents/config/config.qml:19
+msgctxt "@title"
+msgid "Network"
+msgstr "Netwerk"
