@@ -91,6 +91,7 @@ PlasmoidItem {
     fullRepresentation: Kirigami.ScrollablePage {
         id: fullPage
 
+        background: null
         padding: 0
         Kirigami.Theme.inherit: true
         // Optionaler Seitentitel (erscheint z.B. in der mobilen Toolbar)
@@ -99,6 +100,7 @@ PlasmoidItem {
         ListView {
             id: callsList
 
+            background: null
             clip: true
             model: plugin.recentCallsModel
 
