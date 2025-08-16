@@ -100,7 +100,6 @@ PlasmoidItem {
         ListView {
             id: callsList
 
-            background: null
             clip: true
             model: plugin.recentCallsModel
 
