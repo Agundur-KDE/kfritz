@@ -137,11 +137,11 @@ FritzOS 7.57 and 8.03
 
     - Connect a telephone to your Fritz!Box (can be a DECT handset or analog phone).
 
-    - Dial: #96*5*
+    - Dial: #96\*5\*
 
       This enables the call monitor on port 1012.
 
-      To disable it again: #96*0*
+      To disable it again: #96\*0\*
 
       This only needs to be done once. The setting persists after reboot.
 
