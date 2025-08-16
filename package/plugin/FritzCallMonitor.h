@@ -49,7 +49,7 @@ private:
     QString m_callerInfo;
     QString m_message;
     QString m_host, m_user, m_pass;
-    int m_port = 49000;
+    // int m_port = 49000;
 
     int m_retryCount = 0;
     static constexpr int MAX_RETRIES = 12;
