@@ -44,6 +44,7 @@ PlasmoidItem {
     property bool callMonitorConnected: false
     property bool showCallerInfo: false
     property bool testMode: false
+    readonly property bool hasBackground: (Plasmoid.effectiveBackgroundHints & PlasmaCore.Types.DefaultBackground) !== 0
 
     toolTipMainText: Plasmoid.title
     preferredRepresentation: {
@@ -90,29 +91,39 @@ PlasmoidItem {
     fullRepresentation: Kirigami.ScrollablePage {
         id: fullPage
 
+        padding: 0
+        Kirigami.Theme.inherit: true
         // Optionaler Seitentitel (erscheint z.B. in der mobilen Toolbar)
         title: i18n("Recent Calls")
 
         ListView {
-            // model: testMode ? dummyModel : plugin.recentCallsModel
-
             id: callsList
 
+            clip: true
             model: plugin.recentCallsModel
 
-            // Delegate-Komponente für jeden Listeneintrag
-            delegate: Kirigami.InlineMessage {
-                // Diese drei musst du explizit deklarieren:
+            // flacher Delegate ohne Hintergrund
+            delegate: Controls.ItemDelegate {
                 required property string name
                 required property string number
                 required property string time
 
-                Layout.fillWidth: true
-                visible: true
-                type: Kirigami.MessageType.Information
-                icon.source: "user"
+                // Kein Hintergrund zeichnen:
+                background: null
+                hoverEnabled: true
+                padding: Kirigami.Units.smallSpacing
+
+                Kirigami.Separator {
+                    visible: hasBackground
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                }
 
                 contentItem: RowLayout {
+                    spacing: Kirigami.Units.smallSpacing
+
+                    // optional: Icon
                     Kirigami.Icon {
                         source: "user"
                         Layout.alignment: Qt.AlignVCenter
@@ -123,9 +134,9 @@ PlasmoidItem {
                         textFormat: Text.RichText
                         wrapMode: Text.NoWrap
                         elide: Text.ElideRight
+                        color: Kirigami.Theme.textColor
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignVCenter
-                        color: Kirigami.Theme.textColor
                     }
 
                 }
@@ -144,6 +155,7 @@ PlasmoidItem {
 
             RowLayout {
                 Layout.fillWidth: true
+                spacing: Kirigami.Units.smallSpacing
 
                 Controls.Label {
                     text: "FRITZ!Box"
@@ -152,11 +164,27 @@ PlasmoidItem {
                     color: Kirigami.Theme.subtitleColor ?? "#666666"
                 }
 
-                Rectangle {
-                    width: Kirigami.Units.gridUnit / 2
-                    height: Kirigami.Units.gridUnit / 2
-                    radius: Kirigami.Units.gridUnit / 2
-                    color: plugin.callMonitorConnected ? "green" : "red"
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: Kirigami.Units.smallSpacing
+
+                    Rectangle {
+                        width: Kirigami.Units.gridUnit / 2
+                        height: Kirigami.Units.gridUnit / 2
+                        radius: Kirigami.Units.gridUnit / 2
+                        color: plugin.callMonitorConnected ? "green" : "red"
+                        Layout.alignment: Qt.AlignVCenter
+                    }
+
+                    Item {
+                        Layout.fillWidth: true
+                    }
+
+                    HelpTipButton {
+                        helpText: qsTr("Dial: #96*5* to enable the CallMonitor on your Fritz!Box")
+                        Layout.alignment: Qt.AlignVCenter
+                    }
+
                 }
 
             }
