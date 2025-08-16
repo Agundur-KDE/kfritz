@@ -31,7 +31,7 @@ KCM.SimpleKCM {
             inputMask: "000.000.000.000"
             readOnly: false
             Layout.fillWidth: true
-            Kirigami.FormData.label: "FritzBox IP:"
+            Kirigami.FormData.label: i18n("FritzBox IP:")
             text: cfg_Host
             onEditingFinished: cfg_Host = text
         }
@@ -40,7 +40,7 @@ KCM.SimpleKCM {
             id: portSpinBox
 
             value: cfg_Port
-            Kirigami.FormData.label: "FritzBox Port:"
+            Kirigami.FormData.label: i18n("FritzBox Port:")
             from: 1
             to: 65535
             stepSize: 1
@@ -50,12 +50,21 @@ KCM.SimpleKCM {
             onValueChanged: cfg_Port = textFromValue(value)
         }
 
+        Item {
+            Layout.fillWidth: true
+        }
+
+        HelpTipButton {
+            helpText: i18n("You need to enable TR-064 on your Fritz!Box and configure an user")
+            Layout.alignment: Qt.AlignVCenter
+        }
+
         QtControls.TextField {
             id: loginTextField
 
             readOnly: false
             Layout.fillWidth: true
-            Kirigami.FormData.label: "FritzBox user:"
+            Kirigami.FormData.label: i18n("FritzBox user:")
             text: cfg_Login
             onEditingFinished: cfg_Login = text
         }
@@ -66,7 +75,7 @@ KCM.SimpleKCM {
             echoMode: TextInput.PasswordEchoOnEdit
             readOnly: false
             Layout.fillWidth: true
-            Kirigami.FormData.label: "FritzBox password:"
+            Kirigami.FormData.label: i18n("FritzBox password:")
             text: cfg_Password
             onEditingFinished: cfg_Password = text
         }

@@ -53,7 +53,7 @@ KCM.SimpleKCM {
             id: countrySpinBox
 
             value: cfg_CountryCode
-            Kirigami.FormData.label: "Country code: +"
+            Kirigami.FormData.label: i18n("Country code: +")
             from: 1
             to: 999
             stepSize: 1
@@ -84,7 +84,7 @@ KCM.SimpleKCM {
         QtControls.Button {
             id: getPhonebooks
 
-            text: "Get Phonebook"
+            text: i18n("Get Phonebook")
             onClicked: {
                 cfg_Phonebooks = plugin.getPhonebookList(cfg_Host, cfg_Port, cfg_Login, cfg_Password).join(", ");
             }
@@ -95,7 +95,7 @@ KCM.SimpleKCM {
             model: phonebookModel
             textRole: "name"
             valueRole: "id"
-            Kirigami.FormData.label: "Phonebook:"
+            Kirigami.FormData.label: i18n("Phonebook:")
             currentIndex: {
                 for (var i = 0; i < phonebookModel.count; ++i) {
                     if (phonebookModel.get(i).id === cfg_SelectedPhonebook)

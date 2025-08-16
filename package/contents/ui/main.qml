@@ -181,7 +181,7 @@ PlasmoidItem {
                     }
 
                     HelpTipButton {
-                        helpText: qsTr("Dial: #96*5* to enable the CallMonitor on your Fritz!Box")
+                        helpText: i18n("Dial: #96*5* to enable the CallMonitor on your Fritz!Box")
                         Layout.alignment: Qt.AlignVCenter
                     }
 
