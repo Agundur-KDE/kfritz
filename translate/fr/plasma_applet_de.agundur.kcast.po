@@ -17,3 +17,52 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: contents/ui/configNetwork.qml:34
+msgid "FritzBox IP:"
+msgstr "Adresse IP de la FRITZ!Box :"
+
+#: contents/ui/configNetwork.qml:43
+msgid "FritzBox Port:"
+msgstr "Port de la FRITZ!Box :"
+
+#: contents/ui/configNetwork.qml:58
+msgid "You need to enable TR-064 on your Fritz!Box and configure an user"
+msgstr "Vous devez activer TR-064 sur votre FRITZ!Box et configurer un compte utilisateur."
+
+#: contents/ui/configNetwork.qml:67
+msgid "FritzBox user:"
+msgstr "Utilisateur de la FRITZ!Box :"
+
+#: contents/ui/configNetwork.qml:78
+msgid "FritzBox password:"
+msgstr "Mot de passe de la FRITZ!Box :"
+
+#: contents/ui/configPhoneBook.qml:56
+msgid "Country code: +"
+msgstr "Code pays : +"
+
+#: contents/ui/configPhoneBook.qml:87
+msgid "Get Phonebook"
+msgstr "Récupérer le répertoire"
+
+#: contents/ui/configPhoneBook.qml:98
+msgid "Phonebook:"
+msgstr "Répertoire :"
+
+#: contents/ui/main.qml:97 contents/ui/main.qml:152
+msgid "Recent Calls"
+msgstr "Appels récents"
+
+#: contents/ui/main.qml:184
+msgid "Dial: #96*5* to enable the CallMonitor on your Fritz!Box"
+msgstr "Composez : #96*5* pour activer le CallMonitor sur votre FRITZ!Box."
+
+#: contents/config/config.qml:13
+msgctxt "@title"
+msgid "Phonebooks"
+msgstr "Répertoires"
+
+#: contents/config/config.qml:19
+msgctxt "@title"
+msgid "Network"
+msgstr "Réseau"

@@ -17,3 +17,52 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: contents/ui/configNetwork.qml:34
+msgid "FritzBox IP:"
+msgstr "IP de la FRITZ!Box:"
+
+#: contents/ui/configNetwork.qml:43
+msgid "FritzBox Port:"
+msgstr "Puerto de la FRITZ!Box:"
+
+#: contents/ui/configNetwork.qml:58
+msgid "You need to enable TR-064 on your Fritz!Box and configure an user"
+msgstr "Debe habilitar TR-064 en su FRITZ!Box y configurar un usuario."
+
+#: contents/ui/configNetwork.qml:67
+msgid "FritzBox user:"
+msgstr "Usuario de la FRITZ!Box:"
+
+#: contents/ui/configNetwork.qml:78
+msgid "FritzBox password:"
+msgstr "Contraseña de la FRITZ!Box:"
+
+#: contents/ui/configPhoneBook.qml:56
+msgid "Country code: +"
+msgstr "Código de país: +"
+
+#: contents/ui/configPhoneBook.qml:87
+msgid "Get Phonebook"
+msgstr "Obtener la agenda"
+
+#: contents/ui/configPhoneBook.qml:98
+msgid "Phonebook:"
+msgstr "Agenda telefónica:"
+
+#: contents/ui/main.qml:97 contents/ui/main.qml:152
+msgid "Recent Calls"
+msgstr "Llamadas recientes"
+
+#: contents/ui/main.qml:184
+msgid "Dial: #96*5* to enable the CallMonitor on your Fritz!Box"
+msgstr "Marque: #96*5* para activar el CallMonitor en su FRITZ!Box."
+
+#: contents/config/config.qml:13
+msgctxt "@title"
+msgid "Phonebooks"
+msgstr "Agendas telefónicas"
+
+#: contents/config/config.qml:19
+msgctxt "@title"
+msgid "Network"
+msgstr "Red"
