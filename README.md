@@ -16,8 +16,7 @@
   <a href="https://www.pling.com/p/2300820">
   <img src="https://img.shields.io/badge/KDE%20Plasma-1D99F3?logo=kdeplasma&logoColor=fff" alt="kdeplasma">
 
-<noscript><a href="https://liberapay.com/Agundur/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
-</a></div>
+</div>
 
 
 
@@ -35,9 +34,9 @@ Designed for modern Plasma 6 environments, KFritz supports:
 
 ---
 
-## 🏠 Homepage
+##  Homepage
 
-📦 [https://github.com/Agundur-KDE/kfritz](https://github.com/Agundur-KDE/kfritz)
+ [https://www.agundur.de/](https://www.agundur.de/projects/fritzbox_callmonitor_for_kde.html)
 
 
 ## Visuals
@@ -90,7 +89,6 @@ sudo dnf install kfritz
 ```
 
 
-
 ## KFritz Runtime Installer
 
 This archive contains everything needed to install the **KFritz Plasmoid** and its corresponding **QML plugin** on a KDE Plasma system.
@@ -120,6 +118,9 @@ The package [kfritz-installer-package.tar.gz](https://github.com/Agundur-KDE/kfr
 ## Tested Hardware/Software
 
 🛒[FRITZ!Box 6690 Cable](https://amzn.to/3Iwsnog) (Affiliate link).
+
+🛒[FRITZ!Box 6660 Cable](https://amzn.to/3Uxnxu2) (Affiliate link).
+
 
 FritzOS 7.57 and 8.03
 
