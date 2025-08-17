@@ -20,9 +20,8 @@ override_dh_auto_install:
 	# Sicherstellen, dass keine Quelltexte ins Paket wandern:
 	rm -f debian/kfritz/usr/share/plasma/plasmoids/de.agundur.kfritz/plugin/*.{cpp,h,CMakeLists.txt} || true
 
-override_dh_install:
-	# Unsere Build-System-Installationen landen bereits in debian/kfritz
-	dh_install --sourcedir=debian/kfritz
+# WICHTIG: dh_install NICHT umbiegen/duplizieren – CMake hat schon in debian/kfritz installiert.
+# dh_install läuft weiter im Standard-Flow, macht aber mit leerer .install-Datei nichts.
 
 override_dh_auto_clean:
 	rm -rf obj-* build || true
