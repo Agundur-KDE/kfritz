@@ -19,13 +19,12 @@ jobs:
     container:
       image: debian:trixie
 
-    # Alle run-Schritte in Bash (brauchen pipefail)
     defaults:
       run:
         shell: bash
 
-    # Git-Guard: falls irgendein CMake-Skript Git braucht
     env:
+      # Falls CMake/ECM Git-Infos benötigt
       GIT_DISCOVERY_ACROSS_FILESYSTEM: "1"
 
     steps:
@@ -56,13 +55,25 @@ jobs:
           set -euxo pipefail
           mk-build-deps -i -r -t 'apt-get -y --no-install-recommends' debian/control
 
-      - name: Build .deb (log via tee, pipefail übernimmt Exit)
+      - name: Build .deb (log via tee)
         env:
           DEB_BUILD_OPTIONS: parallel=${{ runner.processorCount }}
           DH_VERBOSE: "1"
         run: |
           set -euxo pipefail
           dpkg-buildpackage -us -uc -b 2>&1 | tee build.log
+          # kein PIPESTATUS nötig: bash + pipefail → korrekter Exit
+
+      - name: Check .deb exist
+        run: |
+          set -euxo pipefail
+          shopt -s nullglob
+          files=( ../*.deb )
+          if (( ${#files[@]} == 0 )); then
+            echo "No .deb produced. See build.log above." >&2
+            exit 2
+          fi
+          printf "Found debs:\n%s\n" "${files[@]}"
 
       - name: List staged files (always)
         if: always()
@@ -75,6 +86,13 @@ jobs:
             echo "No staged files yet (build failed before install)."
           fi
 
+      - name: Show parent dir (always)
+        if: always()
+        run: |
+          set +e
+          echo "---- parent dir .. ----"
+          ls -lah .. || true
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -84,6 +102,7 @@ jobs:
             ../*.deb
             ../*.changes
             ../*.buildinfo
+          if-no-files-found: warn
 
       - name: Dump CMake & debhelper logs on failure
         if: failure()
