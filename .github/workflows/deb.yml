@@ -1,24 +1,33 @@
 name: build-deb
+
 on:
   push:
+    paths:
+      - '.github/workflows/deb.yml'
+      - 'debian/**'
+      - 'CMakeLists.txt'
+      - '**/*.cmake'
+      - 'src/**'
+      - '**/*.cpp'
+      - '**/*.h'
+      - 'contents/**'
   workflow_dispatch:
 
 jobs:
   deb:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        suite: [trixie]   # bei Bedarf: sid hinzufügen
-    container: debian:${{ matrix.suite }}
+    container:
+      image: debian:trixie
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Show distro info
         run: |
           set -euxo pipefail
           cat /etc/os-release
+          uname -a
 
       - name: Install base tools
         run: |
@@ -32,38 +41,38 @@ jobs:
       - name: Install Build-Depends from debian/control
         run: |
           set -euxo pipefail
+          # installiert ALLE Build-Depends aus debian/control
           mk-build-deps -i -r -t 'apt-get -y --no-install-recommends' debian/control
 
       - name: Build .deb
-        env:
-          DEB_BUILD_OPTIONS: parallel=${{ runner.processorCount }}
         run: |
           set -euxo pipefail
+          export DEB_BUILD_OPTIONS=parallel=$(nproc)
           dpkg-buildpackage -us -uc -b
+
+      - name: List staged files (always)
+        if: always()
+        run: |
+          set +e
+          echo "---- debian/tmp (top 3 levels) ----"
+          find debian/tmp -maxdepth 3 -type f | sort || true
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: kfritz-${{ matrix.suite }}
+          name: kfritz-trixie
           path: |
             ../*.deb
             ../*.changes
             ../*.buildinfo
 
-       - name: List staged files (always)
-        if: always()
-        run: |
-            set +e
-            echo "---- debian/tmp (top 3 levels) ----"
-            find debian/tmp -maxdepth 3 -type f | sort || true
-
-        - name: Dump CMake logs on failure
+      - name: Dump CMake & debhelper logs on failure
         if: failure()
         run: |
-            set +e
-            echo "---- CMakeError.log ----"
-            find .. -name CMakeError.log -print -exec sed -n '1,200p' {} \;
-            echo "---- CMakeOutput.log (tail) ----"
-            find .. -name CMakeOutput.log -print -exec tail -n 200 {} \;
-            echo "---- debhelper logs (tail) ----"
-            find debian -maxdepth 2 -type f -name '*.log' -print -exec tail -n 200 {} \;
+          set +e
+          echo "---- CMakeError.log ----"
+          find .. -name CMakeError.log -print -exec sed -n '1,200p' {} \;
+          echo "---- CMakeOutput.log (tail) ----"
+          find .. -name CMakeOutput.log -print -exec tail -n 200 {} \;
+          echo "---- debhelper logs (tail) ----"
+          find debian -maxdepth 2 -type f -name '*.log' -print -exec tail -n 200 {} \;
