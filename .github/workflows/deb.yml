@@ -43,26 +43,30 @@ jobs:
           set -euxo pipefail
           mk-build-deps -i -r -t 'apt-get -y --no-install-recommends' debian/control
 
-      - name: Build .deb
+      - name: Build .deb (tee full log)
         env:
           DEB_BUILD_OPTIONS: parallel=${{ runner.processorCount }}
           DH_VERBOSE: "1"
         run: |
           set -euxo pipefail
-          dpkg-buildpackage -us -uc -b
+          # Gesamtausgabe mitschneiden, egal ob success/fail
+          dpkg-buildpackage -us -uc -b 2>&1 | tee build.log
+          # Status auswerten, damit der Job bei Fehlern korrekt rot wird
+          test ${PIPESTATUS[0]} -eq 0
 
       - name: List staged files (always)
         if: always()
         run: |
           set +e
-          echo "---- debian/tmp (top 4 levels) ----"
-          find ./debian/tmp -maxdepth 4 -type f | sort || true
+          echo "---- debian/tmp (top 5 levels) ----"
+          find ./debian/tmp -maxdepth 5 -type f | sort || true
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: kfritz-trixie
           path: |
+            build.log
             ../*.deb
             ../*.changes
             ../*.buildinfo
