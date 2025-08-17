@@ -1,0 +1,16 @@
+<services>
+  <service name="tar_scm">
+    <param name="scm">git</param>
+    <param name="url">https://github.com/Agundur-KDE/kfritz.git</param>
+    <param name="revision">main</param>
+    <param name="filename">kfritz</param>
+    <param name="versionformat">0.1.0+git%cd.%h</param>
+  </service>
+  <service name="recompress">
+    <param name="compression">xz</param>
+    <param name="file">kfritz*.tar</param>
+  </service>
+
+  <!-- macht aus dem Tarball + debian/ eine Debian-Source (.dsc + .debian.tar.xz) -->
+  <service name="debtransform"/>
+</services>
