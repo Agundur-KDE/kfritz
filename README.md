@@ -2,7 +2,7 @@
 <div align="center">
 
 <img src="/package/contents/icons/kfritz_icon_128x128.png" width="80" alt="KFritz Logo" /> 
-  <h1>KFritz</h1> <p><strong>Version: 0.0.1</strong></p>
+  <h1>KFritz</h1> <p><strong>Version: 0.1.0</strong></p>
   <a href="https://kde.org/de/">
   <img src="https://img.shields.io/badge/KDE_Plasma-6.1+-blue?style=flat&logo=kde" alt="KFritz">
 </a>
@@ -21,7 +21,7 @@
 
 
 ## Description
-**KFritz** **Version:** 0.0.1
+**KFritz** **Version:** 0.1.0
 
 KFritz is a KDE Plasma 6 Plasmoid that connects to your AVM Fritz!Box and displays real-time incoming calls. It shows the caller name and number, maintains a history of recent calls, and integrates with the KDE notification system for alerts.
 
@@ -95,7 +95,7 @@ This archive contains everything needed to install the **KFritz Plasmoid** and i
 
 # 📦 Content
 
-The package [kfritz-installer-package.tar.gz](https://github.com/Agundur-KDE/kfritz/releases/download/v0.0.1/kfritz-installer-package.tar.gz) includes:
+The package [kfritz-installer-package.tar.gz](https://github.com/Agundur-KDE/kfritz/releases/download/v0.1.0/kfritz-installer-package.tar.gz) includes:
 
 - `kfritz-runtime.tar.gz`: Contains the compiled `.so`, `qmldir`, and QML files
 - `installer.sh`: Installs everything into the appropriate user directories
