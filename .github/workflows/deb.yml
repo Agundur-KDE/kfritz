@@ -50,11 +50,20 @@ jobs:
             ../*.changes
             ../*.buildinfo
 
-      - name: Dump CMake logs on failure
+       - name: List staged files (always)
+        if: always()
+        run: |
+            set +e
+            echo "---- debian/tmp (top 3 levels) ----"
+            find debian/tmp -maxdepth 3 -type f | sort || true
+
+        - name: Dump CMake logs on failure
         if: failure()
         run: |
-          set +e
-          echo "---- CMakeError.log ----"
-          find .. -name CMakeError.log -print -exec sed -n '1,200p' {} \;
-          echo "---- CMakeOutput.log (tail) ----"
-          find .. -name CMakeOutput.log -print -exec tail -n 200 {} \;
+            set +e
+            echo "---- CMakeError.log ----"
+            find .. -name CMakeError.log -print -exec sed -n '1,200p' {} \;
+            echo "---- CMakeOutput.log (tail) ----"
+            find .. -name CMakeOutput.log -print -exec tail -n 200 {} \;
+            echo "---- debhelper logs (tail) ----"
+            find debian -maxdepth 2 -type f -name '*.log' -print -exec tail -n 200 {} \;

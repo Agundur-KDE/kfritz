@@ -1,5 +1,6 @@
 #!/usr/bin/make -f
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export DH_VERBOSE = 1
 
 %:
 	dh $@ --buildsystem=cmake --parallel
@@ -11,6 +12,14 @@ override_dh_auto_configure:
 	  -DCMAKE_INSTALL_PREFIX=/usr \
 	  -Wdev --debug-find
 
+override_dh_auto_test:
+	# Tests explizit überspringen (wir bauen nur Pakete)
+	:
+
 override_dh_auto_clean:
 	rm -rf obj-* build || true
 	dh_auto_clean || true
+
+override_dh_missing:
+	# Zeigt dir EXPLIZIT, welche Dateien nicht zugeordnet sind (und failt)
+	dh_missing --fail-missing --list-missing

@@ -1,2 +1,6 @@
 usr/share/plasma/plasmoids/de.agundur.kfritz/
 usr/share/locale/*/LC_MESSAGES/plasma_applet_de.agundur.kfritz.mo
+
+# Plugin-Pfad — einen von beiden (prüf im Debug-Listing unten):
+usr/lib/*/qt6/qml/**/lib*.so
+usr/lib/*/libkfritz*.so
