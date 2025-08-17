@@ -1,0 +1,45 @@
+name: build-deb
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  deb:
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [trixie, sid]  # Debian 13 + „höher“
+    runs-on: ubuntu-latest
+    container: debian:${{ matrix.suite }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare apt & base tooling
+        run: |
+          set -e
+          apt-get update
+          # Grundwerkzeug + Build-Helper
+          apt-get install -y --no-install-recommends \
+            devscripts equivs build-essential fakeroot git ca-certificates \
+            cmake ninja-build pkg-kde-tools extra-cmake-modules \
+            qt6-base-dev qt6-declarative-dev gettext
+          # Optional: wenn du mk-build-deps nutzen willst:
+          # (zieht Build-Depends aus debian/control automatisch)
+          mk-build-deps -i -r -t 'apt-get -y --no-install-recommends' debian/control || true
+
+      - name: Build .deb
+        env:
+          DEB_BUILD_OPTIONS: parallel=$(nproc)
+        run: |
+          set -e
+          dpkg-buildpackage -us -uc -b
+
+      - name: Collect artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: kfritz-${{ matrix.suite }}
+          path: |
+            ../*.deb
+            ../*.buildinfo
+            ../*.changes
