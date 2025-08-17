@@ -1,7 +1,7 @@
 Source: kfritz
 Section: kde
 Priority: optional
-Maintainer: Alec <info@agundur.de>
+Maintainer: Agundur <info@agundur.de>
 Build-Depends: debhelper-compat (= 13),
  cmake, ninja-build, extra-cmake-modules, pkg-kde-tools, gettext, pkg-config,
  qt6-base-dev, qt6-declarative-dev, qt6-svg-dev, qt6-base-dev-tools,

@@ -43,15 +43,6 @@ jobs:
           set -euxo pipefail
           mk-build-deps -i -r -t 'apt-get -y --no-install-recommends' debian/control
 
-      # Vorab-Configure nur für klarere Fehler (failsafe, bricht Build nicht hart ab)
-      - name: Probe CMake configure (diagnostic)
-        run: |
-          set -euxo pipefail
-          rm -rf _probe && mkdir _probe
-          cd _probe
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -Wdev --debug-find ..
-        continue-on-error: true
-
       - name: Build .deb
         env:
           DEB_BUILD_OPTIONS: parallel=${{ runner.processorCount }}
