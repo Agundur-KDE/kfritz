@@ -6,26 +6,37 @@ on:
 jobs:
   deb:
     runs-on: ubuntu-latest
-    container: debian:trixie
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [trixie]   # bei Bedarf: sid hinzufügen
+    container: debian:${{ matrix.suite }}
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install build deps
+      - name: Show distro info
         run: |
-            set -euxo pipefail
-            export DEBIAN_FRONTEND=noninteractive
-            apt-get update
-            apt-get install -y --no-install-recommends \
+          set -euxo pipefail
+          cat /etc/os-release
+
+      - name: Install base tools
+        run: |
+          set -euxo pipefail
+          export DEBIAN_FRONTEND=noninteractive
+          apt-get update
+          apt-get install -y --no-install-recommends \
             devscripts equivs build-essential fakeroot ca-certificates git \
-            debhelper-compat \
-            cmake ninja-build extra-cmake-modules pkg-kde-tools gettext \
-            qt6-base-dev qt6-declarative-dev qt6-svg-dev \
-            libplasma-dev libkf6i18n-dev libkf6notifications-dev libkf6package-dev
+            cmake ninja-build pkg-config
+
+      - name: Install Build-Depends from debian/control
+        run: |
+          set -euxo pipefail
+          mk-build-deps -i -r -t 'apt-get -y --no-install-recommends' debian/control
 
       - name: Build .deb
         env:
-          DEB_BUILD_OPTIONS: parallel=$(nproc)
+          DEB_BUILD_OPTIONS: parallel=${{ runner.processorCount }}
         run: |
           set -euxo pipefail
           dpkg-buildpackage -us -uc -b
@@ -33,15 +44,17 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: kfritz-trixie
+          name: kfritz-${{ matrix.suite }}
           path: |
             ../*.deb
             ../*.changes
             ../*.buildinfo
 
-      # Hilfreich, falls CMake nochmal scheitert
-      - name: Dump CMakeError on failure
+      - name: Dump CMake logs on failure
         if: failure()
         run: |
           set +e
+          echo "---- CMakeError.log ----"
           find .. -name CMakeError.log -print -exec sed -n '1,200p' {} \;
+          echo "---- CMakeOutput.log (tail) ----"
+          find .. -name CMakeOutput.log -print -exec tail -n 200 {} \;
