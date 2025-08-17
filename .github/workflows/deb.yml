@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Show distro info
+      - name: Distro info
         run: |
           set -euxo pipefail
           cat /etc/os-release
@@ -41,21 +41,22 @@ jobs:
       - name: Install Build-Depends from debian/control
         run: |
           set -euxo pipefail
-          # installiert ALLE Build-Depends aus debian/control
           mk-build-deps -i -r -t 'apt-get -y --no-install-recommends' debian/control
 
       - name: Build .deb
+        env:
+          DEB_BUILD_OPTIONS: parallel=${{ runner.processorCount }}
         run: |
           set -euxo pipefail
-          export DEB_BUILD_OPTIONS=parallel=$(nproc)
           dpkg-buildpackage -us -uc -b
 
+      # Zeigt, was nach "make install" in debian/tmp liegt (falls wir bis dahin kommen)
       - name: List staged files (always)
         if: always()
         run: |
           set +e
           echo "---- debian/tmp (top 3 levels) ----"
-          find debian/tmp -maxdepth 3 -type f | sort || true
+          find ./debian/tmp -maxdepth 3 -type f | sort || true
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -66,13 +67,16 @@ jobs:
             ../*.changes
             ../*.buildinfo
 
+      # <<< WICHTIG: Logs aus dem aktuellen Workspace holen, nicht aus ".."
       - name: Dump CMake & debhelper logs on failure
         if: failure()
         run: |
           set +e
           echo "---- CMakeError.log ----"
-          find .. -name CMakeError.log -print -exec sed -n '1,200p' {} \;
+          find . -name CMakeError.log -print -exec sed -n '1,200p' {} \;
           echo "---- CMakeOutput.log (tail) ----"
-          find .. -name CMakeOutput.log -print -exec tail -n 200 {} \;
+          find . -name CMakeOutput.log -print -exec tail -n 200 {} \;
+          echo "---- CMakeCache.txt (head) ----"
+          sed -n '1,120p' obj-*/CMakeCache.txt 2>/dev/null || true
           echo "---- debhelper logs (tail) ----"
-          find debian -maxdepth 2 -type f -name '*.log' -print -exec tail -n 200 {} \;
+          find ./debian -maxdepth 2 -type f -name '*.log' -print -exec t*
