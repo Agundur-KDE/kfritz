@@ -3,18 +3,17 @@ Section: kde
 Priority: optional
 Maintainer: Agundur <info@agundur.de>
 Build-Depends: debhelper-compat (= 13),
-               cmake, ninja-build, extra-cmake-modules, pkg-kde-tools, gettext,
-               qt6-base-dev, qt6-declarative-dev, qt6-quickcontrols2-dev,
-               libplasma-dev,
-               libkf6i18n-dev, libkf6notifications-dev, libkf6package-dev,
-               libqt6svg6-dev
-
+ cmake, ninja-build, extra-cmake-modules, pkg-kde-tools, gettext,
+ qt6-base-dev, qt6-declarative-dev, qt6-svg-dev,
+ libplasma-dev,
+ libkf6i18n-dev, libkf6notifications-dev, libkf6package-dev
 Standards-Version: 4.7.0
 Rules-Requires-Root: no
 Homepage: https://github.com/Agundur-KDE/kfritz
 
 Package: kfritz
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, plasma-workspace | plasma-desktop
+Architecture: all
+Depends: ${misc:Depends},
+         qml6-module-qtquick-controls, qml6-module-org-kde-kirigami
 Description: Plasma 6 applet for FRITZ!Box call monitor
- KFritz is a Plasma 6 applet that shows recent calls from your FRITZ!Box.
+ KFritz ist ein Plasma-6-Applet, das Anrufe der FRITZ!Box anzeigt.
