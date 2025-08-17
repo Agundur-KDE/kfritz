@@ -13,7 +13,6 @@ override_dh_auto_configure:
 	  -Wdev --debug-find
 
 override_dh_auto_test:
-	# Tests explizit überspringen (wir bauen nur Pakete)
 	:
 
 override_dh_auto_clean:
@@ -21,5 +20,4 @@ override_dh_auto_clean:
 	dh_auto_clean || true
 
 override_dh_missing:
-	# Zeigt dir EXPLIZIT, welche Dateien nicht zugeordnet sind (und failt)
 	dh_missing --fail-missing --list-missing
