@@ -1,4 +1,8 @@
+# Phase A: nur die Inhalte listen, die garantiert vorhanden sind.
+# (CMake installiert bereits direkt unter debian/kfritz/usr/...)
 usr/share/plasma/plasmoids/de.agundur.kfritz/
-usr/share/locale/*/LC_MESSAGES/plasma_applet_de.agundur.kfritz.mo
-# C++-Plugin (.so) – Pfad ggf. nach Debug-Listing anpassen:
-usr/lib/*/qt6/qml/**/lib*.so
+usr/share/metainfo/de.agundur.kfritz.appdata.xml
+
+# Später (Phase B) wieder aktivieren, wenn Plugin/Übersetzungen korrekt landen:
+# usr/share/locale/*/LC_MESSAGES/plasma_applet_de.agundur.kfritz.mo
+# usr/lib/*/qt6/qml/**/lib*.so

@@ -10,10 +10,19 @@ override_dh_auto_configure:
 	  -DCMAKE_BUILD_TYPE=Release \
 	  -DBUILD_TESTING=OFF \
 	  -DCMAKE_INSTALL_PREFIX=/usr \
-	  --log-level=DEBUG -Wdev --debug-find
+	  -Wdev --debug-find
 
 override_dh_auto_test:
 	:
+
+override_dh_auto_install:
+	dh_auto_install
+	# Sicherstellen, dass keine Quelltexte ins Paket wandern:
+	rm -f debian/kfritz/usr/share/plasma/plasmoids/de.agundur.kfritz/plugin/*.{cpp,h,CMakeLists.txt} || true
+
+override_dh_install:
+	# Unsere Build-System-Installationen landen bereits in debian/kfritz
+	dh_install --sourcedir=debian/kfritz
 
 override_dh_auto_clean:
 	rm -rf obj-* build || true
