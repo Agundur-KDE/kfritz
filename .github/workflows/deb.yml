@@ -46,17 +46,17 @@ jobs:
       - name: Build .deb
         env:
           DEB_BUILD_OPTIONS: parallel=${{ runner.processorCount }}
+          DH_VERBOSE: "1"
         run: |
           set -euxo pipefail
           dpkg-buildpackage -us -uc -b
 
-      # Zeigt, was nach "make install" in debian/tmp liegt (falls wir bis dahin kommen)
       - name: List staged files (always)
         if: always()
         run: |
           set +e
-          echo "---- debian/tmp (top 3 levels) ----"
-          find ./debian/tmp -maxdepth 3 -type f | sort || true
+          echo "---- debian/tmp (top 4 levels) ----"
+          find ./debian/tmp -maxdepth 4 -type f | sort || true
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -67,16 +67,15 @@ jobs:
             ../*.changes
             ../*.buildinfo
 
-      # <<< WICHTIG: Logs aus dem aktuellen Workspace holen, nicht aus ".."
       - name: Dump CMake & debhelper logs on failure
         if: failure()
         run: |
           set +e
           echo "---- CMakeError.log ----"
-          find . -name CMakeError.log -print -exec sed -n '1,200p' {} \;
+          find . -name CMakeError.log -print0 | xargs -0 -r -I{} sh -c 'echo ">>> {}"; sed -n "1,200p" "{}"'
           echo "---- CMakeOutput.log (tail) ----"
-          find . -name CMakeOutput.log -print -exec tail -n 200 {} \;
-          echo "---- CMakeCache.txt (head) ----"
-          sed -n '1,120p' obj-*/CMakeCache.txt 2>/dev/null || true
+          find . -name CMakeOutput.log -print0 | xargs -0 -r -I{} sh -c 'echo ">>> {}"; tail -n 200 "{}"'
+          echo "---- CMakeCache (head) ----"
+          for f in obj-*/CMakeCache.txt; do [ -f "$f" ] && { echo ">>> $f"; sed -n '1,120p' "$f"; }; done
           echo "---- debhelper logs (tail) ----"
-          find ./debian -maxdepth 2 -type f -name '*.log' -print -exec t*
+          find ./debian -maxdepth 2 -type f -name '*.log' -print0 | xargs -0 -r -I{} sh -c 'echo ">>> {}"; tail -n 200 "{}"'
