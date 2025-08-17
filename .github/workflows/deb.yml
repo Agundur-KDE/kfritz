@@ -18,14 +18,13 @@ jobs:
       - name: Prepare apt & base tooling
         run: |
           set -e
+          docker run --rm -it debian:trixie bash
           apt-get update
-          # Grundwerkzeug + Build-Helper
-          apt-get install -y --no-install-recommends \
-            devscripts equivs build-essential fakeroot git ca-certificates \
-            cmake ninja-build pkg-kde-tools extra-cmake-modules \
-            qt6-base-dev qt6-declarative-dev gettext
-          # Optional: wenn du mk-build-deps nutzen willst:
-          # (zieht Build-Depends aus debian/control automatisch)
+          #apt-get install -y devscripts build-essential fakeroot git \
+          cmake ninja-build extra-cmake-modules pkg-kde-tools gettext \
+          qt6-base-dev qt6-declarative-dev qt6-quickcontrols2-dev \
+          libplasma-dev libkf6i18n-dev libkf6notifications-dev libkf6package-dev \
+          libqt6svg6-dev
           mk-build-deps -i -r -t 'apt-get -y --no-install-recommends' debian/control || true
 
       - name: Build .deb
