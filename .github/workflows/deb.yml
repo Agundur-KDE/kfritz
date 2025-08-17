@@ -22,6 +22,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0        # Copilot-Tipp: volle History
+          fetch-tags: true
 
       - name: Distro info
         run: |
@@ -49,17 +52,19 @@ jobs:
           DH_VERBOSE: "1"
         run: |
           set -euxo pipefail
-          # Gesamtausgabe mitschneiden, egal ob success/fail
           dpkg-buildpackage -us -uc -b 2>&1 | tee build.log
-          # Status auswerten, damit der Job bei Fehlern korrekt rot wird
           test ${PIPESTATUS[0]} -eq 0
 
       - name: List staged files (always)
         if: always()
         run: |
           set +e
-          echo "---- debian/tmp (top 5 levels) ----"
-          find ./debian/tmp -maxdepth 5 -type f | sort || true
+          if [ -d debian/tmp ] || [ -d debian/kfritz ]; then
+            echo "---- staged files ----"
+            find debian/tmp debian/kfritz -maxdepth 5 -type f 2>/dev/null | sort
+          else
+            echo "No staged files yet (build failed before install)."
+          fi
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

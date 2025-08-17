@@ -8,6 +8,9 @@ Build-Depends: debhelper-compat (= 13),
  libplasma-dev,
  libkf6i18n-dev, libkf6notifications-dev, libkf6package-dev, libkf6declarative-dev,
  libkirigami-dev, libkf6coreaddons-dev, libkf6config-dev,
+ libkf6kcmutils-dev, libkf6notifyconfig-dev, libkf6globalaccel-dev,
+ libkf6guiaddons-dev, libkf6widgetsaddons-dev, libkf6codecs-dev,
+ libkf6iconthemes-dev, libkf6xmlgui-dev,
  appstream
 Standards-Version: 4.7.0
 Rules-Requires-Root: no

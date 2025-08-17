@@ -1,4 +1,4 @@
 usr/share/plasma/plasmoids/de.agundur.kfritz/
 usr/share/locale/*/LC_MESSAGES/plasma_applet_de.agundur.kfritz.mo
-# .so des Plugins – Pfad ggf. nach Log anpassen:
+# C++-Plugin (.so) – Pfad ggf. nach Debug-Listing anpassen:
 usr/lib/*/qt6/qml/**/lib*.so
