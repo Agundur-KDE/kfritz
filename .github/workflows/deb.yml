@@ -18,7 +18,6 @@ jobs:
       - name: Prepare apt & base tooling
         run: |
           set -e
-          docker run --rm -it debian:trixie bash
           apt-get update
           #apt-get install -y devscripts build-essential fakeroot git \
           cmake ninja-build extra-cmake-modules pkg-kde-tools gettext \
