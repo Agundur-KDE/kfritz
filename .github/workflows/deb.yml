@@ -5,39 +5,43 @@ on:
 
 jobs:
   deb:
-    strategy:
-      fail-fast: false
-      matrix:
-        suite: [trixie, sid]  # Debian 13 + „höher“
     runs-on: ubuntu-latest
-    container: debian:${{ matrix.suite }}
+    container: debian:trixie
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Prepare apt & base tooling
+      - name: Install build deps
         run: |
-          set -e
+          set -euxo pipefail
+          export DEBIAN_FRONTEND=noninteractive
           apt-get update
-          #apt-get install -y devscripts build-essential fakeroot git \
-          cmake ninja-build extra-cmake-modules pkg-kde-tools gettext \
-          qt6-base-dev qt6-declarative-dev qt6-quickcontrols2-dev \
-          libplasma-dev libkf6i18n-dev libkf6notifications-dev libkf6package-dev \
-          libqt6svg6-dev
-          mk-build-deps -i -r -t 'apt-get -y --no-install-recommends' debian/control || true
+          apt-get install -y --no-install-recommends \
+            devscripts build-essential fakeroot ca-certificates git \
+            cmake ninja-build extra-cmake-modules pkg-kde-tools gettext \
+            qt6-base-dev qt6-declarative-dev qt6-quickcontrols2-dev \
+            libplasma-dev libkf6i18n-dev libkf6notifications-dev libkf6package-dev \
+            libqt6svg6-dev
 
       - name: Build .deb
         env:
           DEB_BUILD_OPTIONS: parallel=$(nproc)
         run: |
-          set -e
+          set -euxo pipefail
           dpkg-buildpackage -us -uc -b
 
-      - name: Collect artifacts
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: kfritz-${{ matrix.suite }}
+          name: kfritz-trixie
           path: |
             ../*.deb
-            ../*.buildinfo
             ../*.changes
+            ../*.buildinfo
+
+      # Hilfreich, falls CMake nochmal scheitert
+      - name: Dump CMakeError on failure
+        if: failure()
+        run: |
+          set +e
+          find .. -name CMakeError.log -print -exec sed -n '1,200p' {} \;
