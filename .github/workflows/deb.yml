@@ -19,10 +19,14 @@ jobs:
     container:
       image: debian:trixie
 
-    # >>> Alle run-Schritte verwenden bash (für pipefail & PIPESTATUS)
+    # Alle run-Schritte in Bash (brauchen pipefail)
     defaults:
       run:
         shell: bash
+
+    # Git-Guard: falls irgendein CMake-Skript Git braucht
+    env:
+      GIT_DISCOVERY_ACROSS_FILESYSTEM: "1"
 
     steps:
       - name: Checkout
@@ -36,6 +40,7 @@ jobs:
           set -euxo pipefail
           cat /etc/os-release
           uname -a
+          git rev-parse --is-inside-work-tree || true
 
       - name: Install base tools
         run: |
@@ -51,14 +56,13 @@ jobs:
           set -euxo pipefail
           mk-build-deps -i -r -t 'apt-get -y --no-install-recommends' debian/control
 
-      - name: Build .deb (tee full log)
+      - name: Build .deb (log via tee, pipefail übernimmt Exit)
         env:
           DEB_BUILD_OPTIONS: parallel=${{ runner.processorCount }}
           DH_VERBOSE: "1"
         run: |
           set -euxo pipefail
           dpkg-buildpackage -us -uc -b 2>&1 | tee build.log
-          test ${PIPESTATUS[0]} -eq 0
 
       - name: List staged files (always)
         if: always()

@@ -17,11 +17,8 @@ override_dh_auto_test:
 
 override_dh_auto_install:
 	dh_auto_install
-	# Sicherstellen, dass keine Quelltexte ins Paket wandern:
+	# keine Quelltexte ins Paket:
 	rm -f debian/kfritz/usr/share/plasma/plasmoids/de.agundur.kfritz/plugin/*.{cpp,h,CMakeLists.txt} || true
-
-# WICHTIG: dh_install NICHT umbiegen/duplizieren – CMake hat schon in debian/kfritz installiert.
-# dh_install läuft weiter im Standard-Flow, macht aber mit leerer .install-Datei nichts.
 
 override_dh_auto_clean:
 	rm -rf obj-* build || true
