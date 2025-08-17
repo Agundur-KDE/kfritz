@@ -13,14 +13,15 @@ jobs:
 
       - name: Install build deps
         run: |
-          set -euxo pipefail
-          export DEBIAN_FRONTEND=noninteractive
-          apt-get update
-          apt-get install -y --no-install-recommends \
-          devscripts build-essential fakeroot ca-certificates git \
-          cmake ninja-build extra-cmake-modules pkg-kde-tools gettext \
-          qt6-base-dev qt6-declarative-dev qt6-svg-dev \
-          libplasma-dev libkf6i18n-dev libkf6notifications-dev libkf6package-dev
+            set -euxo pipefail
+            export DEBIAN_FRONTEND=noninteractive
+            apt-get update
+            apt-get install -y --no-install-recommends \
+            devscripts equivs build-essential fakeroot ca-certificates git \
+            debhelper-compat \
+            cmake ninja-build extra-cmake-modules pkg-kde-tools gettext \
+            qt6-base-dev qt6-declarative-dev qt6-svg-dev \
+            libplasma-dev libkf6i18n-dev libkf6notifications-dev libkf6package-dev
 
       - name: Build .deb
         env:
