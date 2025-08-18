@@ -56,7 +56,6 @@ mkdir -p build && cd build
 cmake .. 
 make
 make install (as root) 
-
 ```
 ## 🛠️ Installing KFritz via the openSUSE Build Service Repository
 
@@ -78,8 +77,7 @@ sudo zypper ref
 sudo zypper in kfritz
 ```
 
-## 🛠️ Installing KFritz via my COPR repository (Fedora)
-
+##  Installing KFritz via my COPR repository (Fedora)
 
 ```bash
 # Enable repository
@@ -88,18 +86,19 @@ sudo dnf copr enable agundur/kfritz
 sudo dnf install kfritz
 ```
 
+## Install on Debian (Trixie)
 
-## KFritz Runtime Installer
+### Prerequisites
 
-This archive contains everything needed to install the **KFritz Plasmoid** and its corresponding **QML plugin** on a KDE Plasma system.
+- You’re running KDE Plasma 6 on Debian 13 (Trixie) — e.g. on plasma-desktop / plasma-workspace.
 
-# 📦 Content
+- Architecture: packages provided are amd64 (x86-64).
 
-The package [kfritz-installer-package.tar.gz](https://github.com/Agundur-KDE/kfritz/releases/download/v0.1.0/kfritz-installer-package.tar.gz) includes:
+Download the .deb from the project’s GitHub Release page, then:
 
-- `kfritz-runtime.tar.gz`: Contains the compiled `.so`, `qmldir`, and QML files
-- `installer.sh`: Installs everything into the appropriate user directories
-
+```bash
+sudo apt install ./kfritz_0.1.0-1_amd64.deb
+```
 
 ### Required
     
