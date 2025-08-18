@@ -2,16 +2,9 @@ name: build-deb
 
 on:
   push:
-    paths:
-      - '.github/workflows/deb.yml'
-      - 'debian/**'
-      - 'CMakeLists.txt'
-      - '**/*.cmake'
-      - 'src/**'
-      - '**/*.cpp'
-      - '**/*.h'
-      - 'contents/**'
-  workflow_dispatch:
+    tags:
+      - 'v*'     # läuft nur bei Tags wie v0.1.0, v1.2.3
+  workflow_dispatch:  # optional: manuell startbar
 
 jobs:
   deb:
