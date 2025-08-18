@@ -57,7 +57,7 @@ cmake ..
 make
 make install (as root) 
 ```
-## 🛠️ Installing KFritz via the openSUSE Build Service Repository
+###  Installing KFritz via the openSUSE Build Service Repository
 
 [![build result](https://build.opensuse.org/projects/home:Agundur/packages/KFritz/badge.svg?type=default)](https://build.opensuse.org/package/show/home:Agundur/KFritz)
 
@@ -77,7 +77,7 @@ sudo zypper ref
 sudo zypper in kfritz
 ```
 
-##  Installing KFritz via my COPR repository (Fedora)
+###  Installing KFritz via my COPR repository (Fedora)
 
 ```bash
 # Enable repository
@@ -86,9 +86,9 @@ sudo dnf copr enable agundur/kfritz
 sudo dnf install kfritz
 ```
 
-## Install on Debian (Trixie)
+### Install on Debian (Trixie)
 
-### Prerequisites
+#### Prerequisites
 
 - You’re running KDE Plasma 6 on Debian 13 (Trixie) — e.g. on plasma-desktop / plasma-workspace.
 
@@ -100,7 +100,7 @@ Download the .deb from the project’s GitHub Release page, then:
 sudo apt install ./kfritz_0.1.0-1_amd64.deb
 ```
 
-### Required
+## Required
     
 - KDE Plasma 6.4+
 
@@ -144,7 +144,7 @@ FritzOS 7.57 and 8.03
 
       This only needs to be done once. The setting persists after reboot.
 
-# Enable TR-064
+## Enable TR-064
 
 - Open Fritz!Box web interface: http://fritz.box
 
@@ -155,7 +155,7 @@ FritzOS 7.57 and 8.03
 - Check: ✅ "Allow access for applications (TR-064)"
 
 
-# Create a dedicated user
+## Create a dedicated user
 
 - Go to System > Fritz!Box Users
 
@@ -173,7 +173,7 @@ FritzOS 7.57 and 8.03
 
     This user will be used by KFritz to authenticate via TR-064 and download the phonebook.
 
-# Configuration
+## Configuration
 
 When you add the KFritz Plasmoid to your panel or desktop:
 Right-click and open Configure KFritz
