@@ -4,7 +4,8 @@ Priority: optional
 Maintainer: Agundur <info@agundur.de>
 Build-Depends: debhelper-compat (= 13),
  cmake, ninja-build, extra-cmake-modules, pkg-kde-tools, gettext, pkg-config,
- qt6-base-dev, qt6-declarative-dev, qt6-svg-dev, qt6-base-dev-tools,
+ qt6-base-dev, qt6-declarative-dev, qt6-declarative-dev-tools, qt6-svg-dev, qt6-base-dev-tools,
+ qt6-declarative-private-dev, qt6-base-private-dev,
  libplasma-dev,
  libkf6i18n-dev, libkf6notifications-dev, libkf6package-dev, libkf6declarative-dev,
  libkirigami-dev, libkf6coreaddons-dev, libkf6config-dev,

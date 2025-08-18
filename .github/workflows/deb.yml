@@ -18,18 +18,13 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: debian:trixie
-
     defaults:
       run:
         shell: bash
-
     env:
-      # Falls CMake/ECM Git-Infos benötigt
-      GIT_DISCOVERY_ACROSS_FILESYSTEM: "1"
-
+      GIT_DISCOVERY_ACROSS_FILESYSTEM: "1"   # Git über Mount-Boundaries
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           fetch-tags: true
@@ -38,7 +33,6 @@ jobs:
         run: |
           set -euxo pipefail
           cat /etc/os-release
-          uname -a
           git rev-parse --is-inside-work-tree || true
 
       - name: Install base tools
@@ -55,14 +49,13 @@ jobs:
           set -euxo pipefail
           mk-build-deps -i -r -t 'apt-get -y --no-install-recommends' debian/control
 
-      - name: Build .deb (log via tee)
+      - name: Build .deb
         env:
           DEB_BUILD_OPTIONS: parallel=${{ runner.processorCount }}
           DH_VERBOSE: "1"
         run: |
           set -euxo pipefail
           dpkg-buildpackage -us -uc -b 2>&1 | tee build.log
-          # kein PIPESTATUS nötig: bash + pipefail → korrekter Exit
 
       - name: Check .deb exist
         run: |
@@ -74,17 +67,6 @@ jobs:
             exit 2
           fi
           printf "Found debs:\n%s\n" "${files[@]}"
-
-      - name: List staged files (always)
-        if: always()
-        run: |
-          set +e
-          if [ -d debian/tmp ] || [ -d debian/kfritz ]; then
-            echo "---- staged files ----"
-            find debian/tmp debian/kfritz -maxdepth 5 -type f 2>/dev/null | sort
-          else
-            echo "No staged files yet (build failed before install)."
-          fi
 
       - name: Show parent dir (always)
         if: always()
