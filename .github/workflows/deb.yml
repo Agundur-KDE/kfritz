@@ -24,7 +24,7 @@ jobs:
         shell: bash
 
     env:
-      # falls CMake/ECM Git-Infos braucht
+      # Git-Suche über Container-Boundaries; verhindert "not a git repository"
       GIT_DISCOVERY_ACROSS_FILESYSTEM: "1"
 
     steps:
@@ -34,11 +34,12 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
-      - name: Distro info
+      - name: Distro info & git check
         run: |
           set -euxo pipefail
           cat /etc/os-release
           git rev-parse --is-inside-work-tree || true
+          ls -la .git || true
 
       - name: Install base tools
         run: |
@@ -66,14 +67,15 @@ jobs:
         run: |
           set -euxo pipefail
           mkdir -p dist
-          shopt -s nullglob
-          files=( ../*.deb ../*.changes ../*.buildinfo )
+          # Finde .deb/.changes/.buildinfo egal wo sie im Workspace liegen (üblicherweise ../)
+          mapfile -t files < <(find . .. -maxdepth 2 -type f \( -name '*.deb' -o -name '*.changes' -o -name '*.buildinfo' \) -print)
           if (( ${#files[@]} )); then
-            mv "${files[@]}" dist/
+            printf 'Collecting artifacts:\n%s\n' "${files[@]}"
+            mv -t dist "${files[@]}"
           fi
           ls -lah dist || true
 
-      - name: Verify artifacts exist
+      - name: Verify .deb exist
         run: |
           set -euxo pipefail
           shopt -s nullglob
@@ -84,17 +86,6 @@ jobs:
           fi
           printf "Found debs:\n%s\n" "${debs[@]}"
 
-      - name: List staged files (always)
-        if: always()
-        run: |
-          set +e
-          if [ -d debian/tmp ] || [ -d debian/kfritz ]; then
-            echo "---- staged files ----"
-            find debian/tmp debian/kfritz -maxdepth 5 -type f 2>/dev/null | sort
-          else
-            echo "No staged files yet (build failed before install)."
-          fi
-
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -102,7 +93,7 @@ jobs:
           path: |
             build.log
             dist/**
-          if-no-files-found: warn
+          if-no-files-found: error
 
       - name: Dump CMake & debhelper logs on failure
         if: failure()
