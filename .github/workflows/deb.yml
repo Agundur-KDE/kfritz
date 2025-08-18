@@ -18,13 +18,18 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: debian:trixie
+
     defaults:
       run:
         shell: bash
+
     env:
-      GIT_DISCOVERY_ACROSS_FILESYSTEM: "1"   # Git über Mount-Boundaries
+      # falls CMake/ECM Git-Infos braucht
+      GIT_DISCOVERY_ACROSS_FILESYSTEM: "1"
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           fetch-tags: true
@@ -49,7 +54,7 @@ jobs:
           set -euxo pipefail
           mk-build-deps -i -r -t 'apt-get -y --no-install-recommends' debian/control
 
-      - name: Build .deb
+      - name: Build .deb (log via tee)
         env:
           DEB_BUILD_OPTIONS: parallel=${{ runner.processorCount }}
           DH_VERBOSE: "1"
@@ -57,23 +62,38 @@ jobs:
           set -euxo pipefail
           dpkg-buildpackage -us -uc -b 2>&1 | tee build.log
 
-      - name: Check .deb exist
+      - name: Collect Debian artifacts into ./dist
+        run: |
+          set -euxo pipefail
+          mkdir -p dist
+          shopt -s nullglob
+          files=( ../*.deb ../*.changes ../*.buildinfo )
+          if (( ${#files[@]} )); then
+            mv "${files[@]}" dist/
+          fi
+          ls -lah dist || true
+
+      - name: Verify artifacts exist
         run: |
           set -euxo pipefail
           shopt -s nullglob
-          files=( ../*.deb )
-          if (( ${#files[@]} == 0 )); then
+          debs=( dist/*.deb )
+          if (( ${#debs[@]} == 0 )); then
             echo "No .deb produced. See build.log above." >&2
             exit 2
           fi
-          printf "Found debs:\n%s\n" "${files[@]}"
+          printf "Found debs:\n%s\n" "${debs[@]}"
 
-      - name: Show parent dir (always)
+      - name: List staged files (always)
         if: always()
         run: |
           set +e
-          echo "---- parent dir .. ----"
-          ls -lah .. || true
+          if [ -d debian/tmp ] || [ -d debian/kfritz ]; then
+            echo "---- staged files ----"
+            find debian/tmp debian/kfritz -maxdepth 5 -type f 2>/dev/null | sort
+          else
+            echo "No staged files yet (build failed before install)."
+          fi
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -81,9 +101,7 @@ jobs:
           name: kfritz-trixie
           path: |
             build.log
-            ../*.deb
-            ../*.changes
-            ../*.buildinfo
+            dist/**
           if-no-files-found: warn
 
       - name: Dump CMake & debhelper logs on failure
