@@ -7,6 +7,7 @@
 #include "KFritzCorePlugin.h"
 #include <QDebug>
 #include <QNetworkInformation>
+#include <QNetworkProxy>
 #include <QObject>
 #include <QTcpSocket>
 #include <QTimer>
@@ -32,49 +33,45 @@ FritzCallMonitor::FritzCallMonitor(QObject *parent)
 
 void FritzCallMonitor::setHost(const QString &host)
 {
-    m_host = host;
+    m_host = host.trimmed().isEmpty() ? u"fritz.box"_s : host.trimmed();
 }
 
 void FritzCallMonitor::connectToFritzBox()
 {
-    if (m_socket && m_socket->state() == QAbstractSocket::ConnectingState) {
-        qDebug() << "⚠️ Bereits im Verbindungsaufbau – Abbruch.";
+    // Doppel-Connect vermeiden
+    if (m_socket && (m_socket->state() == QAbstractSocket::ConnectingState || m_socket->state() == QAbstractSocket::ConnectedState)) {
+        qDebug() << u"⚠ Bereits im Verbindungsaufbau/verbunden."_s;
         return;
     }
 
-    QNetworkInformation *netInfo = QNetworkInformation::instance();
-
-    if (!netInfo) {
-        qWarning() << "⚠️ Kein QNetworkInformation-Backend – versuche später erneut...";
-        if (!m_reconnectTimer->isActive()) {
-            m_reconnectTimer->start(); // alle 3 Minuten
-        }
-        return;
-    }
-
-    if (netInfo->reachability() < QNetworkInformation::Reachability::Online) {
-        qDebug() << "📡 Netzwerk offline – neuer Versuch in 10 Sekunden...";
-        QTimer::singleShot(10000, this, &FritzCallMonitor::connectToFritzBox);
-        return;
-    }
-
-    // Wenn Socket schon verbunden, abbrechen
-    if (m_socket && m_socket->state() == QAbstractSocket::ConnectedState) {
-        qDebug() << "⚠️ Socket bereits verbunden.";
-        return;
-    }
-
-    qDebug() << "🔌 Versuche Verbindung zur FritzBox @ " << m_host;
-
+    // Socket vorbereiten
     if (!m_socket) {
         m_socket = new QTcpSocket(this);
+        m_socket->setProxy(QNetworkProxy::NoProxy); // #include <QNetworkProxy>
         connect(m_socket, &QTcpSocket::readyRead, this, &FritzCallMonitor::onReadyRead);
         connect(m_socket, &QTcpSocket::errorOccurred, this, &FritzCallMonitor::onSocketError);
         connect(m_socket, &QTcpSocket::connected, this, &FritzCallMonitor::onConnected);
         connect(m_socket, &QTcpSocket::disconnected, this, &FritzCallMonitor::onDisconnected);
+    } else {
+        m_socket->setProxy(QNetworkProxy::NoProxy);
     }
 
-    m_socket->connectToHost(m_host, 1012);
+    // QNetworkInformation darf kein Hard-Stop sein
+    if (auto *netInfo = QNetworkInformation::instance()) {
+        if (netInfo->reachability() < QNetworkInformation::Reachability::Online) {
+            qDebug() << u"📡 Netzwerk offline – neuer Versuch in 10 Sekunden…"_s;
+            QTimer::singleShot(10000, this, &FritzCallMonitor::connectToFritzBox);
+            return;
+        }
+    } else {
+        qWarning() << u"⚠ Kein QNetworkInformation-Backend – verbinde trotzdem…"_s;
+        // kein return!
+    }
+
+    const QString host = m_host.trimmed().isEmpty() ? u"fritz.box"_s : m_host.trimmed();
+    qDebug() << u"🔌 Versuche Verbindung zur FritzBox @"_s << host << u":1012"_s;
+
+    m_socket->connectToHost(host, 1012);
 }
 
 void FritzCallMonitor::onDisconnected()

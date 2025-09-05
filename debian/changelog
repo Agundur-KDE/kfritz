@@ -1,3 +1,10 @@
+kfritz (0.1.1-1) unstable; urgency=medium
+
+  * FIX for #5 nullptr in QNetworkInformation.
+
+ -- Agundur <info@agundur.de>  Fr, 05 Oct 2025 11:00:00 +0200
+
+
 kfritz (0.1.0-1) unstable; urgency=medium
 
   * Initial release for OBS builds.
