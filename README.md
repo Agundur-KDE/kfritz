@@ -116,9 +116,9 @@ sudo apt install ./kfritz_0.1.0-1_amd64.deb
 
 ## Tested Hardware/Software
 
-🛒[FRITZ!Box 6690 Cable](https://amzn.to/3Iwsnog) (Affiliate link).
+🛒[FRITZ!Box 6690 Cable](https://www.amazon.de/s?k=FRITZ%21Box+6690+Cable) .
 
-🛒[FRITZ!Box 6660 Cable](https://amzn.to/3Uxnxu2) (Affiliate link).
+🛒[FRITZ!Box 6660 Cable](https://www.amazon.de/s?k=FRITZ%21Box+6660+Cable) .
 
 
 FritzOS 7.57 and 8.03
