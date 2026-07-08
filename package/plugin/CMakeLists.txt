@@ -12,6 +12,7 @@ target_sources(kfritzplugin PRIVATE
     FritzCallMonitor.cpp
     FritzDeviceInfoFetcher.cpp
     FritzPhonebookFetcher.cpp
+    FritzSOAP.cpp
     KFritzCorePlugin.cpp
     PhonebookCache.cpp
     RecentCallsModel.cpp

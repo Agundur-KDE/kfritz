@@ -11,6 +11,7 @@
 #include "FritzPhonebookFetcher.h"
 #include "PhonebookCache.h"
 #include "RecentCallsModel.h"
+#include <QHash>
 #include <QObject>
 #include <QQmlEngine>
 #include <QStringList>
@@ -23,6 +24,9 @@ class KFritzCorePlugin : public QObject
     Q_PROPERTY(bool callMonitorConnected READ callMonitorConnected NOTIFY callMonitorConnectedChanged)
     Q_PROPERTY(QString currentCaller READ currentCaller NOTIFY currentCallerChanged)
     Q_PROPERTY(QString callerInfo READ callerInfo NOTIFY callerInfoChanged)
+    Q_PROPERTY(QString currentCallerNumber READ currentCallerNumber NOTIFY callerInfoChanged)
+    Q_PROPERTY(bool callerBlocked READ callerBlocked NOTIFY callerInfoChanged)
+    Q_PROPERTY(bool callerUnknown READ callerUnknown NOTIFY callerInfoChanged)
     Q_PROPERTY(QStringList recentCalls READ recentCalls NOTIFY recentCallsChanged)
     Q_PROPERTY(QAbstractListModel *recentCallsModel READ recentCallsModel NOTIFY recentCallsChanged)
 
@@ -35,6 +39,9 @@ public:
     QString currentCaller() const;
     QStringList recentCalls() const;
     QString callerInfo() const;
+    QString currentCallerNumber() const;
+    bool callerBlocked() const;
+    bool callerUnknown() const;
     QAbstractListModel *recentCallsModel() const;
 
     Q_INVOKABLE QVariantList getPhonebookList(const QString &host, int port, const QString &user, const QString &password);
@@ -42,6 +49,16 @@ public:
     Q_INVOKABLE void connectToFritzBox();
     Q_INVOKABLE void setHost(const QString &host);
     Q_INVOKABLE QString resolveName(const QString &number) const;
+
+    // ids assigned to each role (Settings), used to check an incoming number
+    // against every phonebook in that role, not just one.
+    Q_INVOKABLE void setContactsPhonebooks(const QVariantList &ids, int countryCode);
+    Q_INVOKABLE void setBlocklistPhonebooks(const QVariantList &ids, int countryCode);
+
+    // Adds `number` to phonebook `phonebookId` — the caller (QML) decides
+    // which id that is (ContactsWriteTarget/BlocklistWriteTarget), so this
+    // stays a thin, stateless wrapper.
+    Q_INVOKABLE bool addPhonebookEntry(int phonebookId, const QString &name, const QString &number, const QString &type);
 
 public Q_SLOTS:
     void loadPhonebook(int phonebookId, int countryCode);
@@ -59,7 +76,12 @@ private:
     FritzCallMonitor *m_callMonitor = nullptr;
     QString m_host;
     QString m_callerInfo;
-    PhonebookLookup m_lookup;
+    QString m_currentCallerNumber;
+    bool m_callerBlocked = false;
+    bool m_callerUnknown = false;
+    QHash<int, PhonebookLookup> m_lookups;
+    QList<int> m_contactsIds;
+    QList<int> m_blocklistIds;
     QStringList m_recentCalls;
     RecentCallsModel *m_recentCallsModel = nullptr;
 

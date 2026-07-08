@@ -17,13 +17,18 @@ import org.kde.kquickcontrols 2.0 as KQC
 import org.kde.plasma.plasmoid
 
 KCM.SimpleKCM {
+    id: root
+
     property string cfg_Phonebooks
     property int cfg_Port
     property string cfg_Host
     property string cfg_Login
     property string cfg_Password
     property int cfg_CountryCode: 49
-    property int cfg_SelectedPhonebook: 0
+    property var cfg_ContactsPhonebooks: []
+    property int cfg_ContactsWriteTarget: -1
+    property var cfg_BlocklistPhonebooks: []
+    property int cfg_BlocklistWriteTarget: -1
 
     function updatePhonebooks() {
         phonebookModel.clear();
@@ -36,6 +41,48 @@ KCM.SimpleKCM {
         }
     }
 
+    function nameForId(id) {
+        for (let i = 0; i < phonebookModel.count; ++i) {
+            if (phonebookModel.get(i).id === id)
+                return phonebookModel.get(i).name;
+        }
+        return i18n("Phonebook %1", id);
+    }
+
+    function idsAsInts(stringList) {
+        return stringList.map(s => parseInt(s, 10));
+    }
+
+    function addToContacts(id) {
+        const ids = idsAsInts(cfg_ContactsPhonebooks);
+        if (ids.includes(id))
+            return;
+        cfg_ContactsPhonebooks = cfg_ContactsPhonebooks.concat([String(id)]);
+        if (cfg_ContactsWriteTarget === -1)
+            cfg_ContactsWriteTarget = id;
+    }
+
+    function removeFromContacts(id) {
+        cfg_ContactsPhonebooks = idsAsInts(cfg_ContactsPhonebooks).filter(x => x !== id).map(String);
+        if (cfg_ContactsWriteTarget === id)
+            cfg_ContactsWriteTarget = cfg_ContactsPhonebooks.length > 0 ? parseInt(cfg_ContactsPhonebooks[0], 10) : -1;
+    }
+
+    function addToBlocklist(id) {
+        const ids = idsAsInts(cfg_BlocklistPhonebooks);
+        if (ids.includes(id))
+            return;
+        cfg_BlocklistPhonebooks = cfg_BlocklistPhonebooks.concat([String(id)]);
+        if (cfg_BlocklistWriteTarget === -1)
+            cfg_BlocklistWriteTarget = id;
+    }
+
+    function removeFromBlocklist(id) {
+        cfg_BlocklistPhonebooks = idsAsInts(cfg_BlocklistPhonebooks).filter(x => x !== id).map(String);
+        if (cfg_BlocklistWriteTarget === id)
+            cfg_BlocklistWriteTarget = cfg_BlocklistPhonebooks.length > 0 ? parseInt(cfg_BlocklistPhonebooks[0], 10) : -1;
+    }
+
     Component.onCompleted: updatePhonebooks()
 
     Connections {
@@ -46,67 +93,158 @@ KCM.SimpleKCM {
         target: plugin
     }
 
-    Kirigami.FormLayout {
+    ColumnLayout {
+        anchors.fill: parent
         anchors.margins: Kirigami.Units.largeSpacing
+        spacing: Kirigami.Units.largeSpacing
 
-        QtControls.SpinBox {
-            id: countrySpinBox
+        Kirigami.FormLayout {
+            Layout.fillWidth: true
 
-            value: cfg_CountryCode
-            Kirigami.FormData.label: i18n("Country code: +")
-            from: 1
-            to: 999
-            stepSize: 1
-            textFromValue: function(value) {
-                return value;
+            QtControls.SpinBox {
+                id: countrySpinBox
+
+                value: cfg_CountryCode
+                Kirigami.FormData.label: i18n("Country code: +")
+                from: 1
+                to: 999
+                stepSize: 1
+                textFromValue: function(value) {
+                    return value;
+                }
+                onValueChanged: cfg_CountryCode = textFromValue(value)
             }
-            onValueChanged: cfg_CountryCode = textFromValue(value)
-        }
 
-        Item {
-            Kirigami.FormData.label: "" // leere Spalte 1
-            implicitHeight: Kirigami.Units.largeSpacing
+            QtControls.Button {
+                id: getPhonebooks
+
+                text: i18n("Get Phonebook")
+                onClicked: {
+                    cfg_Phonebooks = plugin.getPhonebookList(cfg_Host, cfg_Port, cfg_Login, cfg_Password).join(", ");
+                }
+            }
+
         }
 
         Kirigami.Separator {
-            // implicitHeight: Kirigami.Units.largeSpacing
-
             Layout.fillWidth: true
-            Layout.alignment: Qt.AlignVCenter
-            Layout.topMargin: Kirigami.Units.largeSpacing
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+
+            Kirigami.Heading {
+                level: 3
+                text: i18n("Add a phonebook")
+                Layout.fillWidth: true
+            }
+
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+
+            QtControls.ComboBox {
+                id: addBox
+
+                Layout.fillWidth: true
+                model: phonebookModel
+                textRole: "name"
+                valueRole: "id"
+            }
+
+            QtControls.Button {
+                text: i18n("Add to Contacts")
+                enabled: addBox.currentIndex >= 0
+                onClicked: addToContacts(phonebookModel.get(addBox.currentIndex).id)
+            }
+
+            QtControls.Button {
+                text: i18n("Add to Blocklist")
+                enabled: addBox.currentIndex >= 0
+                onClicked: addToBlocklist(phonebookModel.get(addBox.currentIndex).id)
+            }
+
+        }
+
+        Kirigami.Heading {
+            level: 3
+            text: i18n("Contacts sources (used for caller ID)")
+        }
+
+        QtControls.Label {
+            visible: cfg_ContactsPhonebooks.length === 0
+            text: i18n("None assigned yet.")
+            opacity: 0.6
+        }
+
+        Repeater {
+            model: idsAsInts(cfg_ContactsPhonebooks)
+
+            delegate: RowLayout {
+                required property int modelData
+
+                Layout.fillWidth: true
+
+                QtControls.RadioButton {
+                    text: nameForId(modelData)
+                    checked: cfg_ContactsWriteTarget === modelData
+                    onClicked: cfg_ContactsWriteTarget = modelData
+                    Layout.fillWidth: true
+                }
+
+                QtControls.ToolTip.visible: hovered
+                QtControls.ToolTip.text: i18n("Write target — new contacts are added here")
+
+                QtControls.ToolButton {
+                    icon.name: "edit-delete"
+                    onClicked: removeFromContacts(modelData)
+                }
+
+            }
+
+        }
+
+        Kirigami.Heading {
+            level: 3
+            text: i18n("Blocklist sources")
+        }
+
+        QtControls.Label {
+            visible: cfg_BlocklistPhonebooks.length === 0
+            text: i18n("None assigned yet.")
+            opacity: 0.6
+        }
+
+        Repeater {
+            model: idsAsInts(cfg_BlocklistPhonebooks)
+
+            delegate: RowLayout {
+                required property int modelData
+
+                Layout.fillWidth: true
+
+                QtControls.RadioButton {
+                    text: nameForId(modelData)
+                    checked: cfg_BlocklistWriteTarget === modelData
+                    onClicked: cfg_BlocklistWriteTarget = modelData
+                    Layout.fillWidth: true
+                }
+
+                QtControls.ToolTip.visible: hovered
+                QtControls.ToolTip.text: i18n("Write target — the \"Add to Blocklist\" button on an incoming call writes here (e.g. keep a WebDAV-synced list read-only by never selecting it here)")
+
+                QtControls.ToolButton {
+                    icon.name: "edit-delete"
+                    onClicked: removeFromBlocklist(modelData)
+                }
+
+            }
+
         }
 
         Item {
-            Kirigami.FormData.label: "" // leere Spalte 1
-            implicitHeight: Kirigami.Units.largeSpacing
-        }
-
-        QtControls.Button {
-            id: getPhonebooks
-
-            text: i18n("Get Phonebook")
-            onClicked: {
-                cfg_Phonebooks = plugin.getPhonebookList(cfg_Host, cfg_Port, cfg_Login, cfg_Password).join(", ");
-            }
-            Layout.topMargin: Kirigami.Units.largeSpacing
-        }
-
-        QtControls.ComboBox {
-            model: phonebookModel
-            textRole: "name"
-            valueRole: "id"
-            Kirigami.FormData.label: i18n("Phonebook:")
-            currentIndex: {
-                for (var i = 0; i < phonebookModel.count; ++i) {
-                    if (phonebookModel.get(i).id === cfg_SelectedPhonebook)
-                        return i;
-
-                }
-                return 0;
-            }
-            onActivated: {
-                cfg_SelectedPhonebook = phonebookModel.get(currentIndex).id;
-            }
+            Layout.fillHeight: true
         }
 
     }

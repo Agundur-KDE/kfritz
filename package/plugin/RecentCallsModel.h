@@ -21,7 +21,8 @@ public:
     enum Roles {
         NameRole = Qt::UserRole + 1,
         NumberRole,
-        TimeRole
+        TimeRole,
+        BlockedRole
     };
 
     explicit RecentCallsModel(QObject *parent = nullptr);
@@ -30,13 +31,14 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    void addCall(const QString &name, const QString &number, const QString &time);
+    void addCall(const QString &name, const QString &number, const QString &time, bool blocked = false);
 
 private:
     struct CallEntry {
         QString name;
         QString number;
         QString time;
+        bool blocked = false;
     };
 
     QVector<CallEntry> m_calls;

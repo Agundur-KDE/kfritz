@@ -1,5 +1,4 @@
 #include "FritzPhonebookFetcher.h"
-#include <QAuthenticator>
 #include <QCoreApplication>
 #include <QDebug>
 #include <QDir>
@@ -22,25 +21,29 @@ FritzPhonebookFetcher::FritzPhonebookFetcher(QObject *parent)
 void FritzPhonebookFetcher::setHost(const QString &host)
 {
     m_host = host;
+    m_soap.setHost(host);
 }
 void FritzPhonebookFetcher::setPort(int port)
 {
     m_port = port;
+    m_soap.setPort(port);
 }
 void FritzPhonebookFetcher::setUsername(const QString &user)
 {
     m_user = user;
+    m_soap.setUsername(user);
 }
 void FritzPhonebookFetcher::setPassword(const QString &pass)
 {
     m_pass = pass;
+    m_soap.setPassword(pass);
 }
 
 QStringList FritzPhonebookFetcher::getPhonebookList()
 {
     const QString body = u"<u:GetPhonebookList xmlns:u=\"urn:dslforum-org:service:X_AVM-DE_OnTel:1\"/>"_s;
 
-    const QString response = sendSoapRequest(u"urn:dslforum-org:service:X_AVM-DE_OnTel:1"_s, u"GetPhonebookList"_s, body, u"/upnp/control/x_contact"_s);
+    const QString response = m_soap.sendRequest(u"urn:dslforum-org:service:X_AVM-DE_OnTel:1"_s, u"GetPhonebookList"_s, body, u"/upnp/control/x_contact"_s);
 
     QStringList phonebooks;
     QXmlStreamReader xml(response);
@@ -121,7 +124,7 @@ QString FritzPhonebookFetcher::getPhonebookUrl(int phonebookId)
                          u"<NewPhonebookID>"_s + QString::number(phonebookId) + u"</NewPhonebookID>"
                          u"</u:GetPhonebook>"_s;
 
-    const QString response = sendSoapRequest(u"urn:dslforum-org:service:X_AVM-DE_OnTel:1"_s, u"GetPhonebook"_s, body, u"/upnp/control/x_contact"_s);
+    const QString response = m_soap.sendRequest(u"urn:dslforum-org:service:X_AVM-DE_OnTel:1"_s, u"GetPhonebook"_s, body, u"/upnp/control/x_contact"_s);
 
     if (response.isEmpty()) {
         qWarning() << "Empty SOAP response for GetPhonebook";
@@ -143,52 +146,28 @@ QString FritzPhonebookFetcher::getPhonebookUrl(int phonebookId)
     return {};
 }
 
-QString FritzPhonebookFetcher::sendSoapRequest(const QString &service, const QString &action, const QString &body, const QString &controlUrl)
+bool FritzPhonebookFetcher::addPhonebookEntry(int phonebookId, const QString &name, const QString &number, const QString &type)
 {
-    const QUrl url = QUrl(u"http://"_s + m_host + u":"_s + QString::number(m_port) + controlUrl);
+    // Official contact schema, TR-064 Support – X_AVM-DE_OnTel, chapter 5.1
+    // "Phonebook Content". No <uniqueid> tag => always adds a new entry
+    // (SetPhonebookEntry with an empty NewPhonebookEntryID does the same).
+    const QString entryData = u"<contact><category>0</category><person><realName>"_s + name.toHtmlEscaped() + u"</realName></person><telephony><services/><number type=\""_s
+        + type.toHtmlEscaped() + u"\" prio=\"0\">"_s + number.toHtmlEscaped() + u"</number></telephony></contact>"_s;
 
-    QNetworkRequest request(url);
+    const QString body = u"<u:SetPhonebookEntry xmlns:u=\"urn:dslforum-org:service:X_AVM-DE_OnTel:1\">"
+                         u"<NewPhonebookID>"_s
+        + QString::number(phonebookId)
+        + u"</NewPhonebookID>"
+          u"<NewPhonebookEntryID></NewPhonebookEntryID>"
+          u"<NewPhonebookEntryData>"_s
+        + entryData.toHtmlEscaped() + u"</NewPhonebookEntryData></u:SetPhonebookEntry>"_s;
 
-    // 🔐 Authorization
-    QString credentials = m_user + u":"_s + m_pass;
-    QByteArray auth = "Basic " + credentials.toUtf8().toBase64();
+    const QString response = m_soap.sendRequest(u"urn:dslforum-org:service:X_AVM-DE_OnTel:1"_s, u"SetPhonebookEntry"_s, body, u"/upnp/control/x_contact"_s);
 
-    request.setRawHeader("Authorization", auth);
-
-    // 📄 Content & SOAP
-    request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("text/xml; charset=\"utf-8\""));
-
-    request.setRawHeader("SOAPACTION", "\"" + service.toUtf8() + "#" + action.toUtf8() + "\"");
-
-    const QString envelope =
-        uR"(<?xml version="1.0" encoding="utf-8"?>
-<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"
-            s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-  <s:Body>)"_s
-        + body + u"</s:Body></s:Envelope>"_s;
-
-    QNetworkAccessManager nam;
-
-    // 🔐 Optional: Auth-Fallback über QAuthenticator (nur wenn RawHeader nicht greift)
-    QObject::connect(&nam, &QNetworkAccessManager::authenticationRequired, [this](QNetworkReply * /*reply*/, QAuthenticator *authenticator) {
-        qDebug() << "authenticationRequired() triggered!";
-        authenticator->setUser(m_user);
-        authenticator->setPassword(m_pass);
-    });
-
-    QNetworkReply *reply = nam.post(request, envelope.toUtf8());
-
-    QEventLoop loop;
-    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    loop.exec();
-
-    QString result;
-    if (reply->error() != QNetworkReply::NoError) {
-        qWarning() << "SOAP request failed:" << reply->errorString();
-    } else {
-        result = QString::fromUtf8(reply->readAll());
+    if (response.contains(u"<errorCode>"_s)) {
+        qWarning() << "SetPhonebookEntry failed:" << response;
+        return false;
     }
 
-    reply->deleteLater();
-    return result;
+    return true;
 }

@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "FritzSOAP.h"
 #include <QObject>
 #include <QQmlEngine>
 #include <QStringList>
@@ -25,6 +26,11 @@ public:
 
     QStringList getPhonebookList();
 
+    // Adds a new entry to phonebook `phonebookId` (SetPhonebookEntry, official
+    // AVM contact XML schema — see TR-064 Support X_AVM-DE_OnTel, chapter 5.1).
+    // Returns true if the SOAP call didn't report an error.
+    bool addPhonebookEntry(int phonebookId, const QString &name, const QString &number, const QString &type = QStringLiteral("home"));
+
 Q_SIGNALS:
     void phonebookDownloaded(int id, const QString &path);
 
@@ -34,6 +40,5 @@ private:
 
     QString m_host, m_user, m_pass;
     int m_port = 49000;
-
-    QString sendSoapRequest(const QString &service, const QString &action, const QString &body, const QString &controlUrl);
+    FritzSOAP m_soap;
 };
