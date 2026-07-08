@@ -6,7 +6,7 @@
     "ServiceTypes": [
       "Plasma/Applet"
     ],
-    "Name": "KKFritz",
+    "Name": "KFritz",
     "Icon": "call-incoming",
     "Description": "A FritzBox callmonitor for your Desktop",
     "Authors": [
@@ -15,8 +15,8 @@
         "Name": "Alec"
       }
     ],
-    "Version": "0.1.1",
-    "License": "GPL",
+    "Version": "0.2.0",
+    "License": "GPL-3.0-or-later",
     "Website": "https://github.com/Agundur-KDE/kfritz",
    "BugReportUrl": "mailto:info@agundur.de?subject=KFritz%20bug%20report"
 

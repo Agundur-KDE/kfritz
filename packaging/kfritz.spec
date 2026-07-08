@@ -3,7 +3,7 @@
 %endif
 
 Name:           kfritz
-Version:        0.1.1
+Version:        0.2.0
 Release:        1%{?dist}
 Summary:        KDE Plasma 6 callmonitor plasmoid for the AVM FRITZ!Box
 
@@ -81,6 +81,11 @@ fi
 %{_datadir}/locale/*/LC_MESSAGES/plasma_applet_de.agundur.kfritz.mo
 
 %changelog
+* Wed Jul 08 2026 Alec <info@agundur.de> - 0.2.0
+- Sound on incoming call, phonebook/blocklist quick-actions with
+  configurable read/write targets, missed-call catch-up on startup
+- Fixed "KKFritz" typo in metadata.json Name
+
 * Wed Jul 08 2026 Alec <info@agundur.de> - 0.1.1
 - First automated OBS release via GitHub Actions obs-submit.yml (was
   maintained by hand until now — spec had drifted to include unused

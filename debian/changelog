@@ -1,3 +1,17 @@
+kfritz (0.2.0-1) unstable; urgency=medium
+
+  * Sound on incoming call (closes #7).
+  * Phonebook/blocklist quick-actions: caller ID lookup and blocking now
+    check multiple phonebooks per role, with one designated write target
+    each so a WebDAV-synced blocklist can't get overwritten.
+  * Missed calls from while the widget wasn't running are now caught up
+    on startup via the FritzBox's own call list.
+  * CMakeLists.txt no longer requires a giant unused KDE Workspace KCM
+    dependency set; fixed a bug shipping raw plugin sources as data files.
+  * Fixed "KKFritz" typo in metadata.json.
+
+ -- Agundur <info@agundur.de>  Wed, 08 Jul 2026 14:00:00 +0200
+
 kfritz (0.1.1-1) unstable; urgency=medium
 
   * FIX for #5 nullptr in QNetworkInformation.
