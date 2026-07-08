@@ -168,6 +168,21 @@ QString KFritzCorePlugin::callerInfo() const
     return m_callerInfo;
 }
 
+QString KFritzCorePlugin::currentCallerNumber() const
+{
+    return m_currentCallerNumber;
+}
+
+bool KFritzCorePlugin::callerBlocked() const
+{
+    return m_callerBlocked;
+}
+
+bool KFritzCorePlugin::callerUnknown() const
+{
+    return m_callerUnknown;
+}
+
 void KFritzCorePlugin::loadPhonebook(int phonebookId, int countryCode)
 {
     QString baseDir = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + u"/phonebooks"_s;
@@ -175,13 +190,44 @@ void KFritzCorePlugin::loadPhonebook(int phonebookId, int countryCode)
 
     qDebug() << "Lade Telefonbuch:" << path;
     QString countryPrefix = u"+" + QString::number(countryCode);
-    m_lookup.loadFromFile(path, countryPrefix);
+    m_lookups[phonebookId].loadFromFile(path, countryPrefix);
+}
+
+void KFritzCorePlugin::setContactsPhonebooks(const QVariantList &ids, int countryCode)
+{
+    m_contactsIds.clear();
+    for (const QVariant &v : ids) {
+        int id = v.toInt();
+        m_contactsIds << id;
+        loadPhonebook(id, countryCode);
+    }
+}
+
+void KFritzCorePlugin::setBlocklistPhonebooks(const QVariantList &ids, int countryCode)
+{
+    m_blocklistIds.clear();
+    for (const QVariant &v : ids) {
+        int id = v.toInt();
+        m_blocklistIds << id;
+        loadPhonebook(id, countryCode);
+    }
+}
+
+bool KFritzCorePlugin::addPhonebookEntry(int phonebookId, const QString &name, const QString &number, const QString &type)
+{
+    return m_fetcher.addPhonebookEntry(phonebookId, name, number, type);
 }
 
 QString KFritzCorePlugin::resolveName(const QString &number) const
 {
-    return m_lookup.resolveName(number);
+    for (int id : m_contactsIds) {
+        const QString name = m_lookups.value(id).resolveName(number);
+        if (!name.isEmpty())
+            return name;
+    }
+    return {};
 }
+
 /************************* Call history *******************************/
 
 QStringList KFritzCorePlugin::recentCalls() const
@@ -191,8 +237,42 @@ QStringList KFritzCorePlugin::recentCalls() const
 
 void KFritzCorePlugin::handleIncomingCall(const QString &number)
 {
-    QString name = m_lookup.resolveName(number);
+    bool blocked = false;
+    for (int id : m_blocklistIds) {
+        if (!m_lookups.value(id).resolveName(number).isEmpty()) {
+            blocked = true;
+            break;
+        }
+    }
+
+    QString name;
+    if (!blocked) {
+        name = resolveName(number);
+    }
+    bool unknown = !blocked && name.isEmpty();
+
     QString timestamp = QDateTime::currentDateTime().toString(u"hh:mm:ss"_s);
+
+    m_currentCallerNumber = number;
+    m_callerBlocked = blocked;
+    m_callerUnknown = unknown;
+    m_callerInfo = !name.isEmpty() ? name + u" (" + number + u")" : number;
+    Q_EMIT callerInfoChanged();
+
+    QString entry = timestamp + u" - "_s + (!name.isEmpty() ? name + u" (" + number + u")" : number);
+    m_recentCalls.prepend(entry);
+
+    if (m_recentCallsModel)
+        m_recentCallsModel->addCall(name, number, timestamp, blocked);
+
+    Q_EMIT recentCallsChanged();
+
+    // Blocked calls are meant to not interrupt -- no system notification at
+    // all, they only show up (styled) in the call list above.
+    if (blocked) {
+        qDebug() << "Blocked call from" << number;
+        return;
+    }
 
     QString message = name.isEmpty() ? i18n("Incoming call from %1", number) : i18n("Incoming call from %1 (%2)", name, number);
 
@@ -200,24 +280,10 @@ void KFritzCorePlugin::handleIncomingCall(const QString &number)
     notification->setComponentName(QStringLiteral("kfritz"));
     notification->setTitle(i18n("FritzBox Call"));
     notification->setText(message);
-    notification->setIconName(QStringLiteral("call-incoming")); // z. B. phone-incoming-symbolic
+    notification->setIconName(QStringLiteral("call-incoming"));
     notification->sendEvent();
 
-    QString entry = timestamp + u" – "_s + (!name.isEmpty() ? name + u" (" + number + u")" : number);
-
-    m_callerInfo = !name.isEmpty() ? name + u" (" + number + u")" : number;
-    Q_EMIT callerInfoChanged();
-
-    m_recentCalls.prepend(entry);
-
-    if (m_recentCallsModel)
-        m_recentCallsModel->addCall(name, number, timestamp);
-
-    // if (m_recentCalls.size() > 20) // nur letzte 20 anzeigen
-    //     m_recentCalls.removeLast();
-    qDebug() << "📞 :" << number << "→ recentCalls:" << m_recentCalls;
-
-    Q_EMIT recentCallsChanged();
+    qDebug() << "Incoming call:" << number << "-> recentCalls:" << m_recentCalls;
 }
 
 QAbstractListModel *KFritzCorePlugin::recentCallsModel() const

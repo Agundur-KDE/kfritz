@@ -63,7 +63,8 @@ PlasmoidItem {
     Component.onCompleted: {
         plugin.setHost(Plasmoid.configuration.Host);
         plugin.connectToFritzBox();
-        plugin.loadPhonebook(Plasmoid.configuration.SelectedPhonebook, Plasmoid.configuration.CountryCode);
+        plugin.setContactsPhonebooks(Plasmoid.configuration.ContactsPhonebooks, Plasmoid.configuration.CountryCode);
+        plugin.setBlocklistPhonebooks(Plasmoid.configuration.BlocklistPhonebooks, Plasmoid.configuration.CountryCode);
     }
 
     KFritzCorePlugin {
@@ -108,6 +109,7 @@ PlasmoidItem {
                 required property string name
                 required property string number
                 required property string time
+                required property bool blocked
 
                 // Kein Hintergrund zeichnen:
                 background: null
@@ -126,16 +128,17 @@ PlasmoidItem {
 
                     // optional: Icon
                     Kirigami.Icon {
-                        source: "user"
+                        source: blocked ? "call-stop" : "user"
                         Layout.alignment: Qt.AlignVCenter
                     }
 
                     Text {
-                        text: "<b>" + name + "</b> " + number + " – " + time
+                        text: blocked ? number : "<b>" + name + "</b> " + number + " – " + time
                         textFormat: Text.RichText
                         wrapMode: Text.NoWrap
                         elide: Text.ElideRight
-                        color: Kirigami.Theme.textColor
+                        font.strikeout: blocked
+                        color: blocked ? "red" : Kirigami.Theme.textColor
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignVCenter
                     }
@@ -184,6 +187,51 @@ PlasmoidItem {
                     HelpTipButton {
                         helpText: i18n("Dial: #96*5* to enable the CallMonitor on your Fritz!Box")
                         Layout.alignment: Qt.AlignVCenter
+                    }
+
+                }
+
+            }
+
+            ColumnLayout {
+                Layout.fillWidth: true
+                visible: showCallerInfo && plugin.callerUnknown
+
+                Controls.Label {
+                    text: i18n("Unknown number: %1", plugin.currentCallerNumber)
+                }
+
+                RowLayout {
+                    Layout.fillWidth: true
+
+                    Controls.TextField {
+                        id: newContactName
+
+                        placeholderText: i18n("Name")
+                        Layout.fillWidth: true
+                    }
+
+                    Controls.ComboBox {
+                        id: newContactType
+
+                        property var typeValues: ["home", "mobile", "work"]
+
+                        model: [i18n("Private"), i18n("Mobile"), i18n("Business")]
+                    }
+
+                    Controls.Button {
+                        text: i18n("Add to Contacts")
+                        enabled: Plasmoid.configuration.ContactsWriteTarget !== -1 && newContactName.text.length > 0
+                        onClicked: {
+                            plugin.addPhonebookEntry(Plasmoid.configuration.ContactsWriteTarget, newContactName.text, plugin.currentCallerNumber, newContactType.typeValues[newContactType.currentIndex]);
+                            newContactName.text = "";
+                        }
+                    }
+
+                    Controls.Button {
+                        text: i18n("Add to Blocklist")
+                        enabled: Plasmoid.configuration.BlocklistWriteTarget !== -1
+                        onClicked: plugin.addPhonebookEntry(Plasmoid.configuration.BlocklistWriteTarget, i18n("Blocked"), plugin.currentCallerNumber, "home")
                     }
 
                 }

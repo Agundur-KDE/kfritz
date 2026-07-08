@@ -25,6 +25,8 @@ QVariant RecentCallsModel::data(const QModelIndex &index, int role) const
         return call.number;
     case TimeRole:
         return call.time;
+    case BlockedRole:
+        return call.blocked;
     default:
         return {};
     }
@@ -32,14 +34,14 @@ QVariant RecentCallsModel::data(const QModelIndex &index, int role) const
 
 QHash<int, QByteArray> RecentCallsModel::roleNames() const
 {
-    return {{NameRole, "name"}, {NumberRole, "number"}, {TimeRole, "time"}};
+    return {{NameRole, "name"}, {NumberRole, "number"}, {TimeRole, "time"}, {BlockedRole, "blocked"}};
 }
 
-void RecentCallsModel::addCall(const QString &name, const QString &number, const QString &time)
+void RecentCallsModel::addCall(const QString &name, const QString &number, const QString &time, bool blocked)
 {
-    qDebug() << "📞 RecentCallsModel::addCall:" << name << number << time;
+    qDebug() << "RecentCallsModel::addCall:" << name << number << time << "blocked:" << blocked;
     beginInsertRows(QModelIndex(), 0, 0);
-    m_calls.prepend({name, number, time});
+    m_calls.prepend({name, number, time, blocked});
     if (m_calls.size() > 20) // optional: max. 20 Anrufe speichern
         m_calls.removeLast();
     endInsertRows();
