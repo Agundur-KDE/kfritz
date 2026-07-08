@@ -235,15 +235,47 @@ QStringList KFritzCorePlugin::recentCalls() const
     return m_recentCalls;
 }
 
-void KFritzCorePlugin::handleIncomingCall(const QString &number)
+bool KFritzCorePlugin::isBlocked(const QString &number) const
 {
-    bool blocked = false;
     for (int id : m_blocklistIds) {
-        if (!m_lookups.value(id).resolveName(number).isEmpty()) {
-            blocked = true;
-            break;
+        if (!m_lookups.value(id).resolveName(number).isEmpty())
+            return true;
+    }
+    return false;
+}
+
+int KFritzCorePlugin::checkMissedCalls(int lastSeenId)
+{
+    const auto entries = m_fetcher.getCallList(lastSeenId);
+
+    int maxId = lastSeenId;
+    bool changed = false;
+
+    for (const FritzCallListEntry &entry : entries) {
+        if (entry.id > maxId)
+            maxId = entry.id;
+
+        if (entry.type != 2) // only "missed"
+            continue;
+
+        const bool blocked = isBlocked(entry.number);
+        const QString name = blocked ? QString{} : (entry.name.isEmpty() ? resolveName(entry.number) : entry.name);
+
+        if (m_recentCallsModel) {
+            m_recentCallsModel->addCall(name, entry.number, entry.date, blocked);
+            changed = true;
         }
     }
+
+    if (changed)
+        Q_EMIT recentCallsChanged();
+
+    return maxId;
+}
+
+void KFritzCorePlugin::handleIncomingCall(const QString &number)
+{
+    bool blocked = isBlocked(number);
 
     QString name;
     if (!blocked) {

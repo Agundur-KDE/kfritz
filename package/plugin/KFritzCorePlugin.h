@@ -60,6 +60,13 @@ public:
     // stays a thin, stateless wrapper.
     Q_INVOKABLE bool addPhonebookEntry(int phonebookId, const QString &name, const QString &number, const QString &type);
 
+    // Fetches missed calls (Type 2) from the box's own call list since
+    // `lastSeenId` (0 = everything the box still has), adds them to
+    // recentCallsModel same as a live call would, and returns the new
+    // highest id seen so QML can persist it (Plasmoid.configuration.
+    // LastSeenCallId) for the next incremental fetch.
+    Q_INVOKABLE int checkMissedCalls(int lastSeenId);
+
 public Q_SLOTS:
     void loadPhonebook(int phonebookId, int countryCode);
     void handleIncomingCall(const QString &number);
@@ -72,6 +79,8 @@ Q_SIGNALS:
     void recentCallsChanged();
 
 private:
+    bool isBlocked(const QString &number) const;
+
     FritzPhonebookFetcher m_fetcher;
     FritzCallMonitor *m_callMonitor = nullptr;
     QString m_host;
