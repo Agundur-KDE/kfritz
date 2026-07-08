@@ -221,7 +221,7 @@ PlasmoidItem {
 
                     Controls.Button {
                         text: i18n("Add to Contacts")
-                        enabled: Plasmoid.configuration.ContactsWriteTarget !== -1
+                        enabled: Plasmoid.configuration.ContactsWriteTarget !== -1 && newContactName.text.length > 0
                         onClicked: {
                             plugin.addPhonebookEntry(Plasmoid.configuration.ContactsWriteTarget, newContactName.text, plugin.currentCallerNumber, newContactType.typeValues[newContactType.currentIndex]);
                             newContactName.text = "";
