@@ -3,7 +3,7 @@
 %endif
 
 Name:           kfritz
-Version:        0.2.0
+Version:        0.2.1
 Release:        1%{?dist}
 Summary:        KDE Plasma 6 callmonitor plasmoid for the AVM FRITZ!Box
 
@@ -75,12 +75,19 @@ fi
 %license LICENSE*
 %doc README*
 %{_datadir}/plasma/plasmoids/de.agundur.kfritz/
+%dir %{_qt6_qmldir}/de
+%dir %{_qt6_qmldir}/de/agundur
 %{_qt6_qmldir}/de/agundur/kfritz/
 %{_datadir}/knotifications6/kfritz.notifyrc
 %{_datadir}/metainfo/de.agundur.kfritz.appdata.xml
 %{_datadir}/locale/*/LC_MESSAGES/plasma_applet_de.agundur.kfritz.mo
 
 %changelog
+* Wed Jul 08 2026 Alec <info@agundur.de> - 0.2.1
+- Fixed OBS build failure: %files was missing %dir declarations for
+  %{_qt6_qmldir}/de and .../de/agundur, so the RPM lint step flagged
+  them as unowned directories
+
 * Wed Jul 08 2026 Alec <info@agundur.de> - 0.2.0
 - Sound on incoming call, phonebook/blocklist quick-actions with
   configurable read/write targets, missed-call catch-up on startup

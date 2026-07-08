@@ -1,3 +1,11 @@
+kfritz (0.2.1-1) unstable; urgency=medium
+
+  * Fixed OBS build failure (RPM only, unrelated to the .deb): %files was
+    missing %dir declarations for the qml/de and qml/de/agundur parent
+    directories, flagged as unowned by the openSUSE lint step.
+
+ -- Agundur <info@agundur.de>  Wed, 08 Jul 2026 15:00:00 +0200
+
 kfritz (0.2.0-1) unstable; urgency=medium
 
   * Sound on incoming call (closes #7).
