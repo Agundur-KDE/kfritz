@@ -6,4 +6,5 @@ Name=KFritz
 Name=Incoming Call
 Comment=Incoming FritzBox call
 Icon=call-incoming
-Action=Popup
+Sound=phone-incoming-call
+Action=Popup|Sound
