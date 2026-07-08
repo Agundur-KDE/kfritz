@@ -171,3 +171,81 @@ bool FritzPhonebookFetcher::addPhonebookEntry(int phonebookId, const QString &na
 
     return true;
 }
+
+QList<FritzCallListEntry> FritzPhonebookFetcher::getCallList(int sinceId)
+{
+    QList<FritzCallListEntry> result;
+
+    const QString body = u"<u:GetCallList xmlns:u=\"urn:dslforum-org:service:X_AVM-DE_OnTel:1\"/>"_s;
+    const QString response = m_soap.sendRequest(u"urn:dslforum-org:service:X_AVM-DE_OnTel:1"_s, u"GetCallList"_s, body, u"/upnp/control/x_contact"_s);
+
+    QString url;
+    QXmlStreamReader urlXml(response);
+    while (!urlXml.atEnd()) {
+        urlXml.readNext();
+        if (urlXml.isStartElement() && urlXml.name() == u"NewCallListURL"_s) {
+            url = urlXml.readElementText().trimmed();
+        }
+    }
+
+    if (url.isEmpty()) {
+        qWarning() << "Empty SOAP response for GetCallList (feature disabled on the box?)";
+        return result;
+    }
+
+    if (sinceId > 0) {
+        url += (url.contains(u'?') ? u"&id="_s : u"?id="_s) + QString::number(sinceId);
+    }
+
+    QNetworkAccessManager nam;
+    QNetworkRequest request{QUrl(url)};
+    QNetworkReply *reply = nam.get(request);
+
+    QEventLoop loop;
+    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec();
+
+    if (reply->error() != QNetworkReply::NoError) {
+        qWarning() << "GetCallList download failed:" << reply->errorString();
+        reply->deleteLater();
+        return result;
+    }
+
+    const QByteArray data = reply->readAll();
+    reply->deleteLater();
+
+    // Official schema, TR-064 Support - X_AVM-DE_OnTel, chapter 5.2 "Call
+    // List Content": <root><Call><Id/><Type/><CallerNumber/><Name/><Date/>...
+    QXmlStreamReader callXml(data);
+    FritzCallListEntry current;
+    bool inCall = false;
+    while (!callXml.atEnd()) {
+        callXml.readNext();
+        if (callXml.isStartElement()) {
+            const QStringView tag = callXml.name();
+            if (tag == u"Call"_s) {
+                inCall = true;
+                current = FritzCallListEntry{};
+            } else if (inCall && tag == u"Id"_s) {
+                current.id = callXml.readElementText().toInt();
+            } else if (inCall && tag == u"Type"_s) {
+                current.type = callXml.readElementText().toInt();
+            } else if (inCall && tag == u"CallerNumber"_s) {
+                current.number = callXml.readElementText();
+            } else if (inCall && tag == u"Name"_s) {
+                current.name = callXml.readElementText();
+            } else if (inCall && tag == u"Date"_s) {
+                current.date = callXml.readElementText();
+            }
+        } else if (callXml.isEndElement() && callXml.name() == u"Call"_s) {
+            inCall = false;
+            result << current;
+        }
+    }
+
+    if (callXml.hasError()) {
+        qWarning() << "Call list XML parse error:" << callXml.errorString();
+    }
+
+    return result;
+}

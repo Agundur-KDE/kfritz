@@ -60,11 +60,16 @@ PlasmoidItem {
     Layout.fillHeight: true
     width: 400
     height: 300
+    function checkMissedCalls() {
+        Plasmoid.configuration.LastSeenCallId = plugin.checkMissedCalls(Plasmoid.configuration.LastSeenCallId);
+    }
+
     Component.onCompleted: {
         plugin.setHost(Plasmoid.configuration.Host);
         plugin.connectToFritzBox();
         plugin.setContactsPhonebooks(Plasmoid.configuration.ContactsPhonebooks, Plasmoid.configuration.CountryCode);
         plugin.setBlocklistPhonebooks(Plasmoid.configuration.BlocklistPhonebooks, Plasmoid.configuration.CountryCode);
+        checkMissedCalls();
     }
 
     KFritzCorePlugin {
@@ -182,6 +187,17 @@ PlasmoidItem {
 
                     Item {
                         Layout.fillWidth: true
+                    }
+
+                    Controls.ToolButton {
+                        icon.name: "view-refresh"
+                        text: i18n("Check for missed calls")
+                        display: Controls.ToolButton.IconOnly
+                        Layout.alignment: Qt.AlignVCenter
+                        onClicked: checkMissedCalls()
+
+                        Controls.ToolTip.visible: hovered
+                        Controls.ToolTip.text: text
                     }
 
                     HelpTipButton {

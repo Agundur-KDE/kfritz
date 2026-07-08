@@ -11,6 +11,17 @@
 #include <QQmlEngine>
 #include <QStringList>
 
+// One entry from the FritzBox's own call list (GetCallList). Type follows
+// the official AVM enum: 1 incoming, 2 missed, 3 outgoing, 9 active
+// incoming, 10 rejected incoming, 11 active outgoing.
+struct FritzCallListEntry {
+    int id = 0;
+    int type = 0;
+    QString number;
+    QString name;
+    QString date;
+};
+
 class FritzPhonebookFetcher : public QObject
 {
     Q_OBJECT
@@ -30,6 +41,11 @@ public:
     // AVM contact XML schema — see TR-064 Support X_AVM-DE_OnTel, chapter 5.1).
     // Returns true if the SOAP call didn't report an error.
     bool addPhonebookEntry(int phonebookId, const QString &name, const QString &number, const QString &type = QStringLiteral("home"));
+
+    // Fetches the box's own call list (GetCallList). If sinceId > 0, only
+    // calls with a higher unique id are returned (AVM's own "id" URL param —
+    // no local dedup bookkeeping needed).
+    QList<FritzCallListEntry> getCallList(int sinceId = 0);
 
 Q_SIGNALS:
     void phonebookDownloaded(int id, const QString &path);
