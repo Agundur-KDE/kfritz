@@ -22,4 +22,5 @@
     <entry name="CountryCode" type="Int">
       <default>49</default>
     </entry>
+  </group>
 </kcfg>
