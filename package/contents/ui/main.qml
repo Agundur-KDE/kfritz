@@ -64,6 +64,18 @@ PlasmoidItem {
         Plasmoid.configuration.LastSeenCallId = plugin.checkMissedCalls(Plasmoid.configuration.LastSeenCallId);
     }
 
+    function refreshAllPhonebooks() {
+        // Re-downloads every phonebook the box has (overwrites the local
+        // cache), then reloads the in-memory lookup tables for the
+        // currently assigned Contacts/Blocklist roles from those fresh
+        // files — a stale cache silently fails to recognize numbers a
+        // WebDAV-synced blocklist has picked up since the last manual
+        // "Get Phonebook" click.
+        plugin.getPhonebookList(Plasmoid.configuration.Host, Plasmoid.configuration.Port, Plasmoid.configuration.Login, Plasmoid.configuration.Password);
+        plugin.setContactsPhonebooks(Plasmoid.configuration.ContactsPhonebooks, Plasmoid.configuration.CountryCode);
+        plugin.setBlocklistPhonebooks(Plasmoid.configuration.BlocklistPhonebooks, Plasmoid.configuration.CountryCode);
+    }
+
     Component.onCompleted: {
         plugin.setHost(Plasmoid.configuration.Host);
         plugin.setCredentials(Plasmoid.configuration.Host, Plasmoid.configuration.Port, Plasmoid.configuration.Login, Plasmoid.configuration.Password);
@@ -71,6 +83,8 @@ PlasmoidItem {
         plugin.setContactsPhonebooks(Plasmoid.configuration.ContactsPhonebooks, Plasmoid.configuration.CountryCode);
         plugin.setBlocklistPhonebooks(Plasmoid.configuration.BlocklistPhonebooks, Plasmoid.configuration.CountryCode);
         startupMissedCallsTimer.start();
+        if (Plasmoid.configuration.AutoSyncPhonebooks)
+            autoSyncStartupTimer.start();
     }
 
     onExpandedChanged: if (expanded)
@@ -83,6 +97,22 @@ PlasmoidItem {
         id: startupMissedCallsTimer
         interval: 5000
         onTriggered: checkMissedCalls()
+    }
+
+    Timer {
+        // Offset from startupMissedCallsTimer so the two blocking network
+        // sequences don't overlap on login.
+        id: autoSyncStartupTimer
+        interval: 10000
+        onTriggered: refreshAllPhonebooks()
+    }
+
+    Timer {
+        id: autoSyncRecurringTimer
+        interval: Plasmoid.configuration.AutoSyncIntervalDays * 24 * 60 * 60 * 1000
+        running: Plasmoid.configuration.AutoSyncPhonebooks
+        repeat: true
+        onTriggered: refreshAllPhonebooks()
     }
 
     KFritzCorePlugin {

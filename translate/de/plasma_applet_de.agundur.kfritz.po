@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kcast 0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-09 08:57+0200\n"
+"POT-Creation-Date: 2026-07-09 09:24+0200\n"
 "PO-Revision-Date: 2025-07-23 13:48+0200\n"
 "Last-Translator: alec <info@agundur.de>\n"
 "Language-Team: German <translation-team-de@lists.sourceforge.net>\n"
@@ -39,48 +39,68 @@ msgstr "FRITZ!Box-Benutzer:"
 msgid "FritzBox password:"
 msgstr "FRITZ!Box-Passwort:"
 
-#: package/contents/ui/configPhoneBook.qml:49
+#: package/contents/ui/configPhoneBook.qml:51
 msgid "Phonebook %1"
 msgstr "Telefonbuch %1"
 
-#: package/contents/ui/configPhoneBook.qml:108
+#: package/contents/ui/configPhoneBook.qml:110
 msgid "Country code: +"
 msgstr "Ländervorwahl: +"
 
-#: package/contents/ui/configPhoneBook.qml:121
+#: package/contents/ui/configPhoneBook.qml:123
 msgid "Get Phonebook"
 msgstr "Telefonbuch abrufen"
 
-#: package/contents/ui/configPhoneBook.qml:138
+#: package/contents/ui/configPhoneBook.qml:132
+msgid "Auto-sync phonebooks:"
+msgstr "Telefonbücher automatisch synchronisieren:"
+
+#: package/contents/ui/configPhoneBook.qml:133
+msgid "Refresh automatically"
+msgstr "Automatisch aktualisieren"
+
+#: package/contents/ui/configPhoneBook.qml:140
+msgid "Interval:"
+msgstr "Intervall:"
+
+#: package/contents/ui/configPhoneBook.qml:141
+msgid "Daily"
+msgstr "Täglich"
+
+#: package/contents/ui/configPhoneBook.qml:141
+msgid "Weekly"
+msgstr "Wöchentlich"
+
+#: package/contents/ui/configPhoneBook.qml:157
 msgid "Add a phonebook"
 msgstr "Telefonbuch hinzufügen"
 
-#: package/contents/ui/configPhoneBook.qml:157 package/contents/ui/main.qml:252
+#: package/contents/ui/configPhoneBook.qml:176 package/contents/ui/main.qml:282
 msgid "Add to Contacts"
 msgstr "Zu Kontakten hinzufügen"
 
-#: package/contents/ui/configPhoneBook.qml:163 package/contents/ui/main.qml:261
+#: package/contents/ui/configPhoneBook.qml:182 package/contents/ui/main.qml:291
 msgid "Add to Blocklist"
 msgstr "Zur Sperrliste hinzufügen"
 
-#: package/contents/ui/configPhoneBook.qml:172
+#: package/contents/ui/configPhoneBook.qml:191
 msgid "Contacts sources (used for caller ID)"
 msgstr "Kontakt-Quellen (für Anrufererkennung)"
 
-#: package/contents/ui/configPhoneBook.qml:177
-#: package/contents/ui/configPhoneBook.qml:224
+#: package/contents/ui/configPhoneBook.qml:196
+#: package/contents/ui/configPhoneBook.qml:243
 msgid "None assigned yet."
 msgstr "Noch keine zugewiesen."
 
-#: package/contents/ui/configPhoneBook.qml:197
+#: package/contents/ui/configPhoneBook.qml:216
 msgid "Write target — new contacts are added here"
 msgstr "Schreibziel — neue Kontakte werden hier eingetragen"
 
-#: package/contents/ui/configPhoneBook.qml:210
+#: package/contents/ui/configPhoneBook.qml:229
 msgid "Blocklist sources"
 msgstr "Sperrlisten-Quellen"
 
-#: package/contents/ui/configPhoneBook.qml:215
+#: package/contents/ui/configPhoneBook.qml:234
 msgid ""
 "All checked phonebooks are read for blocking. The selected radio button is "
 "the single write target for \"Add to Blocklist\" — leave a synced/read-only "
@@ -91,7 +111,7 @@ msgstr ""
 "ein synchronisiertes/nur lesbares Telefonbuch nicht auswählen, damit es nie "
 "überschrieben wird."
 
-#: package/contents/ui/configPhoneBook.qml:244
+#: package/contents/ui/configPhoneBook.qml:263
 msgid ""
 "Write target — the \"Add to Blocklist\" button on an incoming call writes "
 "here (e.g. keep a WebDAV-synced list read-only by never selecting it here)"
@@ -100,40 +120,40 @@ msgstr ""
 "Anruf schreibt hierhin (z. B. eine WebDAV-synchronisierte Liste nur lesbar "
 "halten, indem sie hier nie ausgewählt wird)"
 
-#: package/contents/ui/main.qml:117 package/contents/ui/main.qml:174
+#: package/contents/ui/main.qml:147 package/contents/ui/main.qml:204
 msgid "Recent Calls"
 msgstr "Letzte Anrufe"
 
-#: package/contents/ui/main.qml:207
+#: package/contents/ui/main.qml:237
 msgid "Check for missed calls"
 msgstr "Nach verpassten Anrufen suchen"
 
-#: package/contents/ui/main.qml:217
+#: package/contents/ui/main.qml:247
 msgid "Dial: #96*5* to enable the CallMonitor on your Fritz!Box"
 msgstr ""
 "Wählen Sie #96*5*, um den CallMonitor auf Ihrer FRITZ!Box zu aktivieren."
 
-#: package/contents/ui/main.qml:230
+#: package/contents/ui/main.qml:260
 msgid "Unknown number: %1"
 msgstr "Unbekannte Nummer: %1"
 
-#: package/contents/ui/main.qml:239
+#: package/contents/ui/main.qml:269
 msgid "Name"
 msgstr "Name"
 
-#: package/contents/ui/main.qml:248
+#: package/contents/ui/main.qml:278
 msgid "Private"
 msgstr "Privat"
 
-#: package/contents/ui/main.qml:248
+#: package/contents/ui/main.qml:278
 msgid "Mobile"
 msgstr "Mobil"
 
-#: package/contents/ui/main.qml:248
+#: package/contents/ui/main.qml:278
 msgid "Business"
 msgstr "Geschäftlich"
 
-#: package/contents/ui/main.qml:263
+#: package/contents/ui/main.qml:293
 msgid "Blocked"
 msgstr "Blockiert"
 

@@ -29,6 +29,8 @@ KCM.SimpleKCM {
     property int cfg_ContactsWriteTarget: -1
     property var cfg_BlocklistPhonebooks: []
     property int cfg_BlocklistWriteTarget: -1
+    property bool cfg_AutoSyncPhonebooks: false
+    property int cfg_AutoSyncIntervalDays: 1
 
     function updatePhonebooks() {
         phonebookModel.clear();
@@ -122,6 +124,23 @@ KCM.SimpleKCM {
                 onClicked: {
                     cfg_Phonebooks = plugin.getPhonebookList(cfg_Host, cfg_Port, cfg_Login, cfg_Password).join(", ");
                 }
+            }
+
+            QtControls.CheckBox {
+                id: autoSyncCheckbox
+
+                Kirigami.FormData.label: i18n("Auto-sync phonebooks:")
+                text: i18n("Refresh automatically")
+                checked: cfg_AutoSyncPhonebooks
+                onToggled: cfg_AutoSyncPhonebooks = checked
+            }
+
+            QtControls.ComboBox {
+                visible: autoSyncCheckbox.checked
+                Kirigami.FormData.label: i18n("Interval:")
+                model: [i18n("Daily"), i18n("Weekly")]
+                currentIndex: cfg_AutoSyncIntervalDays >= 7 ? 1 : 0
+                onActivated: cfg_AutoSyncIntervalDays = currentIndex === 1 ? 7 : 1
             }
 
         }
