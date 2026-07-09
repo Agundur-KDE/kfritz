@@ -42,10 +42,9 @@ QString FritzSOAP::sendRequest(const QString &service, const QString &action, co
 
     QNetworkRequest request(url);
 
-    QString credentials = m_user + u":"_s + m_pass;
-    QByteArray auth = "Basic " + credentials.toUtf8().toBase64();
-    request.setRawHeader("Authorization", auth);
-
+    // No preemptive Authorization header: FRITZ!Box's TR-064 endpoint expects
+    // HTTP Digest, and setting the header manually would stop Qt from running
+    // its own challenge-response negotiation (authenticationRequired below).
     request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("text/xml; charset=\"utf-8\""));
     request.setRawHeader("SOAPACTION", "\"" + service.toUtf8() + "#" + action.toUtf8() + "\"");
 

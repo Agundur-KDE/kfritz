@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KFritz 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-16 18:52+0200\n"
+"POT-Creation-Date: 2026-07-09 06:56+0200\n"
 "PO-Revision-Date: 2025-08-16 20:26+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: \n"
@@ -17,52 +17,129 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.6\n"
 
-#: contents/ui/configNetwork.qml:34
+#: package/contents/ui/configNetwork.qml:34
 msgid "FritzBox IP:"
 msgstr "Ip-adres van Fritz!Box:"
 
-#: contents/ui/configNetwork.qml:43
+#: package/contents/ui/configNetwork.qml:43
 msgid "FritzBox Port:"
 msgstr "Fritz!Box-poort:"
 
-#: contents/ui/configNetwork.qml:58
+#: package/contents/ui/configNetwork.qml:58
 msgid "You need to enable TR-064 on your Fritz!Box and configure an user"
 msgstr "Schakel TR-064 in op je Fritz!Box en voeg een gebruiker toe"
 
-#: contents/ui/configNetwork.qml:67
+#: package/contents/ui/configNetwork.qml:67
 msgid "FritzBox user:"
 msgstr "Fritz!Box-gebruikersnaam:"
 
-#: contents/ui/configNetwork.qml:78
+#: package/contents/ui/configNetwork.qml:78
 msgid "FritzBox password:"
 msgstr "Fritz!Box-wachtwoord:"
 
-#: contents/ui/configPhoneBook.qml:56
+#: package/contents/ui/configPhoneBook.qml:49
+msgid "Phonebook %1"
+msgstr "Telefoonboek %1"
+
+#: package/contents/ui/configPhoneBook.qml:108
 msgid "Country code: +"
 msgstr "Landcode: +"
 
-#: contents/ui/configPhoneBook.qml:87
+#: package/contents/ui/configPhoneBook.qml:121
 msgid "Get Phonebook"
 msgstr "Telefoonboek opvragen"
 
-#: contents/ui/configPhoneBook.qml:98
-msgid "Phonebook:"
-msgstr "Telefoonboek:"
+#: package/contents/ui/configPhoneBook.qml:138
+msgid "Add a phonebook"
+msgstr "Telefoonboek toevoegen"
 
-#: contents/ui/main.qml:97 contents/ui/main.qml:152
+#: package/contents/ui/configPhoneBook.qml:157 package/contents/ui/main.qml:239
+msgid "Add to Contacts"
+msgstr "Toevoegen aan contacten"
+
+#: package/contents/ui/configPhoneBook.qml:163 package/contents/ui/main.qml:248
+msgid "Add to Blocklist"
+msgstr "Toevoegen aan blokkeerlijst"
+
+#: package/contents/ui/configPhoneBook.qml:172
+msgid "Contacts sources (used for caller ID)"
+msgstr "Contactbronnen (voor beller-ID)"
+
+#: package/contents/ui/configPhoneBook.qml:177
+#: package/contents/ui/configPhoneBook.qml:224
+msgid "None assigned yet."
+msgstr "Nog niet toegewezen."
+
+#: package/contents/ui/configPhoneBook.qml:197
+msgid "Write target — new contacts are added here"
+msgstr "Schrijfdoel — nieuwe contacten worden hier toegevoegd"
+
+#: package/contents/ui/configPhoneBook.qml:210
+msgid "Blocklist sources"
+msgstr "Blokkeerlijstbronnen"
+
+#: package/contents/ui/configPhoneBook.qml:215
+msgid ""
+"All checked phonebooks are read for blocking. The selected radio button is "
+"the single write target for \"Add to Blocklist\" — leave a synced/read-only "
+"list unselected so it never gets overwritten."
+msgstr ""
+"Alle aangevinkte telefoonboeken worden gelezen om te blokkeren. De "
+"geselecteerde keuzerondje is het enige schrijfdoel voor \"Toevoegen aan "
+"blokkeerlijst\" — laat een gesynchroniseerde/alleen-lezen lijst niet "
+"geselecteerd, zodat deze nooit wordt overschreven."
+
+#: package/contents/ui/configPhoneBook.qml:244
+msgid ""
+"Write target — the \"Add to Blocklist\" button on an incoming call writes "
+"here (e.g. keep a WebDAV-synced list read-only by never selecting it here)"
+msgstr ""
+"Schrijfdoel — de knop \"Toevoegen aan blokkeerlijst\" bij een inkomend "
+"gesprek schrijft hierheen (bijv. houd een via WebDAV gesynchroniseerde lijst "
+"alleen-lezen door deze hier nooit te selecteren)"
+
+#: package/contents/ui/main.qml:104 package/contents/ui/main.qml:161
 msgid "Recent Calls"
 msgstr "Onlangs gebeld"
 
-#: contents/ui/main.qml:184
+#: package/contents/ui/main.qml:194
+msgid "Check for missed calls"
+msgstr "Zoeken naar gemiste oproepen"
+
+#: package/contents/ui/main.qml:204
 msgid "Dial: #96*5* to enable the CallMonitor on your Fritz!Box"
 msgstr "Toets #96*5* in om de gespreksmonitor van je Fritz!Box in te schakelen"
 
-#: contents/config/config.qml:13
+#: package/contents/ui/main.qml:217
+msgid "Unknown number: %1"
+msgstr "Onbekend nummer: %1"
+
+#: package/contents/ui/main.qml:226
+msgid "Name"
+msgstr "Naam"
+
+#: package/contents/ui/main.qml:235
+msgid "Private"
+msgstr "Privé"
+
+#: package/contents/ui/main.qml:235
+msgid "Mobile"
+msgstr "Mobiel"
+
+#: package/contents/ui/main.qml:235
+msgid "Business"
+msgstr "Zakelijk"
+
+#: package/contents/ui/main.qml:250
+msgid "Blocked"
+msgstr "Geblokkeerd"
+
+#: package/contents/config/config.qml:13
 msgctxt "@title"
 msgid "Phonebooks"
 msgstr "Telefoonboeken"
 
-#: contents/config/config.qml:19
+#: package/contents/config/config.qml:19
 msgctxt "@title"
 msgid "Network"
 msgstr "Netwerk"

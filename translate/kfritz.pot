@@ -1,68 +1,138 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the kfritz package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: kfritz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-16 18:52+0200\n"
+"POT-Creation-Date: 2026-07-09 06:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: contents/ui/configNetwork.qml:34
+#: package/contents/ui/configNetwork.qml:34
 msgid "FritzBox IP:"
 msgstr ""
 
-#: contents/ui/configNetwork.qml:43
+#: package/contents/ui/configNetwork.qml:43
 msgid "FritzBox Port:"
 msgstr ""
 
-#: contents/ui/configNetwork.qml:58
+#: package/contents/ui/configNetwork.qml:58
 msgid "You need to enable TR-064 on your Fritz!Box and configure an user"
 msgstr ""
 
-#: contents/ui/configNetwork.qml:67
+#: package/contents/ui/configNetwork.qml:67
 msgid "FritzBox user:"
 msgstr ""
 
-#: contents/ui/configNetwork.qml:78
+#: package/contents/ui/configNetwork.qml:78
 msgid "FritzBox password:"
 msgstr ""
 
-#: contents/ui/configPhoneBook.qml:56
+#: package/contents/ui/configPhoneBook.qml:49
+msgid "Phonebook %1"
+msgstr ""
+
+#: package/contents/ui/configPhoneBook.qml:108
 msgid "Country code: +"
 msgstr ""
 
-#: contents/ui/configPhoneBook.qml:87
+#: package/contents/ui/configPhoneBook.qml:121
 msgid "Get Phonebook"
 msgstr ""
 
-#: contents/ui/configPhoneBook.qml:98
-msgid "Phonebook:"
+#: package/contents/ui/configPhoneBook.qml:138
+msgid "Add a phonebook"
 msgstr ""
 
-#: contents/ui/main.qml:97 contents/ui/main.qml:152
+#: package/contents/ui/configPhoneBook.qml:157 package/contents/ui/main.qml:239
+msgid "Add to Contacts"
+msgstr ""
+
+#: package/contents/ui/configPhoneBook.qml:163 package/contents/ui/main.qml:248
+msgid "Add to Blocklist"
+msgstr ""
+
+#: package/contents/ui/configPhoneBook.qml:172
+msgid "Contacts sources (used for caller ID)"
+msgstr ""
+
+#: package/contents/ui/configPhoneBook.qml:177
+#: package/contents/ui/configPhoneBook.qml:224
+msgid "None assigned yet."
+msgstr ""
+
+#: package/contents/ui/configPhoneBook.qml:197
+msgid "Write target — new contacts are added here"
+msgstr ""
+
+#: package/contents/ui/configPhoneBook.qml:210
+msgid "Blocklist sources"
+msgstr ""
+
+#: package/contents/ui/configPhoneBook.qml:215
+msgid ""
+"All checked phonebooks are read for blocking. The selected radio button is "
+"the single write target for \"Add to Blocklist\" — leave a synced/read-only "
+"list unselected so it never gets overwritten."
+msgstr ""
+
+#: package/contents/ui/configPhoneBook.qml:244
+msgid ""
+"Write target — the \"Add to Blocklist\" button on an incoming call writes "
+"here (e.g. keep a WebDAV-synced list read-only by never selecting it here)"
+msgstr ""
+
+#: package/contents/ui/main.qml:104 package/contents/ui/main.qml:161
 msgid "Recent Calls"
 msgstr ""
 
-#: contents/ui/main.qml:184
+#: package/contents/ui/main.qml:194
+msgid "Check for missed calls"
+msgstr ""
+
+#: package/contents/ui/main.qml:204
 msgid "Dial: #96*5* to enable the CallMonitor on your Fritz!Box"
 msgstr ""
 
-#: contents/config/config.qml:13
+#: package/contents/ui/main.qml:217
+msgid "Unknown number: %1"
+msgstr ""
+
+#: package/contents/ui/main.qml:226
+msgid "Name"
+msgstr ""
+
+#: package/contents/ui/main.qml:235
+msgid "Private"
+msgstr ""
+
+#: package/contents/ui/main.qml:235
+msgid "Mobile"
+msgstr ""
+
+#: package/contents/ui/main.qml:235
+msgid "Business"
+msgstr ""
+
+#: package/contents/ui/main.qml:250
+msgid "Blocked"
+msgstr ""
+
+#: package/contents/config/config.qml:13
 msgctxt "@title"
 msgid "Phonebooks"
 msgstr ""
 
-#: contents/config/config.qml:19
+#: package/contents/config/config.qml:19
 msgctxt "@title"
 msgid "Network"
 msgstr ""

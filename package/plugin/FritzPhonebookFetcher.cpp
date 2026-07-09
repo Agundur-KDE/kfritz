@@ -115,6 +115,7 @@ bool FritzPhonebookFetcher::downloadPhonebook(int id, const QUrl &url)
     file.close();
     qDebug() << "Saved phonebook ID" << id << "to" << filePath;
 
+    Q_EMIT phonebookDownloaded(id, filePath);
     return true;
 }
 
