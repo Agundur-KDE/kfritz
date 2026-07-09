@@ -69,7 +69,16 @@ PlasmoidItem {
         plugin.connectToFritzBox();
         plugin.setContactsPhonebooks(Plasmoid.configuration.ContactsPhonebooks, Plasmoid.configuration.CountryCode);
         plugin.setBlocklistPhonebooks(Plasmoid.configuration.BlocklistPhonebooks, Plasmoid.configuration.CountryCode);
-        checkMissedCalls();
+        startupMissedCallsTimer.start();
+    }
+
+    Timer {
+        // checkMissedCalls() blocks on a SOAP call — give the network a
+        // moment at login/plasmashell start instead of hitting it from
+        // Component.onCompleted, matching FritzCallMonitor's own 5s delay.
+        id: startupMissedCallsTimer
+        interval: 5000
+        onTriggered: checkMissedCalls()
     }
 
     KFritzCorePlugin {

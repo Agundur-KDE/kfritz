@@ -42,6 +42,13 @@ QString FritzSOAP::sendRequest(const QString &service, const QString &action, co
 
     QNetworkRequest request(url);
 
+    // Called synchronously (see the nested QEventLoop below), some of it from
+    // Component.onCompleted at plasmoid startup — without a timeout, an
+    // unreachable box (e.g. network not up yet at login) would hang the
+    // whole call, and with it the QML engine, for the OS's TCP connect
+    // timeout (tens of seconds).
+    request.setTransferTimeout(5000);
+
     // No preemptive Authorization header: FRITZ!Box's TR-064 endpoint expects
     // HTTP Digest, and setting the header manually would stop Qt from running
     // its own challenge-response negotiation (authenticationRequired below).

@@ -86,6 +86,7 @@ bool FritzPhonebookFetcher::downloadPhonebook(int id, const QUrl &url)
 
     QNetworkAccessManager nam;
     QNetworkRequest request(url);
+    request.setTransferTimeout(5000);
     QNetworkReply *reply = nam.get(request);
 
     QEventLoop loop;
@@ -200,6 +201,7 @@ QList<FritzCallListEntry> FritzPhonebookFetcher::getCallList(int sinceId)
 
     QNetworkAccessManager nam;
     QNetworkRequest request{QUrl(url)};
+    request.setTransferTimeout(5000);
     QNetworkReply *reply = nam.get(request);
 
     QEventLoop loop;
