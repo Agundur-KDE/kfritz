@@ -3,7 +3,7 @@
 %endif
 
 Name:           kfritz
-Version:        0.2.1
+Version:        0.2.2
 Release:        1%{?dist}
 Summary:        KDE Plasma 6 callmonitor plasmoid for the AVM FRITZ!Box
 
@@ -83,6 +83,17 @@ fi
 %{_datadir}/locale/*/LC_MESSAGES/plasma_applet_de.agundur.kfritz.mo
 
 %changelog
+* Thu Jul 09 2026 Alec <info@agundur.de> - 0.2.2
+- Fixed TR-064 auth: a preemptive Basic Authorization header stopped Qt
+  from negotiating Digest auth, which FRITZ!Box requires — every SOAP
+  call was failing with 401
+- Fixed the phonebook list in Settings never refreshing after a fetch
+  (missing phonebookDownloaded signal emission)
+- Added a visible explanation of the Contacts/Blocklist write-target
+  concept in Settings
+- Brought all 5 translations (de/fr/es/nl/ru) up to date with the
+  Contacts/Blocklist feature
+
 * Wed Jul 08 2026 Alec <info@agundur.de> - 0.2.1
 - Fixed OBS build failure: %files was missing %dir declarations for
   %{_qt6_qmldir}/de and .../de/agundur, so the RPM lint step flagged
