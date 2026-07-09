@@ -268,6 +268,12 @@ int KFritzCorePlugin::checkMissedCalls(int lastSeenId)
         if (entry.id > maxId)
             maxId = entry.id;
 
+        // Don't trust the box's &id= URL filter alone — if it's ignored
+        // (or the box just returns everything it has), re-check locally
+        // so already-seen entries never reappear after a restart.
+        if (entry.id <= lastSeenId)
+            continue;
+
         if (entry.type != 2) // only "missed"
             continue;
 

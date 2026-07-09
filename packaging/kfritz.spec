@@ -3,7 +3,7 @@
 %endif
 
 Name:           kfritz
-Version:        0.2.3
+Version:        0.2.4
 Release:        1%{?dist}
 Summary:        KDE Plasma 6 callmonitor plasmoid for the AVM FRITZ!Box
 
@@ -83,6 +83,13 @@ fi
 %{_datadir}/locale/*/LC_MESSAGES/plasma_applet_de.agundur.kfritz.mo
 
 %changelog
+* Thu Jul 09 2026 Alec <info@agundur.de> - 0.2.4
+- Fixed missed calls reappearing after a restart: checkMissedCalls() relied
+  solely on the FritzBox honoring the &id= URL filter on GetCallList;
+  entries are now also filtered locally against LastSeenCallId, so
+  already-seen calls stay gone even if the box ever returns more than
+  requested
+
 * Thu Jul 09 2026 Alec <info@agundur.de> - 0.2.3
 - Added 5s timeout to all FritzBox network calls, so an unreachable box
   no longer hangs the widget/QML engine indefinitely
