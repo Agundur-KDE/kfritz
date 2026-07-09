@@ -8,6 +8,8 @@
 #pragma once
 
 #include <QHash>
+#include <QList>
+#include <QPair>
 #include <QString>
 
 class PhonebookLookup
@@ -18,6 +20,11 @@ public:
 
 private:
     QHash<QString, QString> numberToName;
+    // AVM's own wildcard syntax: a trailing '*' on a phonebook number means
+    // "this prefix and everything after it" — common in bulk spam lists
+    // (one entry can cover thousands of numbers). Stored separately since a
+    // plain QHash can only do exact matches.
+    QList<QPair<QString, QString>> wildcardPrefixes;
     QString m_countryCode;
 
     QString normalizeNumber(QString number, const QString &countryCode) const;

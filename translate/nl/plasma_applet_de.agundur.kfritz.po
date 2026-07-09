@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KFritz 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-09 06:56+0200\n"
+"POT-Creation-Date: 2026-07-09 08:57+0200\n"
 "PO-Revision-Date: 2025-08-16 20:26+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: \n"
@@ -53,11 +53,11 @@ msgstr "Telefoonboek opvragen"
 msgid "Add a phonebook"
 msgstr "Telefoonboek toevoegen"
 
-#: package/contents/ui/configPhoneBook.qml:157 package/contents/ui/main.qml:239
+#: package/contents/ui/configPhoneBook.qml:157 package/contents/ui/main.qml:252
 msgid "Add to Contacts"
 msgstr "Toevoegen aan contacten"
 
-#: package/contents/ui/configPhoneBook.qml:163 package/contents/ui/main.qml:248
+#: package/contents/ui/configPhoneBook.qml:163 package/contents/ui/main.qml:261
 msgid "Add to Blocklist"
 msgstr "Toevoegen aan blokkeerlijst"
 
@@ -98,39 +98,39 @@ msgstr ""
 "gesprek schrijft hierheen (bijv. houd een via WebDAV gesynchroniseerde lijst "
 "alleen-lezen door deze hier nooit te selecteren)"
 
-#: package/contents/ui/main.qml:104 package/contents/ui/main.qml:161
+#: package/contents/ui/main.qml:117 package/contents/ui/main.qml:174
 msgid "Recent Calls"
 msgstr "Onlangs gebeld"
 
-#: package/contents/ui/main.qml:194
+#: package/contents/ui/main.qml:207
 msgid "Check for missed calls"
 msgstr "Zoeken naar gemiste oproepen"
 
-#: package/contents/ui/main.qml:204
+#: package/contents/ui/main.qml:217
 msgid "Dial: #96*5* to enable the CallMonitor on your Fritz!Box"
 msgstr "Toets #96*5* in om de gespreksmonitor van je Fritz!Box in te schakelen"
 
-#: package/contents/ui/main.qml:217
+#: package/contents/ui/main.qml:230
 msgid "Unknown number: %1"
 msgstr "Onbekend nummer: %1"
 
-#: package/contents/ui/main.qml:226
+#: package/contents/ui/main.qml:239
 msgid "Name"
 msgstr "Naam"
 
-#: package/contents/ui/main.qml:235
+#: package/contents/ui/main.qml:248
 msgid "Private"
 msgstr "Privé"
 
-#: package/contents/ui/main.qml:235
+#: package/contents/ui/main.qml:248
 msgid "Mobile"
 msgstr "Mobiel"
 
-#: package/contents/ui/main.qml:235
+#: package/contents/ui/main.qml:248
 msgid "Business"
 msgstr "Zakelijk"
 
-#: package/contents/ui/main.qml:250
+#: package/contents/ui/main.qml:263
 msgid "Blocked"
 msgstr "Geblokkeerd"
 
@@ -143,3 +143,6 @@ msgstr "Telefoonboeken"
 msgctxt "@title"
 msgid "Network"
 msgstr "Netwerk"
+
+#~ msgid "Call back %1"
+#~ msgstr "Terugbellen: %1"

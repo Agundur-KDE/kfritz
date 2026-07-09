@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KFritz 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-09 06:56+0200\n"
+"POT-Creation-Date: 2026-07-09 08:57+0200\n"
 "PO-Revision-Date: 2025-07-23 13:48+0200\n"
 "Last-Translator: alec <info@agundur.de>\n"
 "Language-Team: Russian <translation-team-ru@lists.sourceforge.net>\n"
@@ -55,11 +55,11 @@ msgstr "Получить телефонную книгу"
 msgid "Add a phonebook"
 msgstr "Добавить телефонную книгу"
 
-#: package/contents/ui/configPhoneBook.qml:157 package/contents/ui/main.qml:239
+#: package/contents/ui/configPhoneBook.qml:157 package/contents/ui/main.qml:252
 msgid "Add to Contacts"
 msgstr "Добавить в контакты"
 
-#: package/contents/ui/configPhoneBook.qml:163 package/contents/ui/main.qml:248
+#: package/contents/ui/configPhoneBook.qml:163 package/contents/ui/main.qml:261
 msgid "Add to Blocklist"
 msgstr "Добавить в чёрный список"
 
@@ -100,39 +100,39 @@ msgstr ""
 "записывает сюда (например, держите синхронизируемый через WebDAV список "
 "только для чтения, никогда не выбирая его здесь)"
 
-#: package/contents/ui/main.qml:104 package/contents/ui/main.qml:161
+#: package/contents/ui/main.qml:117 package/contents/ui/main.qml:174
 msgid "Recent Calls"
 msgstr "Недавние звонки"
 
-#: package/contents/ui/main.qml:194
+#: package/contents/ui/main.qml:207
 msgid "Check for missed calls"
 msgstr "Проверить пропущенные звонки"
 
-#: package/contents/ui/main.qml:204
+#: package/contents/ui/main.qml:217
 msgid "Dial: #96*5* to enable the CallMonitor on your Fritz!Box"
 msgstr "Наберите: #96*5*, чтобы включить CallMonitor на вашей FRITZ!Box."
 
-#: package/contents/ui/main.qml:217
+#: package/contents/ui/main.qml:230
 msgid "Unknown number: %1"
 msgstr "Неизвестный номер: %1"
 
-#: package/contents/ui/main.qml:226
+#: package/contents/ui/main.qml:239
 msgid "Name"
 msgstr "Имя"
 
-#: package/contents/ui/main.qml:235
+#: package/contents/ui/main.qml:248
 msgid "Private"
 msgstr "Личный"
 
-#: package/contents/ui/main.qml:235
+#: package/contents/ui/main.qml:248
 msgid "Mobile"
 msgstr "Мобильный"
 
-#: package/contents/ui/main.qml:235
+#: package/contents/ui/main.qml:248
 msgid "Business"
 msgstr "Рабочий"
 
-#: package/contents/ui/main.qml:250
+#: package/contents/ui/main.qml:263
 msgid "Blocked"
 msgstr "Заблокирован"
 
@@ -145,3 +145,6 @@ msgstr "Телефонные книги"
 msgctxt "@title"
 msgid "Network"
 msgstr "Сеть"
+
+#~ msgid "Call back %1"
+#~ msgstr "Перезвонить %1"

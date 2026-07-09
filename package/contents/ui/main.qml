@@ -66,11 +66,15 @@ PlasmoidItem {
 
     Component.onCompleted: {
         plugin.setHost(Plasmoid.configuration.Host);
+        plugin.setCredentials(Plasmoid.configuration.Host, Plasmoid.configuration.Port, Plasmoid.configuration.Login, Plasmoid.configuration.Password);
         plugin.connectToFritzBox();
         plugin.setContactsPhonebooks(Plasmoid.configuration.ContactsPhonebooks, Plasmoid.configuration.CountryCode);
         plugin.setBlocklistPhonebooks(Plasmoid.configuration.BlocklistPhonebooks, Plasmoid.configuration.CountryCode);
         startupMissedCallsTimer.start();
     }
+
+    onExpandedChanged: if (expanded)
+        plugin.clearMissedBadge()
 
     Timer {
         // checkMissedCalls() blocks on a SOAP call — give the network a
@@ -287,6 +291,26 @@ PlasmoidItem {
 
             source: "call-incoming"
             anchors.fill: parent
+        }
+
+        Rectangle {
+            visible: plugin.missedCount > 0
+            width: Math.max(badgeLabel.implicitWidth + Kirigami.Units.smallSpacing, Kirigami.Units.gridUnit)
+            height: Kirigami.Units.gridUnit
+            radius: height / 2
+            color: "red"
+            anchors.top: parent.top
+            anchors.right: parent.right
+
+            Controls.Label {
+                id: badgeLabel
+
+                anchors.centerIn: parent
+                text: plugin.missedCount > 99 ? "99+" : plugin.missedCount
+                color: "white"
+                font.pixelSize: Kirigami.Units.gridUnit * 0.6
+            }
+
         }
 
     }

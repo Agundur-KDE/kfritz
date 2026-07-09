@@ -57,6 +57,14 @@ QVariantList KFritzCorePlugin::getPhonebookList(const QString &host, int port, c
     return result;
 }
 
+void KFritzCorePlugin::setCredentials(const QString &host, int port, const QString &user, const QString &password)
+{
+    m_fetcher.setHost(host);
+    m_fetcher.setPort(port);
+    m_fetcher.setUsername(user);
+    m_fetcher.setPassword(password);
+}
+
 QString extractPhonebookNameFromFile(const QString &filePath)
 {
     QFile file(filePath);
@@ -251,7 +259,12 @@ int KFritzCorePlugin::checkMissedCalls(int lastSeenId)
     int maxId = lastSeenId;
     bool changed = false;
 
-    for (const FritzCallListEntry &entry : entries) {
+    // GetCallList returns newest-first, but RecentCallsModel::addCall()
+    // always prepends — walking the list back-to-front here means the
+    // newest entry is prepended last, so it ends up on top (instead of the
+    // whole batch showing up reversed, oldest-on-top).
+    for (auto it = entries.crbegin(); it != entries.crend(); ++it) {
+        const FritzCallListEntry &entry = *it;
         if (entry.id > maxId)
             maxId = entry.id;
 
@@ -265,10 +278,17 @@ int KFritzCorePlugin::checkMissedCalls(int lastSeenId)
             m_recentCallsModel->addCall(name, entry.number, entry.date, blocked);
             changed = true;
         }
+
+        // Blocked numbers stay fully silent by design — don't bump the
+        // badge for calls the user deliberately doesn't want to hear about.
+        if (!blocked)
+            ++m_missedCount;
     }
 
     if (changed)
         Q_EMIT recentCallsChanged();
+    if (m_missedCount > 0)
+        Q_EMIT missedCountChanged();
 
     return maxId;
 }
@@ -321,4 +341,18 @@ void KFritzCorePlugin::handleIncomingCall(const QString &number)
 QAbstractListModel *KFritzCorePlugin::recentCallsModel() const
 {
     return m_recentCallsModel;
+}
+
+int KFritzCorePlugin::missedCount() const
+{
+    return m_missedCount;
+}
+
+void KFritzCorePlugin::clearMissedBadge()
+{
+    if (m_missedCount == 0)
+        return;
+
+    m_missedCount = 0;
+    Q_EMIT missedCountChanged();
 }

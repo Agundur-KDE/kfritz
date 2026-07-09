@@ -17,6 +17,8 @@ using namespace Qt::StringLiterals;
 void PhonebookLookup::loadFromFile(const QString &xmlFilePath, const QString &countryCode)
 {
     m_countryCode = countryCode;
+    numberToName.clear();
+    wildcardPrefixes.clear();
 
     QFile file(xmlFilePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -54,19 +56,39 @@ void PhonebookLookup::loadFromFile(const QString &xmlFilePath, const QString &co
         for (int j = 0; j < telList.count(); ++j) {
             QDomElement numberElement = telList.at(j).toElement();
             QString raw = numberElement.text().trimmed();
+
+            const bool isWildcard = raw.endsWith(u'*');
+            if (isWildcard)
+                raw.chop(1);
+
             QString normalized = normalizeNumber(raw, countryCode);
-            if (!normalized.isEmpty() && !name.isEmpty()) {
+            if (normalized.isEmpty() || name.isEmpty())
+                continue;
+
+            if (isWildcard)
+                wildcardPrefixes.append({normalized, name});
+            else
                 numberToName.insert(normalized, name);
-            }
         }
     }
 
-    qDebug() << "✅ Phonebook loaded:" << numberToName.size() << "entries.";
+    qDebug() << "✅ Phonebook loaded:" << numberToName.size() << "entries," << wildcardPrefixes.size() << "wildcard prefixes.";
 }
 
 QString PhonebookLookup::resolveName(const QString &number) const
 {
-    return numberToName.value(normalizeNumber(number, m_countryCode), QString{});
+    const QString normalized = normalizeNumber(number, m_countryCode);
+
+    const QString exact = numberToName.value(normalized, QString{});
+    if (!exact.isEmpty())
+        return exact;
+
+    for (const auto &[prefix, name] : wildcardPrefixes) {
+        if (normalized.startsWith(prefix))
+            return name;
+    }
+
+    return {};
 }
 
 QString PhonebookLookup::normalizeNumber(QString number, const QString &countryCode) const

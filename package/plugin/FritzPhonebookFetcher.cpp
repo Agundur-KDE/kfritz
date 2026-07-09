@@ -217,8 +217,12 @@ QList<FritzCallListEntry> FritzPhonebookFetcher::getCallList(int sinceId)
     const QByteArray data = reply->readAll();
     reply->deleteLater();
 
-    // Official schema, TR-064 Support - X_AVM-DE_OnTel, chapter 5.2 "Call
-    // List Content": <root><Call><Id/><Type/><CallerNumber/><Name/><Date/>...
+    // Real schema (verified against raw box output, not just the PDF):
+    // <root><Call><Id/><Type/><Caller/><Called/><CalledNumber/><Name/><Date/>...
+    // For incoming/missed calls (Type 1/2, what checkMissedCalls() cares
+    // about) the caller's number is in <Caller> — <CallerNumber> only shows
+    // up on outgoing calls (Type 3), where <Caller> instead holds a "SIP:
+    // ..." line label and <Called>/<CalledNumber> hold the dialed number.
     QXmlStreamReader callXml(data);
     FritzCallListEntry current;
     bool inCall = false;
@@ -233,7 +237,7 @@ QList<FritzCallListEntry> FritzPhonebookFetcher::getCallList(int sinceId)
                 current.id = callXml.readElementText().toInt();
             } else if (inCall && tag == u"Type"_s) {
                 current.type = callXml.readElementText().toInt();
-            } else if (inCall && tag == u"CallerNumber"_s) {
+            } else if (inCall && tag == u"Caller"_s) {
                 current.number = callXml.readElementText();
             } else if (inCall && tag == u"Name"_s) {
                 current.name = callXml.readElementText();

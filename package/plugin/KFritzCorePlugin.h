@@ -29,6 +29,7 @@ class KFritzCorePlugin : public QObject
     Q_PROPERTY(bool callerUnknown READ callerUnknown NOTIFY callerInfoChanged)
     Q_PROPERTY(QStringList recentCalls READ recentCalls NOTIFY recentCallsChanged)
     Q_PROPERTY(QAbstractListModel *recentCallsModel READ recentCallsModel NOTIFY recentCallsChanged)
+    Q_PROPERTY(int missedCount READ missedCount NOTIFY missedCountChanged)
 
     QML_ELEMENT
 
@@ -43,12 +44,22 @@ public:
     bool callerBlocked() const;
     bool callerUnknown() const;
     QAbstractListModel *recentCallsModel() const;
+    int missedCount() const;
 
     Q_INVOKABLE QVariantList getPhonebookList(const QString &host, int port, const QString &user, const QString &password);
     Q_INVOKABLE QVariantList listLocalPhonebooks();
     Q_INVOKABLE void connectToFritzBox();
     Q_INVOKABLE void setHost(const QString &host);
     Q_INVOKABLE QString resolveName(const QString &number) const;
+
+    // Configures the SOAP client used by checkMissedCalls()/dialNumber() —
+    // previously only getPhonebookList() (called from the Settings "Get
+    // Phonebook" button) set these, so a fresh session without ever opening
+    // Settings had checkMissedCalls() silently fail ("Host konnte nicht
+    // gefunden werden"). Call once at startup with the same config values.
+    Q_INVOKABLE void setCredentials(const QString &host, int port, const QString &user, const QString &password);
+
+    Q_INVOKABLE void clearMissedBadge();
 
     // ids assigned to each role (Settings), used to check an incoming number
     // against every phonebook in that role, not just one.
@@ -77,6 +88,7 @@ Q_SIGNALS:
     void currentCallerChanged();
     void callerInfoChanged();
     void recentCallsChanged();
+    void missedCountChanged();
 
 private:
     bool isBlocked(const QString &number) const;
@@ -93,6 +105,7 @@ private:
     QList<int> m_blocklistIds;
     QStringList m_recentCalls;
     RecentCallsModel *m_recentCallsModel = nullptr;
+    int m_missedCount = 0;
 
 private Q_SLOTS:
 
