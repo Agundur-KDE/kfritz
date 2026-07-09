@@ -36,7 +36,8 @@ to your phonebook or block them.
   phonebook is fully silent (no popup, no sound) and shows red/struck-through
   in the call list — instead of a designated "block all numbers" phonebook,
   since AVM's built-in call-barring feature caps out at 32 entries, too few
-  for an internet-sourced spam list.
+  for an internet-sourced spam list. Understands AVM's wildcard entries
+  (a trailing `*` on a number = prefix match), common in bulk spam lists.
 - **Sound + KDE notification** on incoming calls (skipped for blocked ones).
 - **Quick actions** on an unrecognized caller: "Add to Contacts" (with a
   name field and number type) or "Add to Blocklist" — each writes to one
@@ -44,7 +45,12 @@ to your phonebook or block them.
   overwritten on every sync can stay a read-only source while a
   hand-maintained one takes new entries.
 - **Missed-call catch-up**: calls that came in while the widget wasn't
-  running are fetched from the FritzBox's own call list on startup.
+  running are fetched from the FritzBox's own call list on startup, with an
+  unread-count badge on the panel icon (clears when you open the widget).
+- **Phonebook auto-sync**: optionally re-downloads every assigned
+  Contacts/Blocklist phonebook on a daily or weekly schedule, so a stale
+  local cache doesn't silently miss numbers a WebDAV sync picked up since
+  the last manual refresh.
 - Compact and full Plasma representations.
 
 ## Requirements
@@ -112,18 +118,23 @@ To disable it again: `#96*0*`.
 
 ### Enable TR-064
 
-FRITZ!Box web interface (`http://fritz.box`) → Home Network › Network ›
-Network Settings → "Home network sharing" (Heimnetzfreigabe) → enable
-"Allow access for applications (TR-064)".
+Newer FritzOS versions don't have a separate "allow TR-064" toggle anymore —
+it's available as soon as a FRITZ!Box user with the right permission (below)
+exists. Older versions: FRITZ!Box web interface (`http://fritz.box`) →
+Home Network › Network › Network Settings → "Allow access for applications
+(TR-064)".
 
 ### Create a dedicated user
 
 System › FRITZ!Box Users → Add User:
 - Username: `kfritz` (recommended)
-- Permissions: "Read access to call list and phonebook"
+- Permissions: **only** "Sprachnachrichten, Faxnachrichten, FRITZ!App Fon
+  und Anrufliste" ("Voice messages, faxes, FRITZ!App Fon and call list") —
+  don't grant "FRITZ!Box Settings", it's not needed and is full admin access.
 
 This user authenticates KFritz's TR-064 calls (phonebook download, blocklist
-checks, adding contacts).
+checks, adding contacts). Run `./setup_test.sh` (see below) to verify the
+permission is actually sufficient before filing a bug.
 
 ## Configuration
 
@@ -137,6 +148,17 @@ Right-click the widget → Configure KFritz:
   designated write target for the quick-action buttons
 
 Only needs to be done once, settings persist across reboots.
+
+## Troubleshooting
+
+Before filing a bug, run the included diagnostic script — it checks the
+CallMonitor port, the TR-064 port, and phonebook/call-list access against
+your box directly, independent of the widget:
+
+```bash
+./setup_test.sh
+# or non-interactively: ./setup_test.sh <host> <login> <password>
+```
 
 ## Support
 
