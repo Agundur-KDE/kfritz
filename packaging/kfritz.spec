@@ -3,7 +3,7 @@
 %endif
 
 Name:           kfritz
-Version:        0.2.2
+Version:        0.2.3
 Release:        1%{?dist}
 Summary:        KDE Plasma 6 callmonitor plasmoid for the AVM FRITZ!Box
 
@@ -83,6 +83,22 @@ fi
 %{_datadir}/locale/*/LC_MESSAGES/plasma_applet_de.agundur.kfritz.mo
 
 %changelog
+* Thu Jul 09 2026 Alec <info@agundur.de> - 0.2.3
+- Added 5s timeout to all FritzBox network calls, so an unreachable box
+  no longer hangs the widget/QML engine indefinitely
+- Fixed GetCallList parsing: caller number was read from a non-existent
+  <CallerNumber> tag instead of <Caller> — every missed-call number was
+  silently empty, which also broke blocklist matching for those calls
+- Fixed blocklist/contacts matching for AVM's wildcard phonebook entries
+  (trailing '*' = prefix match), common in bulk-imported spam lists
+- Missed calls now sort newest-first; added an unread-count badge
+- Added phonebook auto-sync (daily/weekly) for all assigned Contacts/
+  Blocklist phonebooks, not just the blocklist
+- Added setup_test.sh for diagnosing FritzBox-side connectivity issues
+- Removed the call-back button explored during development —
+  X_AVM-DE_DialNumber (X_VoIP TR-064 service) fails for third-party
+  clients regardless of permissions or box config
+
 * Thu Jul 09 2026 Alec <info@agundur.de> - 0.2.2
 - Fixed TR-064 auth: a preemptive Basic Authorization header stopped Qt
   from negotiating Digest auth, which FRITZ!Box requires — every SOAP
