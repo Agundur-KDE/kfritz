@@ -81,8 +81,10 @@ elif echo "$RESPONSE" | grep -qi "unauthorized"; then
     fail "TR-064-Login fehlgeschlagen — Benutzername/Passwort prüfen"
 elif echo "$RESPONSE" | grep -q "<errorCode>"; then
     ERR=$(echo "$RESPONSE" | grep -oP '(?<=<errorDescription>).*?(?=</errorDescription>)')
-    fail "FritzBox meldet einen Fehler: ${ERR:-unbekannt}"
+    CODE=$(echo "$RESPONSE" | grep -oP '(?<=<errorCode>).*?(?=</errorCode>)')
+    fail "FritzBox meldet einen Fehler: ${ERR:-unbekannt} (errorCode ${CODE:-?})"
     hint "System → FRITZ!Box-Benutzer → Benutzer braucht 'Sprachnachrichten, Faxnachrichten, FRITZ!App Fon und Anrufliste'"
+    hint "Falls die Berechtigung schon stimmt: läuft diese Box als Mesh-Repeater/IP-Client? Telefonie-Services sind dort oft inaktiv."
 else
     fail "Unerwartete/keine Antwort (Verbindungsproblem?)"
 fi
