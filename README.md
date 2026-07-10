@@ -21,6 +21,9 @@ shows real-time incoming calls: caller name and number, call history, and
 KDE notifications — with a sound, and quick actions to add unknown callers
 to your phonebook or block them.
 
+*(FRITZ!Box is a popular router/modem brand in Germany and other parts of
+Europe, with built-in telephony features.)*
+
 ## Visuals
 
 ![KFritz Plasmoid](KFritz1.png)
