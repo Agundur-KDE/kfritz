@@ -163,6 +163,13 @@ your box directly, independent of the widget:
 # or non-interactively: ./setup_test.sh <host> <login> <password>
 ```
 
+`errorCode 502 "XML error"` on the phonebook/call-list check, even with
+correct permissions, usually means the box isn't actually handling telephony
+— e.g. it's running as a Mesh repeater / IP-client (DECT only) while a
+third-party VoIP provider (Sipgate etc.) handles calls elsewhere. AVM's
+`X_AVM-DE_OnTel` service isn't active on that box in that case; this isn't a
+KFritz bug.
+
 ## Support
 
 Open an issue: [KFritz Issues](https://github.com/Agundur-KDE/kfritz/issues)
