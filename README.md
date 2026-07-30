@@ -156,9 +156,13 @@ Only needs to be done once, settings persist across reboots.
 
 Before filing a bug, run the included diagnostic script — it checks the
 CallMonitor port, the TR-064 port, and phonebook/call-list access against
-your box directly, independent of the widget:
+your box directly, independent of the widget. No need to clone the whole
+repo, download it directly:
 
 ```bash
+curl -O https://raw.githubusercontent.com/Agundur-KDE/kfritz/main/setup_test.sh
+chmod +x setup_test.sh   # a plain download doesn't carry the executable bit
+
 ./setup_test.sh
 # or non-interactively: ./setup_test.sh <host> <login> <password>
 ```

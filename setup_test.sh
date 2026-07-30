@@ -20,40 +20,40 @@ PASSWORD="${3:-}"
 PORT="${4:-49000}"
 
 if [[ -z "$HOST" ]]; then
-    read -rp "FritzBox-IP [192.168.178.1]: " HOST
+    read -rp "FritzBox IP [192.168.178.1]: " HOST
     HOST="${HOST:-192.168.178.1}"
 fi
 if [[ -z "$LOGIN" ]]; then
-    read -rp "TR-064-Benutzername: " LOGIN
+    read -rp "TR-064 username: " LOGIN
 fi
 if [[ -z "$PASSWORD" ]]; then
-    read -rsp "TR-064-Passwort: " PASSWORD
+    read -rsp "TR-064 password: " PASSWORD
     echo
 fi
 
-echo "KFritz Setup-Check gegen $HOST"
+echo "KFritz Setup Check against $HOST"
 echo
 
 # 1. TR-064 port reachable
 if timeout 3 bash -c "echo > /dev/tcp/$HOST/$PORT" 2>/dev/null; then
-    ok "TR-064-Port $PORT erreichbar"
+    ok "TR-064 port $PORT reachable"
 else
-    fail "TR-064-Port $PORT NICHT erreichbar"
-    hint "Heimnetz → Netzwerk → Netzwerkeinstellungen → Zugriff für Anwendungen (TR-064) aktivieren"
+    fail "TR-064 port $PORT NOT reachable"
+    hint "Home Network → Network → Network Settings → enable 'Access for Applications' (TR-064)"
     exit 1
 fi
 
 # 2. CallMonitor port reachable
 if timeout 3 bash -c "echo > /dev/tcp/$HOST/1012" 2>/dev/null; then
-    ok "CallMonitor-Port 1012 erreichbar"
+    ok "CallMonitor port 1012 reachable"
 else
-    fail "CallMonitor-Port 1012 NICHT erreichbar"
-    hint "An einem an der FritzBox angeschlossenen Telefon wählen: #96*5* (aktiviert dauerhaft, auch nach Reboot)"
+    fail "CallMonitor port 1012 NOT reachable"
+    hint "Dial #96*5* from a phone connected to the FritzBox (enables it permanently, survives reboots)"
 fi
 
 if [[ -z "$LOGIN" || -z "$PASSWORD" ]]; then
     echo
-    echo "Kein Benutzername/Passwort angegeben — Telefonbuch-/Anrufliste-Check übersprungen."
+    echo "No username/password given — phonebook/call-list check skipped."
     exit 0
 fi
 
@@ -76,30 +76,30 @@ RESPONSE=$(soap_call "GetPhonebookList")
 if echo "$RESPONSE" | grep -q "<NewPhonebookList>"; then
     IDS=$(echo "$RESPONSE" | grep -oP '(?<=<NewPhonebookList>).*?(?=</NewPhonebookList>)')
     COUNT=$(echo "$IDS" | tr ',' '\n' | grep -c .)
-    ok "Telefonbuch-Zugriff funktioniert ($COUNT Telefonbuch/-bücher: $IDS)"
+    ok "Phonebook access works ($COUNT phonebook(s): $IDS)"
 elif echo "$RESPONSE" | grep -qi "unauthorized"; then
-    fail "TR-064-Login fehlgeschlagen — Benutzername/Passwort prüfen"
+    fail "TR-064 login failed — check username/password"
 elif echo "$RESPONSE" | grep -q "<errorCode>"; then
     ERR=$(echo "$RESPONSE" | grep -oP '(?<=<errorDescription>).*?(?=</errorDescription>)')
     CODE=$(echo "$RESPONSE" | grep -oP '(?<=<errorCode>).*?(?=</errorCode>)')
-    fail "FritzBox meldet einen Fehler: ${ERR:-unbekannt} (errorCode ${CODE:-?})"
-    hint "System → FRITZ!Box-Benutzer → Benutzer braucht 'Sprachnachrichten, Faxnachrichten, FRITZ!App Fon und Anrufliste'"
-    hint "Falls die Berechtigung schon stimmt: läuft diese Box als Mesh-Repeater/IP-Client? Telefonie-Services sind dort oft inaktiv."
+    fail "FritzBox reports an error: ${ERR:-unknown} (errorCode ${CODE:-?})"
+    hint "System → FRITZ!Box Users → user needs 'Voice messages, faxes, FRITZ!App Fon and call list'"
+    hint "If the permission is already correct: is this box running as a Mesh repeater/IP client? Telephony services are often inactive there."
 else
-    fail "Unerwartete/keine Antwort (Verbindungsproblem?)"
+    fail "Unexpected/no response (connection problem?)"
 fi
 
 # 4. Call list access — same permission checkbox, but a distinct AVM feature,
 # worth checking separately (missed-call catch-up depends on it).
 RESPONSE=$(soap_call "GetCallList")
 if echo "$RESPONSE" | grep -q "<NewCallListURL>http"; then
-    ok "Anrufliste-Zugriff funktioniert (nötig für Missed-Calls-Abgleich)"
+    ok "Call list access works (needed for missed-calls catch-up)"
 elif echo "$RESPONSE" | grep -q "<NewCallListURL></NewCallListURL>\|<NewCallListURL/>"; then
-    fail "Anrufliste liefert eine leere URL — Feature evtl. auf der Box deaktiviert"
+    fail "Call list returns an empty URL — feature might be disabled on the box"
 else
-    fail "Anrufliste nicht abrufbar"
-    hint "Selbe Berechtigung wie Telefonbuch nötig, siehe oben"
+    fail "Call list not retrievable"
+    hint "Same permission as phonebook needed, see above"
 fi
 
 echo
-echo "Fertig."
+echo "Done."
