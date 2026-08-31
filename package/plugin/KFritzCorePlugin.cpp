@@ -238,11 +238,6 @@ QString KFritzCorePlugin::resolveName(const QString &number) const
 
 /************************* Call history *******************************/
 
-QStringList KFritzCorePlugin::recentCalls() const
-{
-    return m_recentCalls;
-}
-
 bool KFritzCorePlugin::isBlocked(const QString &number) const
 {
     for (int id : m_blocklistIds) {
@@ -317,9 +312,6 @@ void KFritzCorePlugin::handleIncomingCall(const QString &number)
     m_callerInfo = !name.isEmpty() ? name + u" (" + number + u")" : number;
     Q_EMIT callerInfoChanged();
 
-    QString entry = timestamp + u" - "_s + (!name.isEmpty() ? name + u" (" + number + u")" : number);
-    m_recentCalls.prepend(entry);
-
     if (m_recentCallsModel)
         m_recentCallsModel->addCall(name, number, timestamp, blocked);
 
@@ -341,7 +333,7 @@ void KFritzCorePlugin::handleIncomingCall(const QString &number)
     notification->setIconName(QStringLiteral("call-incoming"));
     notification->sendEvent();
 
-    qDebug() << "Incoming call:" << number << "-> recentCalls:" << m_recentCalls;
+    qDebug() << "Incoming call:" << number;
 }
 
 QAbstractListModel *KFritzCorePlugin::recentCallsModel() const

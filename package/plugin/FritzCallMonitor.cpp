@@ -11,6 +11,7 @@
 #include <QObject>
 #include <QTcpSocket>
 #include <QTimer>
+#include <algorithm>
 
 using namespace Qt::StringLiterals;
 
@@ -18,17 +19,22 @@ FritzCallMonitor::FritzCallMonitor(QObject *parent)
     : QObject(parent)
 {
     QTimer::singleShot(5'000, this, &FritzCallMonitor::connectToFritzBox);
-    m_reconnectTimer = new QTimer(this);
-    m_reconnectTimer->setInterval(3 * 60 * 1000); // 3 Minuten
-    m_reconnectTimer->setSingleShot(false);
-    connect(m_reconnectTimer, &QTimer::timeout, this, &FritzCallMonitor::connectToFritzBox);
 
-    if (!m_reconnectTimer) {
-        m_reconnectTimer = new QTimer(this);
-        m_reconnectTimer->setInterval(3 * 60 * 1000); // alle 3 Min
-        m_reconnectTimer->setSingleShot(false);
-        connect(m_reconnectTimer, &QTimer::timeout, this, &FritzCallMonitor::connectToFritzBox);
-    }
+    m_reconnectTimer = new QTimer(this);
+    m_reconnectTimer->setSingleShot(true);
+    connect(m_reconnectTimer, &QTimer::timeout, this, &FritzCallMonitor::connectToFritzBox);
+}
+
+int FritzCallMonitor::nextRetryDelayMs()
+{
+    // Exponentieller Backoff (5s, 10s, 20s, ... ) gedeckelt bei 3 Minuten,
+    // damit ein kurzer Netzwerk-Hänger schnell nachversucht, ein länger
+    // nicht erreichbarer Router aber nicht im Sekundentakt anklopft.
+    static constexpr int baseDelayMs = 5'000;
+    static constexpr int maxDelayMs = 3 * 60 * 1000;
+
+    const int uncapped = baseDelayMs << std::min(m_retryCount, 10);
+    return std::min(uncapped, maxDelayMs);
 }
 
 void FritzCallMonitor::setHost(const QString &host)
@@ -81,16 +87,17 @@ void FritzCallMonitor::onDisconnected()
     m_connected = false;
     Q_EMIT connectedChanged(false);
 
-    if (!m_reconnectTimer->isActive()) {
-        qDebug() << "⏳ Starte Reconnect-Timer (3 Min Intervall)";
-        m_reconnectTimer->start(); // übernimmt alle Reconnects
-    }
+    const int delayMs = nextRetryDelayMs();
+    ++m_retryCount;
+    qDebug() << "⏳ Reconnect-Versuch in" << delayMs / 1000 << "Sekunden";
+    m_reconnectTimer->start(delayMs);
 }
 
 void FritzCallMonitor::onConnected()
 {
     qDebug() << "🟢 Erfolgreich verbunden zur FritzBox.";
-    m_retryCount = 0; // reset Retry-Zähler
+    m_reconnectTimer->stop(); // kein hängender Backoff-Versuch nach Erfolg
+    m_retryCount = 0;
     m_connected = true;
     Q_EMIT connectedChanged(true);
 }
@@ -123,12 +130,18 @@ void FritzCallMonitor::onReadyRead()
 
 void FritzCallMonitor::onSocketError(QAbstractSocket::SocketError socketError)
 {
-    if (!m_reconnectTimer->isActive()) {
-        qDebug() << "⏳ Starte Reconnect-Timer (3 Min Intervall)";
-        m_reconnectTimer->start();
-    }
     qWarning() << "Socket error:" << m_socket->errorString();
     qWarning() << "Socket Error:" << socketError;
+
+    // Ein gescheiterter Erstverbindungsversuch löst kein disconnected() aus
+    // (der Socket war nie verbunden) — hier also selbst nachplanen, aber nur
+    // wenn onDisconnected() nicht schon einen Backoff-Versuch laufen hat.
+    if (!m_reconnectTimer->isActive()) {
+        const int delayMs = nextRetryDelayMs();
+        ++m_retryCount;
+        qDebug() << "⏳ Reconnect-Versuch in" << delayMs / 1000 << "Sekunden";
+        m_reconnectTimer->start(delayMs);
+    }
 }
 
 bool FritzCallMonitor::isConnected() const

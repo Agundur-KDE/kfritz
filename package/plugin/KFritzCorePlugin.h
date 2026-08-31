@@ -27,7 +27,6 @@ class KFritzCorePlugin : public QObject
     Q_PROPERTY(QString currentCallerNumber READ currentCallerNumber NOTIFY callerInfoChanged)
     Q_PROPERTY(bool callerBlocked READ callerBlocked NOTIFY callerInfoChanged)
     Q_PROPERTY(bool callerUnknown READ callerUnknown NOTIFY callerInfoChanged)
-    Q_PROPERTY(QStringList recentCalls READ recentCalls NOTIFY recentCallsChanged)
     Q_PROPERTY(QAbstractListModel *recentCallsModel READ recentCallsModel NOTIFY recentCallsChanged)
     Q_PROPERTY(int missedCount READ missedCount NOTIFY missedCountChanged)
 
@@ -38,7 +37,6 @@ public:
     QObject *callMonitor();
     bool callMonitorConnected() const;
     QString currentCaller() const;
-    QStringList recentCalls() const;
     QString callerInfo() const;
     QString currentCallerNumber() const;
     bool callerBlocked() const;
@@ -103,7 +101,6 @@ private:
     QHash<int, PhonebookLookup> m_lookups;
     QList<int> m_contactsIds;
     QList<int> m_blocklistIds;
-    QStringList m_recentCalls;
     RecentCallsModel *m_recentCallsModel = nullptr;
     int m_missedCount = 0;
 
