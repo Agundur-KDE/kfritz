@@ -18,6 +18,7 @@
 #include <QStringLiteral>
 #include <QTextStream>
 #include <QVariantList>
+#include <QtConcurrent>
 // #include <QXmlStreamReader>
 #include <KLocalizedString>
 #include <KNotification>
@@ -43,18 +44,24 @@ KFritzCorePlugin::KFritzCorePlugin(QObject *parent)
 
 /************************* Phonebook *******************************/
 
-QVariantList KFritzCorePlugin::getPhonebookList(const QString &host, int port, const QString &user, const QString &password)
+void KFritzCorePlugin::getPhonebookList(const QString &host, int port, const QString &user, const QString &password)
 {
+    // setHost/setPort/setUsername/setPassword are cheap (no network I/O) —
+    // fine to call synchronously before dispatching the actual SOAP round
+    // trip (getPhonebookList(), which also downloads each phonebook's XML)
+    // to a worker thread, so it never blocks the QML/panel thread.
     m_fetcher.setHost(host);
     m_fetcher.setPort(port);
     m_fetcher.setUsername(user);
     m_fetcher.setPassword(password);
 
-    QStringList list = m_fetcher.getPhonebookList();
-    QVariantList result;
-    for (const QString &s : list)
-        result << s;
-    return result;
+    QFuture<QStringList> future = QtConcurrent::run([this]() {
+        return m_fetcher.getPhonebookList();
+    });
+
+    future.then(this, [this](QStringList list) {
+        Q_EMIT phonebookListFetched(list, true);
+    });
 }
 
 void KFritzCorePlugin::setCredentials(const QString &host, int port, const QString &user, const QString &password)
@@ -221,9 +228,15 @@ void KFritzCorePlugin::setBlocklistPhonebooks(const QVariantList &ids, int count
     }
 }
 
-bool KFritzCorePlugin::addPhonebookEntry(int phonebookId, const QString &name, const QString &number, const QString &type)
+void KFritzCorePlugin::addPhonebookEntry(int phonebookId, const QString &name, const QString &number, const QString &type)
 {
-    return m_fetcher.addPhonebookEntry(phonebookId, name, number, type);
+    QFuture<bool> future = QtConcurrent::run([this, phonebookId, name, number, type]() {
+        return m_fetcher.addPhonebookEntry(phonebookId, name, number, type);
+    });
+
+    future.then(this, [this](bool ok) {
+        Q_EMIT addPhonebookEntryFinished(ok);
+    });
 }
 
 QString KFritzCorePlugin::resolveName(const QString &number) const
@@ -247,51 +260,60 @@ bool KFritzCorePlugin::isBlocked(const QString &number) const
     return false;
 }
 
-int KFritzCorePlugin::checkMissedCalls(int lastSeenId)
+void KFritzCorePlugin::checkMissedCalls(int lastSeenId)
 {
-    const auto entries = m_fetcher.getCallList(lastSeenId);
+    // Only the network round trip (GetCallList) runs on the worker thread —
+    // isBlocked()/resolveName() read m_lookups/m_blocklistIds/m_contactsIds,
+    // and addCall()/the changed-signals touch the QML-facing model, so that
+    // part stays on the GUI thread inside the .then() continuation.
+    QFuture<QList<FritzCallListEntry>> future = QtConcurrent::run([this, lastSeenId]() {
+        return m_fetcher.getCallList(lastSeenId);
+    });
 
-    int maxId = lastSeenId;
-    bool changed = false;
+    future.then(this, [this, lastSeenId](QList<FritzCallListEntry> entries) {
+        int maxId = lastSeenId;
+        bool changed = false;
 
-    // GetCallList returns newest-first, but RecentCallsModel::addCall()
-    // always prepends — walking the list back-to-front here means the
-    // newest entry is prepended last, so it ends up on top (instead of the
-    // whole batch showing up reversed, oldest-on-top).
-    for (auto it = entries.crbegin(); it != entries.crend(); ++it) {
-        const FritzCallListEntry &entry = *it;
-        if (entry.id > maxId)
-            maxId = entry.id;
+        // GetCallList returns newest-first, but RecentCallsModel::addCall()
+        // always prepends — walking the list back-to-front here means the
+        // newest entry is prepended last, so it ends up on top (instead of
+        // the whole batch showing up reversed, oldest-on-top).
+        for (auto it = entries.crbegin(); it != entries.crend(); ++it) {
+            const FritzCallListEntry &entry = *it;
+            if (entry.id > maxId)
+                maxId = entry.id;
 
-        // Don't trust the box's &id= URL filter alone — if it's ignored
-        // (or the box just returns everything it has), re-check locally
-        // so already-seen entries never reappear after a restart.
-        if (entry.id <= lastSeenId)
-            continue;
+            // Don't trust the box's &id= URL filter alone — if it's ignored
+            // (or the box just returns everything it has), re-check locally
+            // so already-seen entries never reappear after a restart.
+            if (entry.id <= lastSeenId)
+                continue;
 
-        if (entry.type != 2) // only "missed"
-            continue;
+            if (entry.type != 2) // only "missed"
+                continue;
 
-        const bool blocked = isBlocked(entry.number);
-        const QString name = blocked ? QString{} : (entry.name.isEmpty() ? resolveName(entry.number) : entry.name);
+            const bool blocked = isBlocked(entry.number);
+            const QString name = blocked ? QString{} : (entry.name.isEmpty() ? resolveName(entry.number) : entry.name);
 
-        if (m_recentCallsModel) {
-            m_recentCallsModel->addCall(name, entry.number, entry.date, blocked);
-            changed = true;
+            if (m_recentCallsModel) {
+                m_recentCallsModel->addCall(name, entry.number, entry.date, blocked);
+                changed = true;
+            }
+
+            // Blocked numbers stay fully silent by design — don't bump the
+            // badge for calls the user deliberately doesn't want to hear
+            // about.
+            if (!blocked)
+                ++m_missedCount;
         }
 
-        // Blocked numbers stay fully silent by design — don't bump the
-        // badge for calls the user deliberately doesn't want to hear about.
-        if (!blocked)
-            ++m_missedCount;
-    }
+        if (changed)
+            Q_EMIT recentCallsChanged();
+        if (m_missedCount > 0)
+            Q_EMIT missedCountChanged();
 
-    if (changed)
-        Q_EMIT recentCallsChanged();
-    if (m_missedCount > 0)
-        Q_EMIT missedCountChanged();
-
-    return maxId;
+        Q_EMIT missedCallsChecked(maxId);
+    });
 }
 
 void KFritzCorePlugin::handleIncomingCall(const QString &number)

@@ -18,6 +18,7 @@ target_sources(kfritzplugin PRIVATE
   )
 
 target_link_libraries(kfritzplugin PRIVATE
+    Qt6::Concurrent
     Qt6::Core
     Qt6::Qml
     Qt6::Network

@@ -44,7 +44,11 @@ public:
     QAbstractListModel *recentCallsModel() const;
     int missedCount() const;
 
-    Q_INVOKABLE QVariantList getPhonebookList(const QString &host, int port, const QString &user, const QString &password);
+    // Fire-and-forget: downloads the phonebook list on a background thread
+    // (SOAP + phonebook XML downloads are blocking network I/O — running
+    // them on the QML/UI thread visibly freezes the panel). Result arrives
+    // via phonebookListFetched().
+    Q_INVOKABLE void getPhonebookList(const QString &host, int port, const QString &user, const QString &password);
     Q_INVOKABLE QVariantList listLocalPhonebooks();
     Q_INVOKABLE void connectToFritzBox();
     Q_INVOKABLE void setHost(const QString &host);
@@ -65,16 +69,18 @@ public:
     Q_INVOKABLE void setBlocklistPhonebooks(const QVariantList &ids, int countryCode);
 
     // Adds `number` to phonebook `phonebookId` — the caller (QML) decides
-    // which id that is (ContactsWriteTarget/BlocklistWriteTarget), so this
-    // stays a thin, stateless wrapper.
-    Q_INVOKABLE bool addPhonebookEntry(int phonebookId, const QString &name, const QString &number, const QString &type);
+    // which id that is (ContactsWriteTarget/BlocklistWriteTarget). Runs on a
+    // background thread; result (success/failure) arrives via
+    // addPhonebookEntryFinished() instead of a direct return value, so the
+    // SOAP round-trip can't freeze the panel.
+    Q_INVOKABLE void addPhonebookEntry(int phonebookId, const QString &name, const QString &number, const QString &type);
 
     // Fetches missed calls (Type 2) from the box's own call list since
     // `lastSeenId` (0 = everything the box still has), adds them to
-    // recentCallsModel same as a live call would, and returns the new
-    // highest id seen so QML can persist it (Plasmoid.configuration.
-    // LastSeenCallId) for the next incremental fetch.
-    Q_INVOKABLE int checkMissedCalls(int lastSeenId);
+    // recentCallsModel same as a live call would. Runs on a background
+    // thread; the new highest id seen (for QML to persist as
+    // Plasmoid.configuration.LastSeenCallId) arrives via missedCallsChecked().
+    Q_INVOKABLE void checkMissedCalls(int lastSeenId);
 
 public Q_SLOTS:
     void loadPhonebook(int phonebookId, int countryCode);
@@ -87,6 +93,9 @@ Q_SIGNALS:
     void callerInfoChanged();
     void recentCallsChanged();
     void missedCountChanged();
+    void phonebookListFetched(const QStringList &ids, bool ok);
+    void addPhonebookEntryFinished(bool ok);
+    void missedCallsChecked(int newLastSeenId);
 
 private:
     bool isBlocked(const QString &number) const;

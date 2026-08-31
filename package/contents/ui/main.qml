@@ -44,6 +44,7 @@ PlasmoidItem {
     property bool callMonitorConnected: false
     property bool showCallerInfo: false
     property bool testMode: false
+    property bool pendingClearsContactName: false
     readonly property bool hasBackground: (Plasmoid.effectiveBackgroundHints & PlasmaCore.Types.DefaultBackground) !== 0
 
     toolTipMainText: Plasmoid.title
@@ -61,7 +62,11 @@ PlasmoidItem {
     width: 400
     height: 300
     function checkMissedCalls() {
-        Plasmoid.configuration.LastSeenCallId = plugin.checkMissedCalls(Plasmoid.configuration.LastSeenCallId);
+        // Fire-and-forget — checkMissedCalls() now runs the SOAP call on a
+        // background thread and reports back via missedCallsChecked()
+        // (Connections below) instead of a direct return value, so this
+        // can no longer freeze the panel.
+        plugin.checkMissedCalls(Plasmoid.configuration.LastSeenCallId);
     }
 
     function refreshAllPhonebooks() {
@@ -123,6 +128,17 @@ PlasmoidItem {
         function onCurrentCallerChanged() {
             showCallerInfo = true;
             hideTimer.restart();
+        }
+
+        function onMissedCallsChecked(newLastSeenId) {
+            Plasmoid.configuration.LastSeenCallId = newLastSeenId;
+        }
+
+        function onAddPhonebookEntryFinished(ok) {
+            addEntryError.visible = !ok;
+            if (ok && pendingClearsContactName) {
+                newContactName.text = "";
+            }
         }
 
         target: plugin
@@ -282,15 +298,14 @@ PlasmoidItem {
                         text: i18n("Add to Contacts")
                         enabled: Plasmoid.configuration.ContactsWriteTarget !== -1 && newContactName.text.length > 0
                         onClicked: {
-                            // Only clear the field / hide the error on actual
-                            // success — previously the field was wiped even
-                            // when the FritzBox call failed, silently losing
-                            // what the user typed.
-                            const ok = plugin.addPhonebookEntry(Plasmoid.configuration.ContactsWriteTarget, newContactName.text, plugin.currentCallerNumber, newContactType.typeValues[newContactType.currentIndex]);
-                            addEntryError.visible = !ok;
-                            if (ok) {
-                                newContactName.text = "";
-                            }
+                            // addPhonebookEntry() runs on a background thread
+                            // now — result arrives later via
+                            // addPhonebookEntryFinished (Connections below).
+                            // Remember that this click was the one clearing
+                            // the name field on success (Add-to-Blocklist
+                            // doesn't touch it).
+                            pendingClearsContactName = true;
+                            plugin.addPhonebookEntry(Plasmoid.configuration.ContactsWriteTarget, newContactName.text, plugin.currentCallerNumber, newContactType.typeValues[newContactType.currentIndex]);
                         }
                     }
 
@@ -298,8 +313,8 @@ PlasmoidItem {
                         text: i18n("Add to Blocklist")
                         enabled: Plasmoid.configuration.BlocklistWriteTarget !== -1
                         onClicked: {
-                            const ok = plugin.addPhonebookEntry(Plasmoid.configuration.BlocklistWriteTarget, i18n("Blocked"), plugin.currentCallerNumber, "home");
-                            addEntryError.visible = !ok;
+                            pendingClearsContactName = false;
+                            plugin.addPhonebookEntry(Plasmoid.configuration.BlocklistWriteTarget, i18n("Blocked"), plugin.currentCallerNumber, "home");
                         }
                     }
 
