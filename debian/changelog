@@ -1,3 +1,28 @@
+kfritz (0.3.0-1) unstable; urgency=medium
+
+  * Network calls (phonebook download, adding a contact/blocklist entry,
+    checking for missed calls) now run on a background thread instead of
+    the QML/panel thread — they could visibly freeze the panel before.
+  * A failed network call while adding a contact/blocklist entry is no
+    longer silently treated as success; an inline error message is shown
+    and the typed name is no longer lost.
+  * CallMonitor reconnect now uses exponential backoff (5s...3min) instead
+    of a fixed 3-minute interval, and actually stops once connected instead
+    of continuing to run in the background.
+  * The call-history catch-up after a restart now includes all call types
+    (answered, outgoing, missed) instead of only missed calls, so it
+    actually shows "what happened on this phone while the widget wasn't
+    running" as intended.
+  * Fixed several accessibility/theming issues: hardcoded colors replaced
+    with theme roles, the connection status is no longer color-only
+    (adds an icon + tooltip), and an empty call list now shows a
+    placeholder instead of a blank page.
+  * Added a "Clear call history" button (with a confirmation dialog) —
+    only clears the panel's own list, does not touch the FritzBox's call
+    log.
+
+ -- Agundur <info@agundur.de>  Mon, 31 Aug 2026 14:00:00 +0200
+
 kfritz (0.2.4-1) unstable; urgency=medium
 
   * Fixed missed calls reappearing after a restart: checkMissedCalls() relied
