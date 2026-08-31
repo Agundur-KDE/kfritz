@@ -193,6 +193,11 @@ PlasmoidItem {
                     // color alone.
                     Kirigami.Icon {
                         source: blocked ? "call-stop" : "user"
+                        // isMask: true is required for `color` to actually
+                        // take effect — without it Kirigami.Icon silently
+                        // ignores the color property on non-auto-detected
+                        // icons and just renders them in their own colors.
+                        isMask: true
                         color: blocked ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
                         Layout.alignment: Qt.AlignVCenter
                     }
@@ -263,7 +268,12 @@ PlasmoidItem {
                     text: "FRITZ!Box"
                     horizontalAlignment: Text.AlignLeft
                     font.pointSize: 10
-                    color: Kirigami.Theme.subtitleColor
+                    // Verified via plasmoidviewer: Kirigami.Theme.subtitleColor
+                    // resolves to undefined on a plain Controls.Label here,
+                    // and Qt silently defaults an undefined color assignment
+                    // to black — invisible against a dark panel. The
+                    // fallback isn't dead defensive code, it's load-bearing.
+                    color: Kirigami.Theme.subtitleColor ?? "#666666"
                 }
 
                 RowLayout {
@@ -274,9 +284,21 @@ PlasmoidItem {
                     // tell red from green) — icon shape + tooltip text carry
                     // the same information redundantly.
                     Kirigami.Icon {
-                        implicitWidth: Kirigami.Units.gridUnit * 0.8
-                        implicitHeight: Kirigami.Units.gridUnit * 0.8
-                        source: plugin.callMonitorConnected ? "network-connect" : "network-disconnect"
+                        // implicitWidth/Height are only a Layout sizing
+                        // hint — the icon's actual rendered pixmap ignored
+                        // them and rendered oversized/clipped instead of
+                        // scaled. width/height controls the real render size.
+                        width: Kirigami.Units.gridUnit * 0.8
+                        height: Kirigami.Units.gridUnit * 0.8
+                        source: plugin.callMonitorConnected ? "network-connect-symbolic" : "network-disconnect-symbolic"
+                        // isMask: true is required for `color` to actually
+                        // take effect — confirmed via qmlplugindump
+                        // (Kirigami.Icon has both isMask and color
+                        // properties; color is silently ignored without it).
+                        // The plain -symbolic icon alone rendered its own
+                        // tiny, low-contrast default color, which is what
+                        // looked like "black on black" during testing.
+                        isMask: true
                         color: plugin.callMonitorConnected ? Kirigami.Theme.positiveTextColor : Kirigami.Theme.negativeTextColor
                         Layout.alignment: Qt.AlignVCenter
 
