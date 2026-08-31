@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KFritz 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-31 09:57+0200\n"
+"POT-Creation-Date: 2026-08-31 10:34+0200\n"
 "PO-Revision-Date: 2025-07-23 13:48+0200\n"
 "Last-Translator: alec <info@agundur.de>\n"
 "Language-Team: French <translation-team-fr@lists.sourceforge.net>\n"
@@ -75,11 +75,11 @@ msgstr "Hebdomadaire"
 msgid "Add a phonebook"
 msgstr "Ajouter un répertoire"
 
-#: package/contents/ui/configPhoneBook.qml:184 package/contents/ui/main.qml:298
+#: package/contents/ui/configPhoneBook.qml:184 package/contents/ui/main.qml:364
 msgid "Add to Contacts"
 msgstr "Ajouter aux contacts"
 
-#: package/contents/ui/configPhoneBook.qml:190 package/contents/ui/main.qml:313
+#: package/contents/ui/configPhoneBook.qml:190 package/contents/ui/main.qml:379
 msgid "Add to Blocklist"
 msgstr "Ajouter à la liste de blocage"
 
@@ -88,19 +88,19 @@ msgid "Contacts sources (used for caller ID)"
 msgstr "Sources de contacts (pour l'identification de l'appelant)"
 
 #: package/contents/ui/configPhoneBook.qml:204
-#: package/contents/ui/configPhoneBook.qml:251
+#: package/contents/ui/configPhoneBook.qml:255
 msgid "None assigned yet."
 msgstr "Aucun assigné pour l'instant."
 
-#: package/contents/ui/configPhoneBook.qml:224
+#: package/contents/ui/configPhoneBook.qml:228
 msgid "Write target — new contacts are added here"
 msgstr "Cible d'écriture — les nouveaux contacts sont ajoutés ici"
 
-#: package/contents/ui/configPhoneBook.qml:237
+#: package/contents/ui/configPhoneBook.qml:241
 msgid "Blocklist sources"
 msgstr "Sources de la liste de blocage"
 
-#: package/contents/ui/configPhoneBook.qml:242
+#: package/contents/ui/configPhoneBook.qml:246
 msgid ""
 "All checked phonebooks are read for blocking. The selected radio button is "
 "the single write target for \"Add to Blocklist\" — leave a synced/read-only "
@@ -111,7 +111,7 @@ msgstr ""
 "blocage » — ne sélectionnez pas une liste synchronisée en lecture seule, "
 "afin qu'elle ne soit jamais écrasée."
 
-#: package/contents/ui/configPhoneBook.qml:271
+#: package/contents/ui/configPhoneBook.qml:275
 msgid ""
 "Write target — the \"Add to Blocklist\" button on an incoming call writes "
 "here (e.g. keep a WebDAV-synced list read-only by never selecting it here)"
@@ -120,49 +120,61 @@ msgstr ""
 "appel entrant écrit ici (par ex. gardez une liste synchronisée via WebDAV en "
 "lecture seule en ne la sélectionnant jamais ici)"
 
-#: package/contents/ui/main.qml:163 package/contents/ui/main.qml:220
+#: package/contents/ui/main.qml:162 package/contents/ui/main.qml:259
 msgid "Recent Calls"
 msgstr "Appels récents"
 
-#: package/contents/ui/main.qml:253
+#: package/contents/ui/main.qml:250
+msgid "No calls yet"
+msgstr "Aucun appel pour l'instant"
+
+#: package/contents/ui/main.qml:306
+msgid "Call Monitor connected"
+msgstr "Moniteur d'appels connecté"
+
+#: package/contents/ui/main.qml:306
+msgid "Call Monitor disconnected"
+msgstr "Moniteur d'appels déconnecté"
+
+#: package/contents/ui/main.qml:319
 msgid "Check for missed calls"
 msgstr "Rechercher les appels manqués"
 
-#: package/contents/ui/main.qml:263
+#: package/contents/ui/main.qml:329
 msgid "Dial: #96*5* to enable the CallMonitor on your Fritz!Box"
 msgstr "Composez : #96*5* pour activer le CallMonitor sur votre FRITZ!Box."
 
-#: package/contents/ui/main.qml:276
+#: package/contents/ui/main.qml:342
 msgid "Unknown number: %1"
 msgstr "Numéro inconnu : %1"
 
-#: package/contents/ui/main.qml:285
+#: package/contents/ui/main.qml:351
 msgid "Name"
 msgstr "Nom"
 
-#: package/contents/ui/main.qml:294
+#: package/contents/ui/main.qml:360
 msgid "Private"
 msgstr "Privé"
 
-#: package/contents/ui/main.qml:294
+#: package/contents/ui/main.qml:360
 msgid "Mobile"
 msgstr "Mobile"
 
-#: package/contents/ui/main.qml:294
+#: package/contents/ui/main.qml:360
 msgid "Business"
 msgstr "Professionnel"
 
-#: package/contents/ui/main.qml:317
+#: package/contents/ui/main.qml:383
 msgid "Blocked"
 msgstr "Bloqué"
 
-#: package/contents/ui/main.qml:328
+#: package/contents/ui/main.qml:394
 msgid ""
 "Could not reach the FritzBox — entry was not added. Check your connection "
 "and try again."
 msgstr ""
-"Impossible de joindre la FritzBox — l'entrée n'a pas été ajoutée. "
-"Vérifiez votre connexion et réessayez."
+"Impossible de joindre la FritzBox — l'entrée n'a pas été ajoutée. Vérifiez "
+"votre connexion et réessayez."
 
 #: package/contents/config/config.qml:13
 msgctxt "@title"
