@@ -10,7 +10,6 @@ GENERATE_PLUGIN_SOURCE
   )
 target_sources(kfritzplugin PRIVATE
     FritzCallMonitor.cpp
-    FritzDeviceInfoFetcher.cpp
     FritzPhonebookFetcher.cpp
     FritzSOAP.cpp
     KFritzCorePlugin.cpp
@@ -19,6 +18,7 @@ target_sources(kfritzplugin PRIVATE
   )
 
 target_link_libraries(kfritzplugin PRIVATE
+    Qt6::Concurrent
     Qt6::Core
     Qt6::Qml
     Qt6::Network

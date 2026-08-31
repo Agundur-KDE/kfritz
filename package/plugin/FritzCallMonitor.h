@@ -42,15 +42,14 @@ private Q_SLOTS:
     void onSocketError(QAbstractSocket::SocketError socketError);
 
 private:
+    int nextRetryDelayMs();
+
     QTcpSocket *m_socket = nullptr;
     KFritzCorePlugin *m_corePlugin = nullptr;
     bool m_connected = false;
     QTimer *m_reconnectTimer = nullptr;
     QString m_callerInfo;
-    QString m_message;
-    QString m_host, m_user, m_pass;
-    // int m_port = 49000;
+    QString m_host;
 
     int m_retryCount = 0;
-    static constexpr int MAX_RETRIES = 12;
 };

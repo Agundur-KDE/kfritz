@@ -40,9 +40,20 @@ QHash<int, QByteArray> RecentCallsModel::roleNames() const
 void RecentCallsModel::addCall(const QString &name, const QString &number, const QString &time, bool blocked)
 {
     qDebug() << "RecentCallsModel::addCall:" << name << number << time << "blocked:" << blocked;
+
     beginInsertRows(QModelIndex(), 0, 0);
     m_calls.prepend({name, number, time, blocked});
-    if (m_calls.size() > 20) // optional: max. 20 Anrufe speichern
-        m_calls.removeLast();
     endInsertRows();
+
+    // Verlauf begrenzen — als eigene, korrekt signalisierte Entfernung statt
+    // stillschweigend innerhalb von beginInsertRows()/endInsertRows() zu
+    // löschen (das verletzt das Qt-Model-Protokoll und kann Views/Delegates
+    // in einen inkonsistenten Zustand bringen).
+    static constexpr int maxEntries = 20;
+    if (m_calls.size() > maxEntries) {
+        const int lastRow = m_calls.size() - 1;
+        beginRemoveRows(QModelIndex(), lastRow, lastRow);
+        m_calls.removeLast();
+        endRemoveRows();
+    }
 }

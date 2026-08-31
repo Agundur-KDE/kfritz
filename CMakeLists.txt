@@ -24,6 +24,7 @@ include(KDECompilerSettings NO_POLICY_SCOPE)
 include(ECMQmlModule)
 
 find_package(Qt6 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
+    Concurrent
     Core
     Qml
     Network

@@ -92,6 +92,10 @@ KCM.SimpleKCM {
             updatePhonebooks();
         }
 
+        function onPhonebookListFetched(ids, ok) {
+            cfg_Phonebooks = ids.join(", ");
+        }
+
         target: plugin
     }
 
@@ -122,7 +126,11 @@ KCM.SimpleKCM {
 
                 text: i18n("Get Phonebook")
                 onClicked: {
-                    cfg_Phonebooks = plugin.getPhonebookList(cfg_Host, cfg_Port, cfg_Login, cfg_Password).join(", ");
+                    // getPhonebookList() now runs the SOAP call + phonebook
+                    // downloads on a background thread instead of blocking
+                    // this dialog — result arrives via phonebookListFetched
+                    // (Connections below).
+                    plugin.getPhonebookList(cfg_Host, cfg_Port, cfg_Login, cfg_Password);
                 }
             }
 

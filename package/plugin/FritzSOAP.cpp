@@ -36,8 +36,11 @@ void FritzSOAP::setPassword(const QString &pass)
     m_pass = pass;
 }
 
-QString FritzSOAP::sendRequest(const QString &service, const QString &action, const QString &body, const QString &controlUrl) const
+QString FritzSOAP::sendRequest(const QString &service, const QString &action, const QString &body, const QString &controlUrl, bool *ok) const
 {
+    if (ok)
+        *ok = false;
+
     const QUrl url = QUrl(u"http://"_s + m_host + u":"_s + QString::number(m_port) + controlUrl);
 
     QNetworkRequest request(url);
@@ -80,6 +83,8 @@ QString FritzSOAP::sendRequest(const QString &service, const QString &action, co
         qWarning() << "SOAP request failed:" << action << reply->errorString();
     } else {
         result = QString::fromUtf8(reply->readAll());
+        if (ok)
+            *ok = true;
     }
 
     reply->deleteLater();
