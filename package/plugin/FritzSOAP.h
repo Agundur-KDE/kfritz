@@ -19,7 +19,13 @@ public:
     void setUsername(const QString &user);
     void setPassword(const QString &pass);
 
-    QString sendRequest(const QString &service, const QString &action, const QString &body, const QString &controlUrl) const;
+    // `ok` (if given) reports whether the request actually reached the box
+    // and got a reply — distinct from the returned XML being empty, which
+    // an empty-but-successful response can also produce. Callers that only
+    // check the response body for an <errorCode> (as most here do) would
+    // otherwise silently treat "box unreachable"/timeout the same as
+    // "request succeeded, empty response".
+    QString sendRequest(const QString &service, const QString &action, const QString &body, const QString &controlUrl, bool *ok = nullptr) const;
 
 private:
     QString m_host, m_user, m_pass;

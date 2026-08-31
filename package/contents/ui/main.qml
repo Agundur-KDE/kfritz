@@ -282,17 +282,36 @@ PlasmoidItem {
                         text: i18n("Add to Contacts")
                         enabled: Plasmoid.configuration.ContactsWriteTarget !== -1 && newContactName.text.length > 0
                         onClicked: {
-                            plugin.addPhonebookEntry(Plasmoid.configuration.ContactsWriteTarget, newContactName.text, plugin.currentCallerNumber, newContactType.typeValues[newContactType.currentIndex]);
-                            newContactName.text = "";
+                            // Only clear the field / hide the error on actual
+                            // success — previously the field was wiped even
+                            // when the FritzBox call failed, silently losing
+                            // what the user typed.
+                            const ok = plugin.addPhonebookEntry(Plasmoid.configuration.ContactsWriteTarget, newContactName.text, plugin.currentCallerNumber, newContactType.typeValues[newContactType.currentIndex]);
+                            addEntryError.visible = !ok;
+                            if (ok) {
+                                newContactName.text = "";
+                            }
                         }
                     }
 
                     Controls.Button {
                         text: i18n("Add to Blocklist")
                         enabled: Plasmoid.configuration.BlocklistWriteTarget !== -1
-                        onClicked: plugin.addPhonebookEntry(Plasmoid.configuration.BlocklistWriteTarget, i18n("Blocked"), plugin.currentCallerNumber, "home")
+                        onClicked: {
+                            const ok = plugin.addPhonebookEntry(Plasmoid.configuration.BlocklistWriteTarget, i18n("Blocked"), plugin.currentCallerNumber, "home");
+                            addEntryError.visible = !ok;
+                        }
                     }
 
+                }
+
+                Kirigami.InlineMessage {
+                    id: addEntryError
+                    Layout.fillWidth: true
+                    visible: false
+                    type: Kirigami.MessageType.Error
+                    text: i18n("Could not reach the FritzBox — entry was not added. Check your connection and try again.")
+                    showCloseButton: true
                 }
 
             }

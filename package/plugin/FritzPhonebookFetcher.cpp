@@ -164,7 +164,18 @@ bool FritzPhonebookFetcher::addPhonebookEntry(int phonebookId, const QString &na
           u"<NewPhonebookEntryData>"_s
         + entryData.toHtmlEscaped() + u"</NewPhonebookEntryData></u:SetPhonebookEntry>"_s;
 
-    const QString response = m_soap.sendRequest(u"urn:dslforum-org:service:X_AVM-DE_OnTel:1"_s, u"SetPhonebookEntry"_s, body, u"/upnp/control/x_contact"_s);
+    bool requestOk = false;
+    const QString response =
+        m_soap.sendRequest(u"urn:dslforum-org:service:X_AVM-DE_OnTel:1"_s, u"SetPhonebookEntry"_s, body, u"/upnp/control/x_contact"_s, &requestOk);
+
+    // A network-level failure (timeout, unreachable box, auth failure) never
+    // reaches the errorCode check below — response stays empty, which used
+    // to be misread as "SOAP call succeeded with an empty body" instead of
+    // "the call never actually happened".
+    if (!requestOk) {
+        qWarning() << "SetPhonebookEntry: request failed (network/auth), entry NOT added";
+        return false;
+    }
 
     if (response.contains(u"<errorCode>"_s)) {
         qWarning() << "SetPhonebookEntry failed:" << response;
