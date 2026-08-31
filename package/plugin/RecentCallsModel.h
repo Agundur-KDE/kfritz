@@ -32,6 +32,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     void addCall(const QString &name, const QString &number, const QString &time, bool blocked = false);
+    void clearAll();
 
 private:
     struct CallEntry {

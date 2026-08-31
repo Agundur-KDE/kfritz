@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kfritz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-31 10:34+0200\n"
+"POT-Creation-Date: 2026-08-31 12:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,11 +73,11 @@ msgstr ""
 msgid "Add a phonebook"
 msgstr ""
 
-#: package/contents/ui/configPhoneBook.qml:184 package/contents/ui/main.qml:364
+#: package/contents/ui/configPhoneBook.qml:184 package/contents/ui/main.qml:399
 msgid "Add to Contacts"
 msgstr ""
 
-#: package/contents/ui/configPhoneBook.qml:190 package/contents/ui/main.qml:379
+#: package/contents/ui/configPhoneBook.qml:190 package/contents/ui/main.qml:414
 msgid "Add to Blocklist"
 msgstr ""
 
@@ -111,55 +111,73 @@ msgid ""
 "here (e.g. keep a WebDAV-synced list read-only by never selecting it here)"
 msgstr ""
 
-#: package/contents/ui/main.qml:162 package/contents/ui/main.qml:259
+#: package/contents/ui/main.qml:129
+msgid "Clear call history?"
+msgstr ""
+
+#: package/contents/ui/main.qml:130
+msgid ""
+"This only clears the list shown here — it does not delete anything on the "
+"FritzBox itself."
+msgstr ""
+
+#: package/contents/ui/main.qml:135
+msgid "Clear"
+msgstr ""
+
+#: package/contents/ui/main.qml:181 package/contents/ui/main.qml:280
 msgid "Recent Calls"
 msgstr ""
 
-#: package/contents/ui/main.qml:250
+#: package/contents/ui/main.qml:271
 msgid "No calls yet"
 msgstr ""
 
-#: package/contents/ui/main.qml:306
+#: package/contents/ui/main.qml:327
 msgid "Call Monitor connected"
 msgstr ""
 
-#: package/contents/ui/main.qml:306
+#: package/contents/ui/main.qml:327
 msgid "Call Monitor disconnected"
 msgstr ""
 
-#: package/contents/ui/main.qml:319
+#: package/contents/ui/main.qml:340
 msgid "Check for missed calls"
 msgstr ""
 
-#: package/contents/ui/main.qml:329
+#: package/contents/ui/main.qml:354
+msgid "Clear call history"
+msgstr ""
+
+#: package/contents/ui/main.qml:364
 msgid "Dial: #96*5* to enable the CallMonitor on your Fritz!Box"
 msgstr ""
 
-#: package/contents/ui/main.qml:342
+#: package/contents/ui/main.qml:377
 msgid "Unknown number: %1"
 msgstr ""
 
-#: package/contents/ui/main.qml:351
+#: package/contents/ui/main.qml:386
 msgid "Name"
 msgstr ""
 
-#: package/contents/ui/main.qml:360
+#: package/contents/ui/main.qml:395
 msgid "Private"
 msgstr ""
 
-#: package/contents/ui/main.qml:360
+#: package/contents/ui/main.qml:395
 msgid "Mobile"
 msgstr ""
 
-#: package/contents/ui/main.qml:360
+#: package/contents/ui/main.qml:395
 msgid "Business"
 msgstr ""
 
-#: package/contents/ui/main.qml:383
+#: package/contents/ui/main.qml:418
 msgid "Blocked"
 msgstr ""
 
-#: package/contents/ui/main.qml:394
+#: package/contents/ui/main.qml:429
 msgid ""
 "Could not reach the FritzBox — entry was not added. Check your connection "
 "and try again."

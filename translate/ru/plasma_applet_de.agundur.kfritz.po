@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KFritz 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-31 10:34+0200\n"
+"POT-Creation-Date: 2026-08-31 12:22+0200\n"
 "PO-Revision-Date: 2025-07-23 13:48+0200\n"
 "Last-Translator: alec <info@agundur.de>\n"
 "Language-Team: Russian <translation-team-ru@lists.sourceforge.net>\n"
@@ -75,11 +75,11 @@ msgstr "Еженедельно"
 msgid "Add a phonebook"
 msgstr "Добавить телефонную книгу"
 
-#: package/contents/ui/configPhoneBook.qml:184 package/contents/ui/main.qml:364
+#: package/contents/ui/configPhoneBook.qml:184 package/contents/ui/main.qml:399
 msgid "Add to Contacts"
 msgstr "Добавить в контакты"
 
-#: package/contents/ui/configPhoneBook.qml:190 package/contents/ui/main.qml:379
+#: package/contents/ui/configPhoneBook.qml:190 package/contents/ui/main.qml:414
 msgid "Add to Blocklist"
 msgstr "Добавить в чёрный список"
 
@@ -120,55 +120,74 @@ msgstr ""
 "записывает сюда (например, держите синхронизируемый через WebDAV список "
 "только для чтения, никогда не выбирая его здесь)"
 
-#: package/contents/ui/main.qml:162 package/contents/ui/main.qml:259
+#: package/contents/ui/main.qml:129
+msgid "Clear call history?"
+msgstr "Очистить историю звонков?"
+
+#: package/contents/ui/main.qml:130
+msgid ""
+"This only clears the list shown here — it does not delete anything on the "
+"FritzBox itself."
+msgstr ""
+"Это очищает только показанный здесь список — на самой FritzBox ничего не удаляется."
+
+#: package/contents/ui/main.qml:135
+msgid "Clear"
+msgstr "Очистить"
+
+#: package/contents/ui/main.qml:181 package/contents/ui/main.qml:280
 msgid "Recent Calls"
 msgstr "Недавние звонки"
 
-#: package/contents/ui/main.qml:250
+#: package/contents/ui/main.qml:271
 msgid "No calls yet"
 msgstr "Пока нет звонков"
 
-#: package/contents/ui/main.qml:306
+#: package/contents/ui/main.qml:327
 msgid "Call Monitor connected"
 msgstr "Монитор звонков подключён"
 
-#: package/contents/ui/main.qml:306
+#: package/contents/ui/main.qml:327
 msgid "Call Monitor disconnected"
 msgstr "Монитор звонков отключён"
 
-#: package/contents/ui/main.qml:319
+#: package/contents/ui/main.qml:340
 msgid "Check for missed calls"
 msgstr "Проверить пропущенные звонки"
 
-#: package/contents/ui/main.qml:329
+#: package/contents/ui/main.qml:354
+msgid "Clear call history"
+msgstr "Очистить историю звонков"
+
+#: package/contents/ui/main.qml:364
 msgid "Dial: #96*5* to enable the CallMonitor on your Fritz!Box"
 msgstr "Наберите: #96*5*, чтобы включить CallMonitor на вашей FRITZ!Box."
 
-#: package/contents/ui/main.qml:342
+#: package/contents/ui/main.qml:377
 msgid "Unknown number: %1"
 msgstr "Неизвестный номер: %1"
 
-#: package/contents/ui/main.qml:351
+#: package/contents/ui/main.qml:386
 msgid "Name"
 msgstr "Имя"
 
-#: package/contents/ui/main.qml:360
+#: package/contents/ui/main.qml:395
 msgid "Private"
 msgstr "Личный"
 
-#: package/contents/ui/main.qml:360
+#: package/contents/ui/main.qml:395
 msgid "Mobile"
 msgstr "Мобильный"
 
-#: package/contents/ui/main.qml:360
+#: package/contents/ui/main.qml:395
 msgid "Business"
 msgstr "Рабочий"
 
-#: package/contents/ui/main.qml:383
+#: package/contents/ui/main.qml:418
 msgid "Blocked"
 msgstr "Заблокирован"
 
-#: package/contents/ui/main.qml:394
+#: package/contents/ui/main.qml:429
 msgid ""
 "Could not reach the FritzBox — entry was not added. Check your connection "
 "and try again."

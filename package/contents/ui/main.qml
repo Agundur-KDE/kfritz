@@ -123,6 +123,25 @@ PlasmoidItem {
         id: plugin
     }
 
+    Kirigami.PromptDialog {
+        id: clearHistoryPrompt
+
+        title: i18n("Clear call history?")
+        subtitle: i18n("This only clears the list shown here — it does not delete anything on the FritzBox itself.")
+        standardButtons: Kirigami.Dialog.Cancel
+
+        customFooterActions: [
+            Kirigami.Action {
+                text: i18n("Clear")
+                icon.name: "edit-clear-history"
+                onTriggered: {
+                    plugin.clearRecentCalls();
+                    clearHistoryPrompt.close();
+                }
+            }
+        ]
+    }
+
     Connections {
         function onCurrentCallerChanged() {
             showCallerInfo = true;
@@ -322,6 +341,20 @@ PlasmoidItem {
                         display: Controls.ToolButton.IconOnly
                         Layout.alignment: Qt.AlignVCenter
                         onClicked: checkMissedCalls()
+
+                        Controls.ToolTip.visible: hovered
+                        Controls.ToolTip.text: text
+                    }
+
+                    Controls.ToolButton {
+                        // Only clutters the toolbar when there's actually
+                        // something to clear.
+                        visible: callsList.count > 0
+                        icon.name: "edit-clear-history"
+                        text: i18n("Clear call history")
+                        display: Controls.ToolButton.IconOnly
+                        Layout.alignment: Qt.AlignVCenter
+                        onClicked: clearHistoryPrompt.open()
 
                         Controls.ToolTip.visible: hovered
                         Controls.ToolTip.text: text

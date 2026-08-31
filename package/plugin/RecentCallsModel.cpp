@@ -37,6 +37,16 @@ QHash<int, QByteArray> RecentCallsModel::roleNames() const
     return {{NameRole, "name"}, {NumberRole, "number"}, {TimeRole, "time"}, {BlockedRole, "blocked"}};
 }
 
+void RecentCallsModel::clearAll()
+{
+    if (m_calls.isEmpty())
+        return;
+
+    beginResetModel();
+    m_calls.clear();
+    endResetModel();
+}
+
 void RecentCallsModel::addCall(const QString &name, const QString &number, const QString &time, bool blocked)
 {
     qDebug() << "RecentCallsModel::addCall:" << name << number << time << "blocked:" << blocked;

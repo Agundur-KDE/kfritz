@@ -382,3 +382,12 @@ void KFritzCorePlugin::clearMissedBadge()
     m_missedCount = 0;
     Q_EMIT missedCountChanged();
 }
+
+void KFritzCorePlugin::clearRecentCalls()
+{
+    if (!m_recentCallsModel)
+        return;
+
+    m_recentCallsModel->clearAll();
+    Q_EMIT recentCallsChanged();
+}

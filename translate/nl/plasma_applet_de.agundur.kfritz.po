@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KFritz 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-31 10:34+0200\n"
+"POT-Creation-Date: 2026-08-31 12:22+0200\n"
 "PO-Revision-Date: 2025-08-16 20:26+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: \n"
@@ -73,11 +73,11 @@ msgstr "Wekelijks"
 msgid "Add a phonebook"
 msgstr "Telefoonboek toevoegen"
 
-#: package/contents/ui/configPhoneBook.qml:184 package/contents/ui/main.qml:364
+#: package/contents/ui/configPhoneBook.qml:184 package/contents/ui/main.qml:399
 msgid "Add to Contacts"
 msgstr "Toevoegen aan contacten"
 
-#: package/contents/ui/configPhoneBook.qml:190 package/contents/ui/main.qml:379
+#: package/contents/ui/configPhoneBook.qml:190 package/contents/ui/main.qml:414
 msgid "Add to Blocklist"
 msgstr "Toevoegen aan blokkeerlijst"
 
@@ -118,55 +118,74 @@ msgstr ""
 "gesprek schrijft hierheen (bijv. houd een via WebDAV gesynchroniseerde lijst "
 "alleen-lezen door deze hier nooit te selecteren)"
 
-#: package/contents/ui/main.qml:162 package/contents/ui/main.qml:259
+#: package/contents/ui/main.qml:129
+msgid "Clear call history?"
+msgstr "Oproepgeschiedenis wissen?"
+
+#: package/contents/ui/main.qml:130
+msgid ""
+"This only clears the list shown here — it does not delete anything on the "
+"FritzBox itself."
+msgstr ""
+"Dit wist alleen de hier getoonde lijst — er wordt niets verwijderd op de FritzBox zelf."
+
+#: package/contents/ui/main.qml:135
+msgid "Clear"
+msgstr "Wissen"
+
+#: package/contents/ui/main.qml:181 package/contents/ui/main.qml:280
 msgid "Recent Calls"
 msgstr "Onlangs gebeld"
 
-#: package/contents/ui/main.qml:250
+#: package/contents/ui/main.qml:271
 msgid "No calls yet"
 msgstr "Nog geen oproepen"
 
-#: package/contents/ui/main.qml:306
+#: package/contents/ui/main.qml:327
 msgid "Call Monitor connected"
 msgstr "Oproepmonitor verbonden"
 
-#: package/contents/ui/main.qml:306
+#: package/contents/ui/main.qml:327
 msgid "Call Monitor disconnected"
 msgstr "Oproepmonitor niet verbonden"
 
-#: package/contents/ui/main.qml:319
+#: package/contents/ui/main.qml:340
 msgid "Check for missed calls"
 msgstr "Zoeken naar gemiste oproepen"
 
-#: package/contents/ui/main.qml:329
+#: package/contents/ui/main.qml:354
+msgid "Clear call history"
+msgstr "Oproepgeschiedenis wissen"
+
+#: package/contents/ui/main.qml:364
 msgid "Dial: #96*5* to enable the CallMonitor on your Fritz!Box"
 msgstr "Toets #96*5* in om de gespreksmonitor van je Fritz!Box in te schakelen"
 
-#: package/contents/ui/main.qml:342
+#: package/contents/ui/main.qml:377
 msgid "Unknown number: %1"
 msgstr "Onbekend nummer: %1"
 
-#: package/contents/ui/main.qml:351
+#: package/contents/ui/main.qml:386
 msgid "Name"
 msgstr "Naam"
 
-#: package/contents/ui/main.qml:360
+#: package/contents/ui/main.qml:395
 msgid "Private"
 msgstr "Privé"
 
-#: package/contents/ui/main.qml:360
+#: package/contents/ui/main.qml:395
 msgid "Mobile"
 msgstr "Mobiel"
 
-#: package/contents/ui/main.qml:360
+#: package/contents/ui/main.qml:395
 msgid "Business"
 msgstr "Zakelijk"
 
-#: package/contents/ui/main.qml:383
+#: package/contents/ui/main.qml:418
 msgid "Blocked"
 msgstr "Geblokkeerd"
 
-#: package/contents/ui/main.qml:394
+#: package/contents/ui/main.qml:429
 msgid ""
 "Could not reach the FritzBox — entry was not added. Check your connection "
 "and try again."

@@ -63,6 +63,13 @@ public:
 
     Q_INVOKABLE void clearMissedBadge();
 
+    // Wipes the visible call history only — the FritzBox's own call list
+    // and LastSeenCallId are untouched, so already-shown entries won't
+    // reappear from the next checkMissedCalls() catch-up (their id is
+    // already <= LastSeenCallId); live incoming calls keep getting added
+    // normally afterwards.
+    Q_INVOKABLE void clearRecentCalls();
+
     // ids assigned to each role (Settings), used to check an incoming number
     // against every phonebook in that role, not just one.
     Q_INVOKABLE void setContactsPhonebooks(const QVariantList &ids, int countryCode);
