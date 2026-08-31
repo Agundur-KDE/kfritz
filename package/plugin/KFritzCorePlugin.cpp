@@ -289,9 +289,15 @@ void KFritzCorePlugin::checkMissedCalls(int lastSeenId)
             if (entry.id <= lastSeenId)
                 continue;
 
-            if (entry.type != 2) // only "missed"
-                continue;
-
+            // Originally filtered to type==2 ("missed") only — but the
+            // point of this catch-up is "what happened on this phone while
+            // I wasn't running" (e.g. shut the computer down at 18:00, a
+            // call comes in at 19:00, see it the next morning), which means
+            // every call type belongs in the list: answered (1), missed (2),
+            // outgoing (3), and the "active"/rejected variants (9-11) in
+            // case a restart lands mid-call. Only the missed-count badge
+            // stays scoped to actual missed calls below — a badge counting
+            // every call the box ever logged wouldn't mean "missed" anymore.
             const bool blocked = isBlocked(entry.number);
             const QString name = blocked ? QString{} : (entry.name.isEmpty() ? resolveName(entry.number) : entry.name);
 
@@ -302,8 +308,8 @@ void KFritzCorePlugin::checkMissedCalls(int lastSeenId)
 
             // Blocked numbers stay fully silent by design — don't bump the
             // badge for calls the user deliberately doesn't want to hear
-            // about.
-            if (!blocked)
+            // about. Only actual missed calls (type 2) count toward it.
+            if (!blocked && entry.type == 2)
                 ++m_missedCount;
         }
 
