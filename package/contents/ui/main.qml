@@ -226,7 +226,9 @@ PlasmoidItem {
                         Controls.Label {
                             visible: !blocked
                             text: number + " – " + time
-                            color: Kirigami.Theme.subtitleColor
+                            // See the header-label fallback below — same
+                            // undefined-color bug on a plain Controls.Label.
+                            color: Kirigami.Theme.subtitleColor ?? "#666666"
                             wrapMode: Text.NoWrap
                             elide: Text.ElideRight
                             Layout.fillWidth: true
