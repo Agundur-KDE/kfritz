@@ -202,7 +202,7 @@ KCM.SimpleKCM {
         QtControls.Label {
             visible: cfg_ContactsPhonebooks.length === 0
             text: i18n("None assigned yet.")
-            opacity: 0.6
+            color: Kirigami.Theme.subtitleColor
         }
 
         Repeater {
@@ -242,14 +242,14 @@ KCM.SimpleKCM {
             text: i18n("All checked phonebooks are read for blocking. The selected radio button is the single write target for \"Add to Blocklist\" — leave a synced/read-only list unselected so it never gets overwritten.")
             wrapMode: Text.WordWrap
             Layout.fillWidth: true
-            opacity: 0.6
+            color: Kirigami.Theme.subtitleColor
             font.italic: true
         }
 
         QtControls.Label {
             visible: cfg_BlocklistPhonebooks.length === 0
             text: i18n("None assigned yet.")
-            opacity: 0.6
+            color: Kirigami.Theme.subtitleColor
         }
 
         Repeater {

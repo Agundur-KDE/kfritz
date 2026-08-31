@@ -10,7 +10,6 @@ import QtQuick.Controls 6.5 as Controls
 import QtQuick.Layouts
 import de.agundur.kfritz 0.1
 import org.kde.kirigami 2.20 as Kirigami
-import org.kde.kirigamiaddons.components 1.0 as KirigamiAddons
 import org.kde.plasma.components as PlasmaComponents
 import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.plasmoid
@@ -190,25 +189,60 @@ PlasmoidItem {
                 contentItem: RowLayout {
                     spacing: Kirigami.Units.smallSpacing
 
-                    // optional: Icon
+                    // Blocked is also conveyed via icon + strikethrough, not
+                    // color alone.
                     Kirigami.Icon {
                         source: blocked ? "call-stop" : "user"
+                        color: blocked ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
                         Layout.alignment: Qt.AlignVCenter
                     }
 
-                    Text {
-                        text: blocked ? number : "<b>" + name + "</b> " + number + " – " + time
-                        textFormat: Text.RichText
-                        wrapMode: Text.NoWrap
-                        elide: Text.ElideRight
-                        font.strikeout: blocked
-                        color: blocked ? "red" : Kirigami.Theme.textColor
+                    // Two-line title/subtitle instead of one RichText line
+                    // built from string concatenation — avoids caller-name
+                    // data being interpreted as HTML, and reads more clearly
+                    // than everything crammed onto one line.
+                    ColumnLayout {
                         Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignVCenter
+                        spacing: 0
+
+                        Controls.Label {
+                            // Falls back to the number when there's no
+                            // resolved name, so the title line is never
+                            // empty.
+                            text: blocked ? number : (name.length > 0 ? name : number)
+                            font.bold: true
+                            font.strikeout: blocked
+                            color: blocked ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
+                            wrapMode: Text.NoWrap
+                            elide: Text.ElideRight
+                            Layout.fillWidth: true
+                        }
+
+                        Controls.Label {
+                            visible: !blocked
+                            text: number + " – " + time
+                            color: Kirigami.Theme.subtitleColor
+                            wrapMode: Text.NoWrap
+                            elide: Text.ElideRight
+                            Layout.fillWidth: true
+                        }
+
                     }
 
                 }
 
+            }
+
+            Kirigami.PlaceholderMessage {
+                anchors.centerIn: parent
+                width: parent.width - Kirigami.Units.gridUnit * 4
+                // Model exists as soon as the plugin is instantiated, so an
+                // empty list here genuinely means "no calls yet" rather than
+                // "still loading" — there's no separate loading state to
+                // race against.
+                visible: callsList.count === 0
+                icon.name: "call-start"
+                text: i18n("No calls yet")
             }
 
         }
@@ -229,19 +263,29 @@ PlasmoidItem {
                     text: "FRITZ!Box"
                     horizontalAlignment: Text.AlignLeft
                     font.pointSize: 10
-                    color: Kirigami.Theme.subtitleColor ?? "#666666"
+                    color: Kirigami.Theme.subtitleColor
                 }
 
                 RowLayout {
                     Layout.fillWidth: true
                     spacing: Kirigami.Units.smallSpacing
 
-                    Rectangle {
-                        width: Kirigami.Units.gridUnit / 2
-                        height: Kirigami.Units.gridUnit / 2
-                        radius: Kirigami.Units.gridUnit / 2
-                        color: plugin.callMonitorConnected ? "green" : "red"
+                    // Color alone isn't accessible (colorblind users can't
+                    // tell red from green) — icon shape + tooltip text carry
+                    // the same information redundantly.
+                    Kirigami.Icon {
+                        implicitWidth: Kirigami.Units.gridUnit * 0.8
+                        implicitHeight: Kirigami.Units.gridUnit * 0.8
+                        source: plugin.callMonitorConnected ? "network-connect" : "network-disconnect"
+                        color: plugin.callMonitorConnected ? Kirigami.Theme.positiveTextColor : Kirigami.Theme.negativeTextColor
                         Layout.alignment: Qt.AlignVCenter
+
+                        Controls.ToolTip.visible: statusIconHover.hovered
+                        Controls.ToolTip.text: plugin.callMonitorConnected ? i18n("Call Monitor connected") : i18n("Call Monitor disconnected")
+
+                        HoverHandler {
+                            id: statusIconHover
+                        }
                     }
 
                     Item {
@@ -362,7 +406,7 @@ PlasmoidItem {
             width: Math.max(badgeLabel.implicitWidth + Kirigami.Units.smallSpacing, Kirigami.Units.gridUnit)
             height: Kirigami.Units.gridUnit
             radius: height / 2
-            color: "red"
+            color: Kirigami.Theme.negativeBackgroundColor
             anchors.top: parent.top
             anchors.right: parent.right
 
@@ -371,7 +415,11 @@ PlasmoidItem {
 
                 anchors.centerIn: parent
                 text: plugin.missedCount > 99 ? "99+" : plugin.missedCount
-                color: "white"
+                // highlightedTextColor rather than negativeTextColor: the
+                // latter is a signal color for text-on-normal-background,
+                // not guaranteed to contrast against negativeBackgroundColor
+                // itself.
+                color: Kirigami.Theme.highlightedTextColor
                 font.pixelSize: Kirigami.Units.gridUnit * 0.6
             }
 
