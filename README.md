@@ -24,6 +24,8 @@ to your phonebook or block them.
 *(FRITZ!Box is a popular router/modem brand in Germany and other parts of
 Europe, with built-in telephony features.)*
 
+If KFritz is useful to you, [support continued KDE/Linux development through GitHub Sponsors](https://github.com/sponsors/Agundur-KDE).
+
 ## Visuals
 
 ![KFritz Plasmoid](KFritz1.png)
