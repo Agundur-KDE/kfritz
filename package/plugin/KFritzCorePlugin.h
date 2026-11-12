@@ -94,6 +94,7 @@ public Q_SLOTS:
     void handleIncomingCall(const QString &number);
 
 Q_SIGNALS:
+    void incomingCall(const QString &name, const QString &number);
     void phonebookDownloaded(int id, const QString &path);
     void callMonitorConnectedChanged();
     void currentCallerChanged();

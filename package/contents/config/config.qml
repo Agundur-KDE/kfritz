@@ -10,6 +10,12 @@ import org.kde.plasma.configuration 2.0
 
 ConfigModel {
     ConfigCategory {
+        name: i18nc("@title", "OSD")
+        icon: "preferences-desktop-display"
+        source: "configOsd.qml"
+    }
+
+    ConfigCategory {
         name: i18nc("@title", "Phonebooks")
         icon: "kaddressbook"
         source: "configPhoneBook.qml"

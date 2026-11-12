@@ -119,6 +119,27 @@ PlasmoidItem {
         onTriggered: refreshAllPhonebooks()
     }
 
+    CallOsd {
+        id: callOsd
+    }
+
+    Connections {
+        target: Plasmoid.configuration
+        function onOsdEnabledChanged() {
+            if (!Plasmoid.configuration.OsdEnabled)
+                callOsd.hide();
+        }
+    }
+
+    Connections {
+        target: plugin
+        function onIncomingCall(name, number) {
+            if (Plasmoid.configuration.OsdEnabled)
+                callOsd.showCall(name, number, Plasmoid.configuration.OsdFont,
+                                 Plasmoid.configuration.OsdPosition, Plasmoid.configuration.OsdTextColor);
+        }
+    }
+
     KFritzCorePlugin {
         id: plugin
     }

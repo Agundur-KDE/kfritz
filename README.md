@@ -56,11 +56,14 @@ If KFritz is useful to you, [support continued KDE/Linux development through Git
   Contacts/Blocklist phonebook on a daily or weekly schedule, so a stale
   local cache doesn't silently miss numbers a WebDAV sync picked up since
   the last manual refresh.
+- Optional call OSD above fullscreen applications on Plasma Wayland, with
+  configurable font, text color and nine screen positions. The overlay accepts no input
+  and disappears after eight seconds; blocked calls never trigger it.
 - Compact and full Plasma representations.
 
 ## Requirements
 
-- KDE Plasma 6.1+, Qt ≥ 6.7, KDE Frameworks ≥ 6.10
+- KDE Plasma 6.1+, Qt ≥ 6.7, KDE Frameworks ≥ 6.10, LayerShellQt ≥ 6.1
 - A FRITZ!Box with:
   - CallMonitor enabled (see below)
   - TR-064 enabled
@@ -152,6 +155,12 @@ Right-click the widget → Configure KFritz:
   "Blocklist" role (checked first on every call) — each role has one
   designated write target for the quick-action buttons
 
+- **OSD**: enable the additional call overlay, choose its font (including
+  size and style), text color and position. It is off by default and requires Wayland.
+  Standard KDE notifications and sounds continue to work. Use "Test OSD" to preview the current settings immediately, even before
+  applying them. The overlay uses the active
+  screen; visibility and input behavior should be checked with your game.
+
 Only needs to be done once, settings persist across reboots.
 
 ## Troubleshooting
@@ -183,6 +192,10 @@ Open an issue: [KFritz Issues](https://github.com/Agundur-KDE/kfritz/issues)
 ## Contributing
 
 Fork and adapt freely.
+
+After changing translatable text, run `bash Messages.sh`, update every
+shipped language catalog and run `bash tools/check-translations.sh`. The
+check rejects missing, untranslated or fuzzy entries and invalid formats.
 
 ## License
 

@@ -352,6 +352,8 @@ void KFritzCorePlugin::handleIncomingCall(const QString &number)
         return;
     }
 
+    Q_EMIT incomingCall(name, number);
+
     QString message = name.isEmpty() ? i18n("Incoming call from %1", number) : i18n("Incoming call from %1 (%2)", name, number);
 
     auto *notification = new KNotification(QStringLiteral("callReceived"), KNotification::CloseOnTimeout);

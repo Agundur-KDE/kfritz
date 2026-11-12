@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KFritz 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-31 12:22+0200\n"
+"POT-Creation-Date: 2026-11-12 13:23+0100\n"
 "PO-Revision-Date: 2025-07-23 13:48+0200\n"
 "Last-Translator: alec <info@agundur.de>\n"
 "Language-Team: Spanish <translation-team-es@lists.sourceforge.net>\n"
@@ -16,6 +16,96 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: package/contents/ui/configOsd.qml:25
+msgid "Choose OSD font"
+msgstr "Elegir la fuente del OSD"
+
+#: package/contents/ui/configOsd.qml:31
+msgid "Choose OSD text color"
+msgstr "Elegir el color del texto del OSD"
+
+#: package/contents/ui/configOsd.qml:40
+msgid "The call overlay requires a Plasma Wayland session."
+msgstr "La visualización de llamadas requiere una sesión de Plasma Wayland."
+
+#: package/contents/ui/configOsd.qml:44
+msgid "Call OSD:"
+msgstr "OSD de llamadas:"
+
+#: package/contents/ui/configOsd.qml:45
+msgid "Show incoming calls over fullscreen applications"
+msgstr ""
+"Mostrar las llamadas entrantes sobre las aplicaciones a pantalla completa"
+
+#: package/contents/ui/configOsd.qml:52
+msgid "Font:"
+msgstr "Fuente:"
+
+#: package/contents/ui/configOsd.qml:62
+msgid "Text color:"
+msgstr "Color del texto:"
+
+#: package/contents/ui/configOsd.qml:73
+msgid "Choose color…"
+msgstr "Elegir color…"
+
+#: package/contents/ui/configOsd.qml:82
+msgid "Position:"
+msgstr "Posición:"
+
+#: package/contents/ui/configOsd.qml:84
+msgid "Top left"
+msgstr "Arriba a la izquierda"
+
+#: package/contents/ui/configOsd.qml:84
+msgid "Top center"
+msgstr "Arriba en el centro"
+
+#: package/contents/ui/configOsd.qml:84
+msgid "Top right"
+msgstr "Arriba a la derecha"
+
+#: package/contents/ui/configOsd.qml:85
+msgid "Middle left"
+msgstr "En el centro a la izquierda"
+
+#: package/contents/ui/configOsd.qml:85
+msgid "Center"
+msgstr "En el centro"
+
+#: package/contents/ui/configOsd.qml:85
+msgid "Middle right"
+msgstr "En el centro a la derecha"
+
+#: package/contents/ui/configOsd.qml:86
+msgid "Bottom left"
+msgstr "Abajo a la izquierda"
+
+#: package/contents/ui/configOsd.qml:86
+msgid "Bottom center"
+msgstr "Abajo en el centro"
+
+#: package/contents/ui/configOsd.qml:86
+msgid "Bottom right"
+msgstr "Abajo a la derecha"
+
+#: package/contents/ui/configOsd.qml:94
+msgid ""
+"The OSD appears for 8 seconds on the active screen without taking focus. "
+"Standard notifications and sounds remain enabled. Blocked calls stay silent."
+msgstr ""
+"El OSD se muestra durante 8 segundos en la pantalla activa sin tomar el "
+"foco. Las notificaciones y los sonidos habituales siguen activados. Las "
+"llamadas bloqueadas permanecen en silencio."
+
+#: package/contents/ui/configOsd.qml:99
+msgid "Test OSD"
+msgstr "Probar OSD"
+
+#: package/contents/ui/configOsd.qml:101
+msgid "Max Mustermann"
+msgstr "Juan Pérez"
 
 #: package/contents/ui/configNetwork.qml:34
 msgid "FritzBox IP:"
@@ -73,11 +163,11 @@ msgstr "Semanal"
 msgid "Add a phonebook"
 msgstr "Añadir una agenda"
 
-#: package/contents/ui/configPhoneBook.qml:184 package/contents/ui/main.qml:399
+#: package/contents/ui/configPhoneBook.qml:184 package/contents/ui/main.qml:420
 msgid "Add to Contacts"
 msgstr "Añadir a contactos"
 
-#: package/contents/ui/configPhoneBook.qml:190 package/contents/ui/main.qml:414
+#: package/contents/ui/configPhoneBook.qml:190 package/contents/ui/main.qml:435
 msgid "Add to Blocklist"
 msgstr "Añadir a la lista de bloqueo"
 
@@ -118,74 +208,75 @@ msgstr ""
 "llamada entrante escribe aquí (p. ej. mantenga una lista sincronizada por "
 "WebDAV de solo lectura no seleccionándola nunca aquí)"
 
-#: package/contents/ui/main.qml:129
+#: package/contents/ui/main.qml:150
 msgid "Clear call history?"
 msgstr "¿Borrar el historial de llamadas?"
 
-#: package/contents/ui/main.qml:130
+#: package/contents/ui/main.qml:151
 msgid ""
 "This only clears the list shown here — it does not delete anything on the "
 "FritzBox itself."
 msgstr ""
-"Esto solo borra la lista mostrada aquí — no elimina nada en la propia FritzBox."
+"Esto solo borra la lista mostrada aquí — no elimina nada en la propia "
+"FritzBox."
 
-#: package/contents/ui/main.qml:135
+#: package/contents/ui/main.qml:156
 msgid "Clear"
 msgstr "Borrar"
 
-#: package/contents/ui/main.qml:181 package/contents/ui/main.qml:280
+#: package/contents/ui/main.qml:202 package/contents/ui/main.qml:301
 msgid "Recent Calls"
 msgstr "Llamadas recientes"
 
-#: package/contents/ui/main.qml:271
+#: package/contents/ui/main.qml:292
 msgid "No calls yet"
 msgstr "Aún no hay llamadas"
 
-#: package/contents/ui/main.qml:327
+#: package/contents/ui/main.qml:348
 msgid "Call Monitor connected"
 msgstr "Monitor de llamadas conectado"
 
-#: package/contents/ui/main.qml:327
+#: package/contents/ui/main.qml:348
 msgid "Call Monitor disconnected"
 msgstr "Monitor de llamadas desconectado"
 
-#: package/contents/ui/main.qml:340
+#: package/contents/ui/main.qml:361
 msgid "Check for missed calls"
 msgstr "Buscar llamadas perdidas"
 
-#: package/contents/ui/main.qml:354
+#: package/contents/ui/main.qml:375
 msgid "Clear call history"
 msgstr "Borrar historial de llamadas"
 
-#: package/contents/ui/main.qml:364
+#: package/contents/ui/main.qml:385
 msgid "Dial: #96*5* to enable the CallMonitor on your Fritz!Box"
 msgstr "Marque: #96*5* para activar el CallMonitor en su FRITZ!Box."
 
-#: package/contents/ui/main.qml:377
+#: package/contents/ui/main.qml:398
 msgid "Unknown number: %1"
 msgstr "Número desconocido: %1"
 
-#: package/contents/ui/main.qml:386
+#: package/contents/ui/main.qml:407
 msgid "Name"
 msgstr "Nombre"
 
-#: package/contents/ui/main.qml:395
+#: package/contents/ui/main.qml:416
 msgid "Private"
 msgstr "Privado"
 
-#: package/contents/ui/main.qml:395
+#: package/contents/ui/main.qml:416
 msgid "Mobile"
 msgstr "Móvil"
 
-#: package/contents/ui/main.qml:395
+#: package/contents/ui/main.qml:416
 msgid "Business"
 msgstr "Trabajo"
 
-#: package/contents/ui/main.qml:418
+#: package/contents/ui/main.qml:439
 msgid "Blocked"
 msgstr "Bloqueado"
 
-#: package/contents/ui/main.qml:429
+#: package/contents/ui/main.qml:450
 msgid ""
 "Could not reach the FritzBox — entry was not added. Check your connection "
 "and try again."
@@ -195,13 +286,42 @@ msgstr ""
 
 #: package/contents/config/config.qml:13
 msgctxt "@title"
-msgid "Phonebooks"
-msgstr "Agendas telefónicas"
+msgid "OSD"
+msgstr "OSD"
 
 #: package/contents/config/config.qml:19
 msgctxt "@title"
+msgid "Phonebooks"
+msgstr "Agendas telefónicas"
+
+#: package/contents/config/config.qml:25
+msgctxt "@title"
 msgid "Network"
 msgstr "Red"
+
+#: package/plugin/CallOsd.cpp:60
+msgid "Unknown caller"
+msgstr "Llamante desconocido"
+
+#: package/plugin/CallOsd.cpp:61
+msgid "Withheld number"
+msgstr "Número oculto"
+
+#: package/plugin/CallOsd.cpp:62
+msgid "Incoming call"
+msgstr "Llamada entrante"
+
+#: package/plugin/KFritzCorePlugin.cpp:357
+msgid "Incoming call from %1"
+msgstr "Llamada entrante de %1"
+
+#: package/plugin/KFritzCorePlugin.cpp:357
+msgid "Incoming call from %1 (%2)"
+msgstr "Llamada entrante de %1 (%2)"
+
+#: package/plugin/KFritzCorePlugin.cpp:361
+msgid "FritzBox Call"
+msgstr "Llamada de FRITZ!Box"
 
 #~ msgid "Call back %1"
 #~ msgstr "Devolver llamada a %1"

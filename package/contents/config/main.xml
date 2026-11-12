@@ -41,4 +41,20 @@
       <default>1</default>
     </entry>
   </group>
+  <group name="OSD">
+    <entry name="OsdEnabled" type="Bool">
+      <default>false</default>
+    </entry>
+    <entry name="OsdFont" type="Font">
+      <default>Sans Serif,18,-1,5,50,0,0,0,0,0</default>
+    </entry>
+    <entry name="OsdTextColor" type="Color">
+      <default>#ffffff</default>
+    </entry>
+    <entry name="OsdPosition" type="Int">
+      <default>2</default>
+      <min>0</min>
+      <max>8</max>
+    </entry>
+  </group>
 </kcfg>
