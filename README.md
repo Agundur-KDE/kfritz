@@ -191,6 +191,10 @@ Open an issue: [KFritz Issues](https://github.com/Agundur-KDE/kfritz/issues)
 
 Fork and adapt freely.
 
+After changing translatable text, run `bash Messages.sh`, update every
+shipped language catalog and run `bash tools/check-translations.sh`. The
+check rejects missing, untranslated or fuzzy entries and invalid formats.
+
 ## License
 
 GPL-3.0-or-later
