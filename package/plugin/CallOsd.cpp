@@ -42,7 +42,7 @@ void CallOsd::showCall(const QString &name, const QString &number, const QFont &
     layer->setLayer(LayerShellQt::Window::LayerOverlay);
     layer->setKeyboardInteractivity(LayerShellQt::Window::KeyboardInteractivityNone);
     layer->setExclusiveZone(-1);
-#if KFRITZ_LAYERSHELL_ACTIVE_SCREEN
+#if defined(KFRITZ_LAYERSHELL_ACTIVE_SCREEN) && KFRITZ_LAYERSHELL_ACTIVE_SCREEN
     layer->setWantsToBeOnActiveScreen(true);
 #else
     layer->setScreenConfiguration(LayerShellQt::Window::ScreenFromCompositor);

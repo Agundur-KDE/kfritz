@@ -1,3 +1,10 @@
+kfritz (0.4.1-1) unstable; urgency=medium
+
+  * Fix the LayerShellQt compatibility preprocessor check with older versions,
+    including Debian Trixie builds using -Werror=undef.
+
+ -- Agundur <info@agundur.de>  Thu, 12 Nov 2026 20:00:00 +0100
+
 kfritz (0.4.0-1) unstable; urgency=medium
 
   * Add an optional incoming-call overlay for Plasma Wayland, with configurable

@@ -30,6 +30,11 @@
         <id>plasma-applet-de.agundur.kfritz</id>
     </provides>
     <releases>
+        <release version="0.4.1" date="2026-11-12">
+            <description>
+                <p>Fix compilation with older LayerShellQt versions, including Debian Trixie.</p>
+            </description>
+        </release>
         <release version="0.4.0" date="2026-11-12">
             <description>
                 <p>Optional incoming-call overlay for Plasma Wayland with configurable font, text color, position and an immediate preview. Includes complete translations for all five supported languages.</p>
