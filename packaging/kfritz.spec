@@ -15,6 +15,7 @@ BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  gettext
 BuildRequires:  extra-cmake-modules
+BuildRequires:  cmake(LayerShellQt) >= 6.1
 BuildRequires:  qt6-base-devel
 BuildRequires:  qt6-declarative-devel
 BuildRequires:  kf6-kcoreaddons-devel

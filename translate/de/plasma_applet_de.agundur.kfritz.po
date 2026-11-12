@@ -208,3 +208,79 @@ msgstr "Netzwerk"
 
 #~ msgid "Call back %1"
 #~ msgstr "Zurückrufen: %1"
+
+msgctxt "@title"
+msgid "OSD"
+msgstr "OSD"
+
+msgid "Choose OSD font"
+msgstr "OSD-Schrift auswählen"
+
+msgid "Max Mustermann"
+msgstr "Max Mustermann"
+
+msgid "The call overlay requires a Plasma Wayland session."
+msgstr "Die Anrufanzeige benötigt eine Plasma-Wayland-Sitzung."
+
+msgid "Call OSD:"
+msgstr "Anruf-OSD:"
+
+msgid "Show incoming calls over fullscreen applications"
+msgstr "Eingehende Anrufe über Vollbildanwendungen anzeigen"
+
+msgid "Font:"
+msgstr "Schrift:"
+
+msgid "Position:"
+msgstr "Position:"
+
+msgid "Top left"
+msgstr "Oben links"
+
+msgid "Top center"
+msgstr "Oben mittig"
+
+msgid "Top right"
+msgstr "Oben rechts"
+
+msgid "Middle left"
+msgstr "Mitte links"
+
+msgid "Center"
+msgstr "Mitte"
+
+msgid "Middle right"
+msgstr "Mitte rechts"
+
+msgid "Bottom left"
+msgstr "Unten links"
+
+msgid "Bottom center"
+msgstr "Unten mittig"
+
+msgid "Bottom right"
+msgstr "Unten rechts"
+
+msgid "The OSD appears for 8 seconds on the active screen without taking focus. Standard notifications and sounds remain enabled. Blocked calls stay silent."
+msgstr "Das OSD erscheint für 8 Sekunden auf dem aktiven Bildschirm, ohne den Fokus zu übernehmen. Normale Benachrichtigungen und Töne bleiben aktiviert. Gesperrte Anrufe bleiben lautlos."
+
+msgid "Test OSD"
+msgstr "OSD testen"
+
+msgid "Unknown caller"
+msgstr "Unbekannter Anrufer"
+
+msgid "Withheld number"
+msgstr "Unterdrückte Rufnummer"
+
+msgid "Incoming call"
+msgstr "Eingehender Anruf"
+
+msgid "Choose OSD text color"
+msgstr "OSD-Schriftfarbe auswählen"
+
+msgid "Text color:"
+msgstr "Schriftfarbe:"
+
+msgid "Choose color…"
+msgstr "Farbe auswählen…"

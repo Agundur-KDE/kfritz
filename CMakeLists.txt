@@ -27,9 +27,12 @@ find_package(Qt6 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
     Concurrent
     Core
     Qml
+    Quick
     Network
     Xml
 )
+
+find_package(LayerShellQt 6.1 REQUIRED)
 
 find_package(KF6 ${KF6_MIN_VERSION} REQUIRED COMPONENTS
     I18n

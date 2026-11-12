@@ -9,6 +9,7 @@ VERSION 0.1
 GENERATE_PLUGIN_SOURCE
   )
 target_sources(kfritzplugin PRIVATE
+    CallOsd.cpp
     FritzCallMonitor.cpp
     FritzPhonebookFetcher.cpp
     FritzSOAP.cpp
@@ -20,6 +21,8 @@ target_sources(kfritzplugin PRIVATE
 target_link_libraries(kfritzplugin PRIVATE
     Qt6::Concurrent
     Qt6::Core
+    Qt6::Quick
+    LayerShellQt::Interface
     Qt6::Qml
     Qt6::Network
     KF6::CoreAddons
@@ -27,4 +30,12 @@ target_link_libraries(kfritzplugin PRIVATE
     KF6::I18n
     KF6::Notifications
   )
+if(LayerShellQt_VERSION VERSION_GREATER_EQUAL "6.6")
+    target_compile_definitions(kfritzplugin PRIVATE KFRITZ_LAYERSHELL_ACTIVE_SCREEN=1)
+endif()
+
+qt_add_resources(kfritzplugin "osd"
+    PREFIX "/kfritz"
+    FILES OsdCard.qml
+)
 ecm_finalize_qml_module(kfritzplugin)
