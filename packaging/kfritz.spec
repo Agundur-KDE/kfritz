@@ -3,7 +3,7 @@
 %endif
 
 Name:           kfritz
-Version:        0.2.4
+Version:        0.4.0
 Release:        1%{?dist}
 Summary:        KDE Plasma 6 callmonitor plasmoid for the AVM FRITZ!Box
 
@@ -84,6 +84,13 @@ fi
 %{_datadir}/locale/*/LC_MESSAGES/plasma_applet_de.agundur.kfritz.mo
 
 %changelog
+* Thu Nov 12 2026 Alec <info@agundur.de> - 0.4.0
+- Add optional call overlay for Plasma Wayland with font, color and position
+  settings and an immediate preview
+- Keep blocked calls silent and preserve existing notifications and sounds
+- Complete translations for all five supported languages
+- Add LayerShellQt build dependency
+
 * Thu Jul 09 2026 Alec <info@agundur.de> - 0.2.4
 - Fixed missed calls reappearing after a restart: checkMissedCalls() relied
   solely on the FritzBox honoring the &id= URL filter on GetCallList;
