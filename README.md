@@ -74,9 +74,20 @@ If KFritz is useful to you, [support continued KDE/Linux development through Git
 Grab the `.deb`/`.rpm` from the
 [latest release](https://github.com/Agundur-KDE/kfritz/releases/latest), or:
 
+Choose the repository for your installed distribution. Add it only once; the same repository provides the other Agundur packages too.
+
+**openSUSE Tumbleweed:**
+
 ```bash
-# openSUSE Tumbleweed
 sudo zypper ar -f https://download.opensuse.org/repositories/home:/Agundur/openSUSE_Tumbleweed/home:Agundur.repo
+sudo zypper --gpg-auto-import-keys ref
+sudo zypper in kfritz
+```
+
+**openSUSE Leap 16.0:**
+
+```bash
+sudo zypper ar -f https://download.opensuse.org/repositories/home:/Agundur/16.0/home:Agundur.repo
 sudo zypper --gpg-auto-import-keys ref
 sudo zypper in kfritz
 ```
