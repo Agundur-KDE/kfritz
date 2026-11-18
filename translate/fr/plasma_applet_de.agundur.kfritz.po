@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KFritz 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-12 13:23+0100\n"
+"POT-Creation-Date: 2026-11-18 12:48+0100\n"
 "PO-Revision-Date: 2025-07-23 13:48+0200\n"
 "Last-Translator: alec <info@agundur.de>\n"
 "Language-Team: French <translation-team-fr@lists.sourceforge.net>\n"
@@ -165,11 +165,11 @@ msgstr "Hebdomadaire"
 msgid "Add a phonebook"
 msgstr "Ajouter un répertoire"
 
-#: package/contents/ui/configPhoneBook.qml:184 package/contents/ui/main.qml:420
+#: package/contents/ui/configPhoneBook.qml:184 package/contents/ui/main.qml:450
 msgid "Add to Contacts"
 msgstr "Ajouter aux contacts"
 
-#: package/contents/ui/configPhoneBook.qml:190 package/contents/ui/main.qml:435
+#: package/contents/ui/configPhoneBook.qml:190 package/contents/ui/main.qml:465
 msgid "Add to Blocklist"
 msgstr "Ajouter à la liste de blocage"
 
@@ -210,11 +210,48 @@ msgstr ""
 "appel entrant écrit ici (par ex. gardez une liste synchronisée via WebDAV en "
 "lecture seule en ne la sélectionnant jamais ici)"
 
-#: package/contents/ui/main.qml:150
+#: package/contents/ui/configMobile.qml:19
+msgid "Receive calls from paired phones"
+msgstr "Recevoir les appels des téléphones associés"
+
+#: package/contents/ui/configMobile.qml:26
+msgid ""
+"In ScreenRing Phone, add this computer as a destination using its local IP "
+"address, this port and this pairing key. Caller details are encrypted. Your "
+"computer must be running and reachable on the home network."
+msgstr "Dans ScreenRing Téléphone, ajouter cet ordinateur comme destination avec son adresse IP locale, ce port et cette clé d’association. Les données de l’appelant sont chiffrées. L’ordinateur doit être allumé et accessible sur le réseau local."
+
+#: package/contents/ui/configMobile.qml:29
+msgid "Mobile call port:"
+msgstr "Port des appels mobiles :"
+
+#: package/contents/ui/configMobile.qml:35
+msgid "Pairing key:"
+msgstr "Clé d’association :"
+
+#: package/contents/ui/configMobile.qml:42
+msgid "Generate new pairing key"
+msgstr "Générer une nouvelle clé d’association"
+
+#: package/contents/ui/configMobile.qml:48
+msgid ""
+"A new key disconnects previously paired phones. Save the settings before "
+"testing the phone connection."
+msgstr "Une nouvelle clé dissocie les téléphones déjà associés. Enregistrer les paramètres avant de tester la connexion."
+
+#: package/contents/ui/configMobile.qml:53
+msgid "Replace pairing key?"
+msgstr "Remplacer la clé d’association ?"
+
+#: package/contents/ui/configMobile.qml:54
+msgid "All phones must be paired again with the new key."
+msgstr "Tous les téléphones doivent être associés à nouveau avec la nouvelle clé."
+
+#: package/contents/ui/main.qml:172
 msgid "Clear call history?"
 msgstr "Effacer l'historique des appels ?"
 
-#: package/contents/ui/main.qml:151
+#: package/contents/ui/main.qml:173
 msgid ""
 "This only clears the list shown here — it does not delete anything on the "
 "FritzBox itself."
@@ -222,63 +259,63 @@ msgstr ""
 "Cela efface uniquement la liste affichée ici — rien n'est supprimé sur la "
 "FritzBox elle-même."
 
-#: package/contents/ui/main.qml:156
+#: package/contents/ui/main.qml:178
 msgid "Clear"
 msgstr "Effacer"
 
-#: package/contents/ui/main.qml:202 package/contents/ui/main.qml:301
+#: package/contents/ui/main.qml:224 package/contents/ui/main.qml:331
 msgid "Recent Calls"
 msgstr "Appels récents"
 
-#: package/contents/ui/main.qml:292
+#: package/contents/ui/main.qml:315
 msgid "No calls yet"
 msgstr "Aucun appel pour l'instant"
 
-#: package/contents/ui/main.qml:348
+#: package/contents/ui/main.qml:378
 msgid "Call Monitor connected"
 msgstr "Moniteur d'appels connecté"
 
-#: package/contents/ui/main.qml:348
+#: package/contents/ui/main.qml:378
 msgid "Call Monitor disconnected"
 msgstr "Moniteur d'appels déconnecté"
 
-#: package/contents/ui/main.qml:361
+#: package/contents/ui/main.qml:391
 msgid "Check for missed calls"
 msgstr "Rechercher les appels manqués"
 
-#: package/contents/ui/main.qml:375
+#: package/contents/ui/main.qml:405
 msgid "Clear call history"
 msgstr "Effacer l'historique des appels"
 
-#: package/contents/ui/main.qml:385
+#: package/contents/ui/main.qml:415
 msgid "Dial: #96*5* to enable the CallMonitor on your Fritz!Box"
 msgstr "Composez : #96*5* pour activer le CallMonitor sur votre FRITZ!Box."
 
-#: package/contents/ui/main.qml:398
+#: package/contents/ui/main.qml:428
 msgid "Unknown number: %1"
 msgstr "Numéro inconnu : %1"
 
-#: package/contents/ui/main.qml:407
+#: package/contents/ui/main.qml:437
 msgid "Name"
 msgstr "Nom"
 
-#: package/contents/ui/main.qml:416
+#: package/contents/ui/main.qml:446
 msgid "Private"
 msgstr "Privé"
 
-#: package/contents/ui/main.qml:416
+#: package/contents/ui/main.qml:446
 msgid "Mobile"
 msgstr "Mobile"
 
-#: package/contents/ui/main.qml:416
+#: package/contents/ui/main.qml:446
 msgid "Business"
 msgstr "Professionnel"
 
-#: package/contents/ui/main.qml:439
+#: package/contents/ui/main.qml:469
 msgid "Blocked"
 msgstr "Bloqué"
 
-#: package/contents/ui/main.qml:450
+#: package/contents/ui/main.qml:480
 msgid ""
 "Could not reach the FritzBox — entry was not added. Check your connection "
 "and try again."
@@ -287,16 +324,20 @@ msgstr ""
 "votre connexion et réessayez."
 
 #: package/contents/config/config.qml:13
+msgid "Mobile calls"
+msgstr "Appels mobiles"
+
+#: package/contents/config/config.qml:19
 msgctxt "@title"
 msgid "OSD"
 msgstr "OSD"
 
-#: package/contents/config/config.qml:19
+#: package/contents/config/config.qml:25
 msgctxt "@title"
 msgid "Phonebooks"
 msgstr "Répertoires"
 
-#: package/contents/config/config.qml:25
+#: package/contents/config/config.qml:31
 msgctxt "@title"
 msgid "Network"
 msgstr "Réseau"
@@ -313,17 +354,42 @@ msgstr "Numéro masqué"
 msgid "Incoming call"
 msgstr "Appel entrant"
 
+#: package/plugin/MobileCallReceiver.cpp:17
+msgid "Receiving mobile calls on port %1"
+msgstr "Réception des appels mobiles sur le port %1"
+
+#: package/plugin/MobileCallReceiver.cpp:18
+msgid "Enter a valid pairing key"
+msgstr "Saisir une clé d’association valide"
+
+#: package/plugin/MobileCallReceiver.cpp:19
+msgid "Could not open the mobile call port"
+msgstr "Impossible d’ouvrir le port des appels mobiles"
+
+#: package/plugin/MobileCallReceiver.cpp:20
+msgid "Mobile call reception is disabled"
+msgstr "La réception des appels mobiles est désactivée"
+
 #: package/plugin/KFritzCorePlugin.cpp:357
 msgid "Incoming call from %1"
 msgstr "Appel entrant de %1"
 
 #: package/plugin/KFritzCorePlugin.cpp:357
+#: package/plugin/KFritzCorePlugin.cpp:409
 msgid "Incoming call from %1 (%2)"
 msgstr "Appel entrant de %1 (%2)"
 
 #: package/plugin/KFritzCorePlugin.cpp:361
 msgid "FritzBox Call"
 msgstr "Appel FRITZ!Box"
+
+#: package/plugin/KFritzCorePlugin.cpp:408
+msgid "Mobile call · %1"
+msgstr "Appel mobile · %1"
+
+#: package/plugin/KFritzCorePlugin.cpp:423
+msgid "Phone connected"
+msgstr "Téléphone connecté"
 
 #~ msgid "Call back %1"
 #~ msgstr "Rappeler %1"

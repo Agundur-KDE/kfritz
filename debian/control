@@ -3,6 +3,7 @@ Section: kde
 Priority: optional
 Maintainer: Agundur <info@agundur.de>
 Build-Depends: debhelper-compat (= 13),
+ libssl-dev,
  cmake, ninja-build, extra-cmake-modules, pkg-kde-tools, gettext, pkg-config,
  qt6-base-dev, qt6-declarative-dev, qt6-declarative-dev-tools, qt6-base-dev-tools,
  liblayershellqtinterface-dev,

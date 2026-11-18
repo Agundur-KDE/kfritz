@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KFritz 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-12 13:23+0100\n"
+"POT-Creation-Date: 2026-11-18 12:48+0100\n"
 "PO-Revision-Date: 2025-08-16 20:26+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: \n"
@@ -162,11 +162,11 @@ msgstr "Wekelijks"
 msgid "Add a phonebook"
 msgstr "Telefoonboek toevoegen"
 
-#: package/contents/ui/configPhoneBook.qml:184 package/contents/ui/main.qml:420
+#: package/contents/ui/configPhoneBook.qml:184 package/contents/ui/main.qml:450
 msgid "Add to Contacts"
 msgstr "Toevoegen aan contacten"
 
-#: package/contents/ui/configPhoneBook.qml:190 package/contents/ui/main.qml:435
+#: package/contents/ui/configPhoneBook.qml:190 package/contents/ui/main.qml:465
 msgid "Add to Blocklist"
 msgstr "Toevoegen aan blokkeerlijst"
 
@@ -207,11 +207,48 @@ msgstr ""
 "gesprek schrijft hierheen (bijv. houd een via WebDAV gesynchroniseerde lijst "
 "alleen-lezen door deze hier nooit te selecteren)"
 
-#: package/contents/ui/main.qml:150
+#: package/contents/ui/configMobile.qml:19
+msgid "Receive calls from paired phones"
+msgstr "Oproepen van gekoppelde telefoons ontvangen"
+
+#: package/contents/ui/configMobile.qml:26
+msgid ""
+"In ScreenRing Phone, add this computer as a destination using its local IP "
+"address, this port and this pairing key. Caller details are encrypted. Your "
+"computer must be running and reachable on the home network."
+msgstr "Voeg deze computer in ScreenRing Phone toe als bestemming met het lokale IP-adres, deze poort en deze koppelingssleutel. Bellergegevens worden versleuteld. De computer moet aanstaan en bereikbaar zijn op het thuisnetwerk."
+
+#: package/contents/ui/configMobile.qml:29
+msgid "Mobile call port:"
+msgstr "Poort voor mobiele oproepen:"
+
+#: package/contents/ui/configMobile.qml:35
+msgid "Pairing key:"
+msgstr "Koppelingssleutel:"
+
+#: package/contents/ui/configMobile.qml:42
+msgid "Generate new pairing key"
+msgstr "Nieuwe koppelingssleutel genereren"
+
+#: package/contents/ui/configMobile.qml:48
+msgid ""
+"A new key disconnects previously paired phones. Save the settings before "
+"testing the phone connection."
+msgstr "Een nieuwe sleutel ontkoppelt eerder gekoppelde telefoons. Sla de instellingen op voordat u de verbinding test."
+
+#: package/contents/ui/configMobile.qml:53
+msgid "Replace pairing key?"
+msgstr "Koppelingssleutel vervangen?"
+
+#: package/contents/ui/configMobile.qml:54
+msgid "All phones must be paired again with the new key."
+msgstr "Alle telefoons moeten opnieuw worden gekoppeld met de nieuwe sleutel."
+
+#: package/contents/ui/main.qml:172
 msgid "Clear call history?"
 msgstr "Oproepgeschiedenis wissen?"
 
-#: package/contents/ui/main.qml:151
+#: package/contents/ui/main.qml:173
 msgid ""
 "This only clears the list shown here — it does not delete anything on the "
 "FritzBox itself."
@@ -219,63 +256,63 @@ msgstr ""
 "Dit wist alleen de hier getoonde lijst — er wordt niets verwijderd op de "
 "FritzBox zelf."
 
-#: package/contents/ui/main.qml:156
+#: package/contents/ui/main.qml:178
 msgid "Clear"
 msgstr "Wissen"
 
-#: package/contents/ui/main.qml:202 package/contents/ui/main.qml:301
+#: package/contents/ui/main.qml:224 package/contents/ui/main.qml:331
 msgid "Recent Calls"
 msgstr "Onlangs gebeld"
 
-#: package/contents/ui/main.qml:292
+#: package/contents/ui/main.qml:315
 msgid "No calls yet"
 msgstr "Nog geen oproepen"
 
-#: package/contents/ui/main.qml:348
+#: package/contents/ui/main.qml:378
 msgid "Call Monitor connected"
 msgstr "Oproepmonitor verbonden"
 
-#: package/contents/ui/main.qml:348
+#: package/contents/ui/main.qml:378
 msgid "Call Monitor disconnected"
 msgstr "Oproepmonitor niet verbonden"
 
-#: package/contents/ui/main.qml:361
+#: package/contents/ui/main.qml:391
 msgid "Check for missed calls"
 msgstr "Zoeken naar gemiste oproepen"
 
-#: package/contents/ui/main.qml:375
+#: package/contents/ui/main.qml:405
 msgid "Clear call history"
 msgstr "Oproepgeschiedenis wissen"
 
-#: package/contents/ui/main.qml:385
+#: package/contents/ui/main.qml:415
 msgid "Dial: #96*5* to enable the CallMonitor on your Fritz!Box"
 msgstr "Toets #96*5* in om de gespreksmonitor van je Fritz!Box in te schakelen"
 
-#: package/contents/ui/main.qml:398
+#: package/contents/ui/main.qml:428
 msgid "Unknown number: %1"
 msgstr "Onbekend nummer: %1"
 
-#: package/contents/ui/main.qml:407
+#: package/contents/ui/main.qml:437
 msgid "Name"
 msgstr "Naam"
 
-#: package/contents/ui/main.qml:416
+#: package/contents/ui/main.qml:446
 msgid "Private"
 msgstr "Privé"
 
-#: package/contents/ui/main.qml:416
+#: package/contents/ui/main.qml:446
 msgid "Mobile"
 msgstr "Mobiel"
 
-#: package/contents/ui/main.qml:416
+#: package/contents/ui/main.qml:446
 msgid "Business"
 msgstr "Zakelijk"
 
-#: package/contents/ui/main.qml:439
+#: package/contents/ui/main.qml:469
 msgid "Blocked"
 msgstr "Geblokkeerd"
 
-#: package/contents/ui/main.qml:450
+#: package/contents/ui/main.qml:480
 msgid ""
 "Could not reach the FritzBox — entry was not added. Check your connection "
 "and try again."
@@ -284,16 +321,20 @@ msgstr ""
 "en probeer het opnieuw."
 
 #: package/contents/config/config.qml:13
+msgid "Mobile calls"
+msgstr "Mobiele oproepen"
+
+#: package/contents/config/config.qml:19
 msgctxt "@title"
 msgid "OSD"
 msgstr "OSD"
 
-#: package/contents/config/config.qml:19
+#: package/contents/config/config.qml:25
 msgctxt "@title"
 msgid "Phonebooks"
 msgstr "Telefoonboeken"
 
-#: package/contents/config/config.qml:25
+#: package/contents/config/config.qml:31
 msgctxt "@title"
 msgid "Network"
 msgstr "Netwerk"
@@ -310,17 +351,42 @@ msgstr "Afgeschermd nummer"
 msgid "Incoming call"
 msgstr "Inkomende oproep"
 
+#: package/plugin/MobileCallReceiver.cpp:17
+msgid "Receiving mobile calls on port %1"
+msgstr "Mobiele oproepen ontvangen op poort %1"
+
+#: package/plugin/MobileCallReceiver.cpp:18
+msgid "Enter a valid pairing key"
+msgstr "Voer een geldige koppelingssleutel in"
+
+#: package/plugin/MobileCallReceiver.cpp:19
+msgid "Could not open the mobile call port"
+msgstr "De poort voor mobiele oproepen kon niet worden geopend"
+
+#: package/plugin/MobileCallReceiver.cpp:20
+msgid "Mobile call reception is disabled"
+msgstr "Ontvangst van mobiele oproepen is uitgeschakeld"
+
 #: package/plugin/KFritzCorePlugin.cpp:357
 msgid "Incoming call from %1"
 msgstr "Inkomende oproep van %1"
 
 #: package/plugin/KFritzCorePlugin.cpp:357
+#: package/plugin/KFritzCorePlugin.cpp:409
 msgid "Incoming call from %1 (%2)"
 msgstr "Inkomende oproep van %1 (%2)"
 
 #: package/plugin/KFritzCorePlugin.cpp:361
 msgid "FritzBox Call"
 msgstr "FRITZ!Box-oproep"
+
+#: package/plugin/KFritzCorePlugin.cpp:408
+msgid "Mobile call · %1"
+msgstr "Mobiele oproep · %1"
+
+#: package/plugin/KFritzCorePlugin.cpp:423
+msgid "Phone connected"
+msgstr "Telefoon verbonden"
 
 #~ msgid "Call back %1"
 #~ msgstr "Terugbellen: %1"

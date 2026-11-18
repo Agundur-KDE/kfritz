@@ -9,6 +9,8 @@ VERSION 0.1
 GENERATE_PLUGIN_SOURCE
   )
 target_sources(kfritzplugin PRIVATE
+    MobileProtocol.cpp
+    MobileCallReceiver.cpp
     CallOsd.cpp
     FritzCallMonitor.cpp
     FritzPhonebookFetcher.cpp
@@ -19,6 +21,7 @@ target_sources(kfritzplugin PRIVATE
   )
 
 target_link_libraries(kfritzplugin PRIVATE
+    OpenSSL::Crypto
     Qt6::Concurrent
     Qt6::Core
     Qt6::Quick

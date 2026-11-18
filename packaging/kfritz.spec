@@ -14,6 +14,7 @@ URL:            https://github.com/Agundur-KDE/kfritz
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  gettext
+BuildRequires:  pkgconfig(openssl)
 BuildRequires:  extra-cmake-modules
 BuildRequires:  cmake(LayerShellQt) >= 6.1
 BuildRequires:  qt6-base-devel

@@ -33,6 +33,7 @@ find_package(Qt6 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
 )
 
 find_package(LayerShellQt 6.1 REQUIRED)
+find_package(OpenSSL REQUIRED COMPONENTS Crypto)
 
 find_package(KF6 ${KF6_MIN_VERSION} REQUIRED COMPONENTS
     I18n
@@ -65,3 +66,8 @@ install(DIRECTORY package/contents/
 
 install(FILES package/metadata/de.agundur.kfritz.appdata.xml
         DESTINATION ${KDE_INSTALL_DATADIR}/metainfo)
+
+include(CTest)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

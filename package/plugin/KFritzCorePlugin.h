@@ -61,6 +61,9 @@ public:
     // gefunden werden"). Call once at startup with the same config values.
     Q_INVOKABLE void setCredentials(const QString &host, int port, const QString &user, const QString &password);
 
+    Q_INVOKABLE void handleMobileCall(const QString &id, const QString &name, const QString &number, const QString &label);
+    Q_INVOKABLE void updateMobileCall(const QString &id, const QString &name, const QString &number, const QString &label);
+    Q_INVOKABLE void showMobileTest(const QString &label);
     Q_INVOKABLE void clearMissedBadge();
 
     // Wipes the visible call history only — the FritzBox's own call list
@@ -94,6 +97,9 @@ public Q_SLOTS:
     void handleIncomingCall(const QString &number);
 
 Q_SIGNALS:
+    void mobileCallSuppressed(const QString &id);
+    void mobileIncomingCall(const QString &id, const QString &name, const QString &number);
+    void mobileCallerUpdated(const QString &id, const QString &name, const QString &number);
     void incomingCall(const QString &name, const QString &number);
     void phonebookDownloaded(int id, const QString &path);
     void callMonitorConnectedChanged();

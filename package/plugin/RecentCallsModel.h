@@ -22,6 +22,7 @@ public:
         NameRole = Qt::UserRole + 1,
         NumberRole,
         TimeRole,
+        SourceRole,
         BlockedRole
     };
 
@@ -31,7 +32,8 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    void addCall(const QString &name, const QString &number, const QString &time, bool blocked = false);
+    void addCall(const QString &name, const QString &number, const QString &time, bool blocked = false, const QString &id = {}, const QString &source = {});
+    void updateCall(const QString &id, const QString &name, const QString &number, bool blocked = false);
     void clearAll();
 
 private:
@@ -40,6 +42,8 @@ private:
         QString number;
         QString time;
         bool blocked = false;
+        QString id;
+        QString source;
     };
 
     QVector<CallEntry> m_calls;

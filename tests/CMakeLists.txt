@@ -1,0 +1,22 @@
+find_package(Qt6 REQUIRED COMPONENTS Test)
+add_executable(mobile_receiver_test MobileReceiverTest.cpp ../package/plugin/MobileProtocol.cpp ../package/plugin/MobileCallReceiver.cpp)
+target_link_libraries(mobile_receiver_test PRIVATE Qt6::Core Qt6::Network Qt6::Qml Qt6::Test KF6::I18n OpenSSL::Crypto)
+target_include_directories(mobile_receiver_test PRIVATE ../package/plugin)
+target_compile_definitions(mobile_receiver_test PRIVATE WIRE_VECTOR_PATH="${CMAKE_CURRENT_SOURCE_DIR}/wire-v2.json")
+add_test(NAME mobile_receiver COMMAND mobile_receiver_test)
+
+# Small live test receiver using the same protocol and OSD; no full-window preview.
+add_executable(kfritz_mobile_probe MobileReceiverProbe.cpp ../package/plugin/MobileProtocol.cpp ../package/plugin/MobileCallReceiver.cpp ../package/plugin/CallOsd.cpp)
+target_link_libraries(kfritz_mobile_probe PRIVATE Qt6::Core Qt6::Network Qt6::Qml Qt6::Quick KF6::I18n KF6::Notifications LayerShellQt::Interface OpenSSL::Crypto)
+target_include_directories(kfritz_mobile_probe PRIVATE ../package/plugin)
+if(LayerShellQt_VERSION VERSION_GREATER_EQUAL "6.6")
+    target_compile_definitions(kfritz_mobile_probe PRIVATE KFRITZ_LAYERSHELL_ACTIVE_SCREEN=1)
+endif()
+qt_add_resources(kfritz_mobile_probe "probe_osd" PREFIX "/kfritz" BASE ../package/plugin FILES ../package/plugin/OsdCard.qml)
+
+add_executable(qml_registration_test QmlRegistrationTest.cpp)
+target_link_libraries(qml_registration_test PRIVATE Qt6::Core Qt6::Gui Qt6::Qml KF6::I18n)
+target_compile_definitions(qml_registration_test PRIVATE QML_BUILD_PATH="${CMAKE_BINARY_DIR}/bin" QML_SOURCE_PATH="${CMAKE_SOURCE_DIR}/package/contents/ui")
+add_dependencies(qml_registration_test kfritzplugin)
+add_test(NAME mobile_qml_registration COMMAND qml_registration_test)
+set_tests_properties(mobile_qml_registration PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")

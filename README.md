@@ -227,3 +227,67 @@ check rejects missing, untranslated or fuzzy entries and invalid formats.
 ## License
 
 GPL-3.0-or-later
+
+## ScreenRing mobile calls (feature branch)
+
+Branch `feature/screenring-mobile-calls` adds an optional local receiver for the
+ScreenRing Android companion. It runs alongside the direct FRITZ!Box monitor;
+FRITZ!Box events do not need a phone or an intermediary desktop app.
+
+In **Settings → Mobile calls**, enable reception, generate a pairing key and save.
+In ScreenRing Phone, enable the KFritz destination and enter the computer's local
+IP address, port (default 10123) and that key. Pair the TV independently if both
+should receive alerts. The computer must be running. The listener is disabled
+by default and rejects unauthenticated messages.
+
+With optional Android caller-data permissions, the phone sends the incoming number
+and matching local contact name, encrypted. Otherwise KFritz receives a generic
+phone label. Mobile calls have their own source in recent history, use the normal
+notifications/OSD and respect configured blocklists when a number is available.
+Caller metadata can update an existing entry without adding duplicate history or
+notification sounds. Neither this receiver nor the phone app transfers call audio.
+
+See [protocol details](docs/screenring-protocol.md). OpenSSL Crypto is a build
+requirement. Build/test with `cmake -S . -B build -DBUILD_TESTING=ON`,
+`cmake --build build` and `ctest --test-dir build --output-on-failure`.
+Translation catalogs include the existing DE/FR/ES/RU/NL languages.
+
+A separate `build/bin/kfritz_mobile_probe --key-file <private-file> --port 10123`
+uses the same receiver and small OSD for a live test without a full-window applet
+preview. This is a development test; it does not update the running Plasma applet.
+At the current work checkpoint, the normal installed KFritz has not yet been
+replaced. Receiver crypto/network/QML tests pass; real caller-name lookup on the
+Moto and installation/reload of the normal applet still require completion.
+
+
+## Session checkpoint – 18 November 2026
+
+Live test completed: the Moto sent encrypted TEST messages independently to TV and
+PC, both acknowledged. Initial PC failures were a firewalld block, then the
+standalone probe used the wrong Qt platform. A LAN-only runtime rule for
+192.168.178.0/24 TCP 10123 and explicit Wayland mode fixed these. User confirmed
+the PC OSD, then confirmed that a real incoming contact name displayed correctly
+on both devices. Do not log or commit the actual contact/name/number.
+
+Desktop deployment is **not completed**. Normal installed KFritz is still the old
+version. Only `kfritz_mobile_probe` uses the new receiver; a reboot does not install
+the branch and will end that probe. The firewalld rule is runtime-only and also
+needs reapplying or a scoped persistent rule for durable operation. Moto/TV 0.4
+are installed; phone has both destinations and optional caller-data permissions.
+
+Next session: install the already built/tested KFritz branch to /usr, preserve
+existing config, enable the existing applet's MobileCalls using the paired key,
+stop the standalone probe and reload Plasma so the new C++ plugin loads. No
+installation or Plasma restart has been executed yet. Staged install is in
+.local/stage (ignored). Use `cmake --install build --component kfritz`; the old
+build/install_manifest.txt is owned by nobody, while the named component has its
+own writable manifest. Private receiver key is .local/mobile-key (0600, ignored).
+Never output that file or existing FRITZ!Box credentials. Phone desktop destination
+currently points to this computer's home-network IP, port 10123, with that key.
+
+Validation before checkpoint: Android builds + 19 JVM tests pass; KFritz builds,
+all 3 CTest targets pass (appstream, protocol/network, QML runtime registration),
+all five existing KFritz translation catalogs complete (84 messages). Static
+qmllint had installed-module/environment warnings, so the built-module runtime
+registration and config/main component check was added and passed. User requested
+commit/push and #sema, then continuation tomorrow. Do not resume deployment tonight.

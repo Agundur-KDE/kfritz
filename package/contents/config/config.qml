@@ -10,6 +10,12 @@ import org.kde.plasma.configuration 2.0
 
 ConfigModel {
     ConfigCategory {
+        name: i18n("Mobile calls")
+        icon: "smartphone"
+        source: "configMobile.qml"
+    }
+
+    ConfigCategory {
         name: i18nc("@title", "OSD")
         icon: "preferences-desktop-display"
         source: "configOsd.qml"

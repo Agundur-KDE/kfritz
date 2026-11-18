@@ -25,6 +25,8 @@ QVariant RecentCallsModel::data(const QModelIndex &index, int role) const
         return call.number;
     case TimeRole:
         return call.time;
+    case SourceRole:
+        return call.source;
     case BlockedRole:
         return call.blocked;
     default:
@@ -34,7 +36,7 @@ QVariant RecentCallsModel::data(const QModelIndex &index, int role) const
 
 QHash<int, QByteArray> RecentCallsModel::roleNames() const
 {
-    return {{NameRole, "name"}, {NumberRole, "number"}, {TimeRole, "time"}, {BlockedRole, "blocked"}};
+    return {{NameRole, "name"}, {NumberRole, "number"}, {TimeRole, "time"}, {SourceRole, "callSource"}, {BlockedRole, "blocked"}};
 }
 
 void RecentCallsModel::clearAll()
@@ -47,12 +49,12 @@ void RecentCallsModel::clearAll()
     endResetModel();
 }
 
-void RecentCallsModel::addCall(const QString &name, const QString &number, const QString &time, bool blocked)
+void RecentCallsModel::addCall(const QString &name, const QString &number, const QString &time, bool blocked, const QString &id, const QString &source)
 {
-    qDebug() << "RecentCallsModel::addCall:" << name << number << time << "blocked:" << blocked;
+    // Never put caller names or numbers in diagnostic logs.
 
     beginInsertRows(QModelIndex(), 0, 0);
-    m_calls.prepend({name, number, time, blocked});
+    m_calls.prepend({name, number, time, blocked, id, source});
     endInsertRows();
 
     // Verlauf begrenzen — als eigene, korrekt signalisierte Entfernung statt
@@ -65,5 +67,14 @@ void RecentCallsModel::addCall(const QString &name, const QString &number, const
         beginRemoveRows(QModelIndex(), lastRow, lastRow);
         m_calls.removeLast();
         endRemoveRows();
+    }
+}
+
+void RecentCallsModel::updateCall(const QString &id, const QString &name, const QString &number, bool blocked)
+{
+    if (id.isEmpty()) return;
+    for (int row=0;row<m_calls.size();++row) if (m_calls[row].id==id) {
+        m_calls[row].name=name; m_calls[row].number=number; m_calls[row].blocked=blocked;
+        Q_EMIT dataChanged(index(row),index(row),{NameRole,NumberRole,BlockedRole}); return;
     }
 }

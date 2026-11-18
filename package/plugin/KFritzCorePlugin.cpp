@@ -393,3 +393,35 @@ void KFritzCorePlugin::clearRecentCalls()
     m_recentCallsModel->clearAll();
     Q_EMIT recentCallsChanged();
 }
+
+void KFritzCorePlugin::handleMobileCall(const QString &id, const QString &name, const QString &number, const QString &label)
+{
+    const bool blocked = !number.isEmpty() && isBlocked(number);
+    QString resolved = name.isEmpty() && !number.isEmpty() ? resolveName(number) : name;
+    if (resolved.isEmpty()) resolved = number.isEmpty() ? label : number;
+    if (m_recentCallsModel) m_recentCallsModel->addCall(resolved,number,QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss")),blocked,id,label);
+    Q_EMIT recentCallsChanged();
+    if (blocked) return;
+    Q_EMIT mobileIncomingCall(id,resolved,number);
+    auto *notification = new KNotification(QStringLiteral("callReceived"), KNotification::CloseOnTimeout);
+    notification->setComponentName(QStringLiteral("kfritz"));
+    notification->setTitle(i18nd("plasma_applet_de.agundur.kfritz","Mobile call · %1",label));
+    notification->setText(number.isEmpty() ? resolved.toHtmlEscaped() : i18nd("plasma_applet_de.agundur.kfritz","Incoming call from %1 (%2)",resolved.toHtmlEscaped(),number.toHtmlEscaped()));
+    notification->setIconName(QStringLiteral("call-incoming")); notification->sendEvent();
+}
+void KFritzCorePlugin::updateMobileCall(const QString &id, const QString &name, const QString &number, const QString &label)
+{
+    QString resolved = name.isEmpty() && !number.isEmpty() ? resolveName(number) : name;
+    if (resolved.isEmpty()) resolved = number.isEmpty() ? label : number;
+    const bool blocked = !number.isEmpty() && isBlocked(number);
+    if (m_recentCallsModel) m_recentCallsModel->updateCall(id,resolved,number,blocked);
+    if (blocked) { Q_EMIT mobileCallSuppressed(id); return; }
+    if (!blocked) Q_EMIT mobileCallerUpdated(id,resolved,number);
+}
+void KFritzCorePlugin::showMobileTest(const QString &label)
+{
+    auto *notification = new KNotification(QStringLiteral("callReceived"), KNotification::CloseOnTimeout);
+    notification->setComponentName(QStringLiteral("kfritz"));
+    notification->setTitle(i18nd("plasma_applet_de.agundur.kfritz","Phone connected")); notification->setText(label.toHtmlEscaped());
+    notification->setIconName(QStringLiteral("smartphone")); notification->sendEvent();
+}

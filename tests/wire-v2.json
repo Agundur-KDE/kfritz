@@ -1,0 +1,11 @@
+{
+  "key": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+  "nonce": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "line": "v2\ttest-device\tRING\ttest-call\tAAECAwQFBgcICQoLSHq5y+8FxLpLwEBlxQai3s9ReKOrQSqcF7HYrxUb6nE6tCX75dlgAnlS+9esHQ==\t7e4f8042e6ae8a5a9c1f56286787aaf8db7507c582b609df9d0c9ca15b41dc74",
+  "device": "test-device",
+  "event": "RING",
+  "call": "test-call",
+  "label": "Test phone",
+  "name": "Example Ä",
+  "number": "+4912345"
+}

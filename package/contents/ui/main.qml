@@ -119,6 +119,18 @@ PlasmoidItem {
         onTriggered: refreshAllPhonebooks()
     }
 
+    property string mobileOsdId: ""
+    MobileCallReceiver {
+        id: mobileReceiver
+        enabled: Plasmoid.configuration.MobileEnabled
+        port: Plasmoid.configuration.MobilePort
+        pairingKey: Plasmoid.configuration.MobileKey
+        onIncomingCall: (id, name, number, label) => plugin.handleMobileCall(id, name, number, label)
+        onCallerUpdated: (id, name, number, label) => plugin.updateMobileCall(id, name, number, label)
+        onTestMessage: label => plugin.showMobileTest(label)
+        onCallEnded: id => { if (root.mobileOsdId === id) { callOsd.hide(); root.mobileOsdId = ""; } }
+    }
+
     CallOsd {
         id: callOsd
     }
@@ -133,7 +145,18 @@ PlasmoidItem {
 
     Connections {
         target: plugin
+        function onMobileCallSuppressed(id) { if (root.mobileOsdId === id) { callOsd.hide(); root.mobileOsdId = ""; } }
+        function onMobileIncomingCall(id, name, number) {
+            root.mobileOsdId = id;
+            if (Plasmoid.configuration.OsdEnabled)
+                callOsd.showCall(name, number, Plasmoid.configuration.OsdFont, Plasmoid.configuration.OsdPosition, Plasmoid.configuration.OsdTextColor);
+        }
+        function onMobileCallerUpdated(id, name, number) {
+            if (root.mobileOsdId === id && Plasmoid.configuration.OsdEnabled)
+                callOsd.showCall(name, number, Plasmoid.configuration.OsdFont, Plasmoid.configuration.OsdPosition, Plasmoid.configuration.OsdTextColor);
+        }
         function onIncomingCall(name, number) {
+            root.mobileOsdId = "";
             if (Plasmoid.configuration.OsdEnabled)
                 callOsd.showCall(name, number, Plasmoid.configuration.OsdFont,
                                  Plasmoid.configuration.OsdPosition, Plasmoid.configuration.OsdTextColor);
@@ -211,6 +234,7 @@ PlasmoidItem {
             delegate: Controls.ItemDelegate {
                 required property string name
                 required property string number
+                required property string callSource
                 required property string time
                 required property bool blocked
 
@@ -255,6 +279,7 @@ PlasmoidItem {
                             // resolved name, so the title line is never
                             // empty.
                             text: blocked ? number : (name.length > 0 ? name : number)
+                            textFormat: Text.PlainText
                             font.bold: true
                             font.strikeout: blocked
                             color: blocked ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
@@ -265,7 +290,8 @@ PlasmoidItem {
 
                         Controls.Label {
                             visible: !blocked
-                            text: number + " – " + time
+                            text: [number, callSource, time].filter(value => value.length > 0).join(" – ")
+                            textFormat: Text.PlainText
                             // See the header-label fallback below — same
                             // undefined-color bug on a plain Controls.Label.
                             color: Kirigami.Theme.subtitleColor ?? "#666666"
@@ -296,6 +322,13 @@ PlasmoidItem {
 
         // Header-Bereich oben: Überschrift + Statuszeile (aus Kirigami Gallery übernommenes Muster)
         header: ColumnLayout {
+            Controls.Label {
+                visible: Plasmoid.configuration.MobileEnabled
+                text: mobileReceiver.status
+                textFormat: Text.PlainText
+                wrapMode: Text.WordWrap
+                Layout.fillWidth: true
+            }
             Kirigami.Heading {
                 level: 2
                 text: i18n("Recent Calls") // Überschrift der Seite
