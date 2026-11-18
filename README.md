@@ -291,3 +291,33 @@ all five existing KFritz translation catalogs complete (84 messages). Static
 qmllint had installed-module/environment warnings, so the built-module runtime
 registration and config/main component check was added and passed. User requested
 commit/push and #sema, then continuation tomorrow. Do not resume deployment tonight.
+
+
+## Latest state: prepared for next login, no Plasma restart
+
+Supersedes the earlier end-of-day note: at the user's later explicit request,
+the 25 reviewed staged KFritz files were installed under /usr by atomic inode
+replacement. Hashes match the stage. The running Plasma process was not stopped
+or restarted (MainPID remained 4254); its loaded old library remains valid.
+
+User explicitly declined a Plasma restart tonight. A one-time, failure-tolerant
+ExecStartPre drop-in is installed at
+~/.config/systemd/user/plasma-plasmashell.service.d/50-kfritz-mobile.conf. On the
+next normal Plasma start, tools/activate_mobile_on_start.py preserves the existing
+applet configuration and enables MobileCalls with the already paired local key.
+It backs up the private config, stops only the standalone development probe if
+still present and writes .local/mobile-activation.done. A completed activation
+will not override later user settings on subsequent logins. Activation dry-run
+passed; the marker remains absent, as intended. A missing script or error cannot
+prevent Plasma starting (ExecStartPre ignores failure). No service restart command
+is present in the new preparation tool.
+
+The LAN-only firewall rule for source 192.168.178.0/24 TCP 10123 is now permanent,
+verified by firewalld. tools/deploy_mobile.py is the no-restart preparation wrapper;
+tools/install_staged_atomic.py performs the administrator-only atomic install.
+Private system backups remain under ignored .local/system-backup-*.
+
+Next session: after the user's reboot/login, verify the activation marker,
+normal plasmashell-owned listener on 10123 and a real incoming phone call. No
+installation should be needed again if those checks pass. The user has ended
+today's session; do not continue implementation or restart Plasma tonight.
