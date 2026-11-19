@@ -373,3 +373,15 @@ Moto, a fresh UI-triggered TEST was acknowledged independently by TV and desktop
 the TV also logged a fresh authenticated TEST. Both Android foreground services
 are running. TEST does not pause playback. Today's TV card visibility and real
 call/pause remain unconfirmed. TV automatic startup has not been demonstrated.
+
+
+### Real mobile call to both destinations – 19 November 2026
+
+User reports the TV stopped during the next real incoming mobile call. Phone
+logs confirm fresh RING and END acknowledgements from both TV and desktop.
+TV independently logs authenticated RING, overlay and targeted pause request
+for `com.google.android.youtube.tv`, followed by END. Pause is visually confirmed
+by the user; no pause-confirmation callback appeared in the filtered log.
+Phone/TV clocks differ; no cross-device latency is inferred. The user was asked
+to test with the phone locked but did not explicitly confirm lock state.
+Automatic restart/startup and automatic playback resume remain unimplemented.
