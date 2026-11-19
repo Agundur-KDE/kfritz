@@ -9,6 +9,7 @@ DROPIN=Path.home()/'.config/systemd/user/plasma-plasmashell.service.d/50-kfritz-
 def main():
     subprocess.run(['/usr/bin/python3',str(ROOT/'tools/activate_mobile_on_start.py'),'--dry-run'],check=True)
     subprocess.run(['pkexec','/usr/bin/python3',str(ROOT/'tools/install_staged_atomic.py')],check=True)
+    subprocess.run(['/usr/bin/python3',str(ROOT/'tools/verify_deployment.py')],check=True)
     DROPIN.parent.mkdir(parents=True,exist_ok=True)
     # A missing project or activation error must never prevent the desktop starting.
     DROPIN.write_text('[Service]\nExecStartPre=-/usr/bin/python3 '+str(ROOT/'tools/activate_mobile_on_start.py')+'\n')

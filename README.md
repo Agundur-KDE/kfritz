@@ -321,3 +321,24 @@ Next session: after the user's reboot/login, verify the activation marker,
 normal plasmashell-owned listener on 10123 and a real incoming phone call. No
 installation should be needed again if those checks pass. The user has ended
 today's session; do not continue implementation or restart Plasma tonight.
+
+
+## Deployment verification – 19 November 2026
+
+The login activation completed, but the installed RPM `kfritz-0.4.1-2.3`
+replaced the development files before this login (installed file change times:
+08:22 CET). Configuration and the activation marker survived, while the installed
+QML and library lacked the mobile receiver. A loaded library path alone does not
+prove its version. Restored the reviewed stage, verified all 25 installed hashes,
+and restarted Plasma with the user's authorization today. The regular plasmashell
+process now listens on TCP 10123 and acknowledged an authenticated local TEST.
+All three CTest targets pass outside the socket-restricted sandbox. The first
+handshake attempts during startup timed out; later challenge and full TEST passed.
+A fresh real incoming call has not yet been tested. Moto USB ADB is unauthorized.
+
+`python3 tools/verify_deployment.py` now checks installed hashes against the stage.
+The login hook checks these even when the activation marker exists; a mismatch is
+reported in the service journal without preventing Plasma from starting. The
+preparation wrapper verifies after installation. RPM updates can still overwrite
+this development build; rerun verification after package updates and restore the
+reviewed build if needed. No automatic administrator reinstall is performed.

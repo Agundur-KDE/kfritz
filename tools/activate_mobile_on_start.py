@@ -2,6 +2,8 @@
 """One-time configuration immediately before a future Plasma start; never restart it."""
 from pathlib import Path
 import os,re,shutil,signal,subprocess,tempfile
+import sys
+from verify_deployment import verify
 
 ROOT=Path(__file__).resolve().parents[1]
 CONFIG=Path.home()/'.config/plasma-org.kde.plasma.desktop-appletsrc'
@@ -22,6 +24,11 @@ def patch(content,key):
     return content.rstrip()+'\n\n'+header+'\n'+''.join(name+'='+value+'\n' for name,value in values.items())
 
 def main():
+    # An activation marker proves configuration only, not installed binaries.
+    # RPM updates can overwrite the development receiver between logins.
+    # Deployment dry-run checks configuration before repairing installed files.
+    if '--dry-run' not in sys.argv:
+        verify()
     if DONE.exists():return
     key=(ROOT/'.local/mobile-key').read_text().strip()
     if not re.fullmatch('[a-f0-9]{64}',key):raise RuntimeError('Private pairing key unavailable')
