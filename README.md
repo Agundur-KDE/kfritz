@@ -353,3 +353,10 @@ the Plasma reload. Phone forwarding remains a foreground service. Existing
 pairing/settings were preserved. No fresh TV acknowledgement: phone TV status
 reports connection_failed and the configured TV is currently unreachable on
 receiver port 10123 / ADB port 5555. No real incoming call was tested today.
+
+
+Real incoming Moto call on 19 November: fresh desktop RING acknowledgements at
+08:45:00.650 and 08:45:01.673, followed by END at 08:45:02.703 (phone log clock).
+Actual incoming call and end delivery to the regular KFritz receiver after reload
+are confirmed. No CONNECT observed. Visual card/caller-name confirmation for this
+call remains pending; no caller identity or number was captured in this note.
