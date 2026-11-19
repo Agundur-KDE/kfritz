@@ -322,13 +322,6 @@ PlasmoidItem {
 
         // Header-Bereich oben: Überschrift + Statuszeile (aus Kirigami Gallery übernommenes Muster)
         header: ColumnLayout {
-            Controls.Label {
-                visible: Plasmoid.configuration.MobileEnabled
-                text: mobileReceiver.status
-                textFormat: Text.PlainText
-                wrapMode: Text.WordWrap
-                Layout.fillWidth: true
-            }
             Kirigami.Heading {
                 level: 2
                 text: i18n("Recent Calls") // Überschrift der Seite
