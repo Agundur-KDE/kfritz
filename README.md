@@ -342,3 +342,14 @@ reported in the service journal without preventing Plasma from starting. The
 preparation wrapper verifies after installation. RPM updates can still overwrite
 this development build; rerun verification after package updates and restore the
 reviewed build if needed. No automatic administrator reinstall is performed.
+
+
+### Phone delivery after reload – 19 November 2026
+
+After USB authorization and unlocking the Moto, triggered a fresh TEST through
+the phone UI using its stable resource ID. A new `target=desktop event=TEST`
+acknowledgement confirms encrypted delivery to the regular KFritz applet after
+the Plasma reload. Phone forwarding remains a foreground service. Existing
+pairing/settings were preserved. No fresh TV acknowledgement: phone TV status
+reports connection_failed and the configured TV is currently unreachable on
+receiver port 10123 / ADB port 5555. No real incoming call was tested today.
