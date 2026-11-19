@@ -360,3 +360,16 @@ Real incoming Moto call on 19 November: fresh desktop RING acknowledgements at
 Actual incoming call and end delivery to the regular KFritz receiver after reload
 are confirmed. No CONNECT observed. Visual card/caller-name confirmation for this
 call remains pending; no caller identity or number was captured in this note.
+
+
+### TV reconnected – 19 November 2026
+
+User confirmed the real mobile caller card with name was visible in KFritz.
+After the TV was powered on, ADB reconnected on its known LAN transport. The TV
+RingService was initially absent and was started explicitly in the background,
+without a full-screen activity. Existing phone reception, overlay and targeted
+pause settings remain enabled; no pairing/settings changes. After unlocking the
+Moto, a fresh UI-triggered TEST was acknowledged independently by TV and desktop;
+the TV also logged a fresh authenticated TEST. Both Android foreground services
+are running. TEST does not pause playback. Today's TV card visibility and real
+call/pause remain unconfirmed. TV automatic startup has not been demonstrated.
