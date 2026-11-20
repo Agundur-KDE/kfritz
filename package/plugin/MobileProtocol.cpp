@@ -31,6 +31,10 @@ bool MobileProtocol::validKey(const QString &key) {
     static const QRegularExpression pattern(QStringLiteral("^[a-f0-9]{64}$"));
     return pattern.match(key).hasMatch();
 }
+QByteArray MobileProtocol::acknowledgement(const QString &key,const QByteArray &challenge,const QByteArray &line) {
+    if(!validKey(key) || !validKey(QString::fromLatin1(challenge)) || line.size()>4096) return {};
+    return QByteArrayLiteral("ACK\t")+mac(QByteArray::fromHex(key.toLatin1()),challenge+'\n'+QByteArrayLiteral("ScreenRing acknowledgement v1\n")+line).toHex();
+}
 QByteArray MobileProtocol::newChallenge() {
     QByteArray random(32, Qt::Uninitialized);
     for (qsizetype i = 0; i < random.size(); ++i) random[i] = char(QRandomGenerator::system()->generate() & 255);

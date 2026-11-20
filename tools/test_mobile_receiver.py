@@ -11,5 +11,6 @@ with socket.create_connection((a.host,a.port),3) as connection:
   payload='\t'.join(['v1','desktop-probe','TEST',str(uuid.uuid4()),base64.b64encode(b'ScreenRing connection test').decode()])
   signature=hmac.new(key,(nonce+'\n'+payload).encode(),hashlib.sha256).hexdigest()
   connection.sendall((payload+'\t'+signature+'\n').encode())
-  if stream.readline(20)!=b'OK\n':raise SystemExit('No acknowledgement')
+  expected=('ACK\t'+hmac.new(key,(nonce+'\nScreenRing acknowledgement v1\n'+payload+'\t'+signature).encode(),hashlib.sha256).hexdigest()+'\n').encode()
+  if not hmac.compare_digest(stream.readline(1025),expected):raise SystemExit('No authenticated acknowledgement')
 print('Receiver acknowledged TEST; no caller data sent.')

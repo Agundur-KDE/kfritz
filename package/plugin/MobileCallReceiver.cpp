@@ -55,22 +55,25 @@ void MobileCallReceiver::accept() {
                 if (!m_enabled || m_key!=key) { socket->abort(); return; }
                 const auto message=MobileProtocol::verify(key,challenge,line);
                 if (!message) { socket->abort(); return; }
-                process(*message);socket->write("OK\n");socket->disconnectFromHost();
+                if(!process(*message)) { socket->abort();return; }
+                socket->write(MobileProtocol::acknowledgement(key,challenge,line)+'\n');socket->disconnectFromHost();
         });
     }
 }
-void MobileCallReceiver::process(const MobileMessage &m) {
-    if (m.event==QLatin1String("TEST")) { Q_EMIT testMessage(m.label); return; }
+bool MobileCallReceiver::process(const MobileMessage &m) {
+    if (m.event==QLatin1String("TEST")) { Q_EMIT testMessage(m.label); return true; }
     const QString id=m.device+QLatin1Char('/')+m.call;
-    if (m.event==QLatin1String("END")) { if (m_calls.remove(id)) Q_EMIT callEnded(id); return; }
+    if (m.event==QLatin1String("END")) { if (m_calls.remove(id)) Q_EMIT callEnded(id); return true; }
     if (!m_calls.contains(id)) {
-        if (m_calls.size()>=32 || m.event!=QLatin1String("RING")) return;
+        if (m_calls.size()>=32) return false;
+        if (m.event!=QLatin1String("RING")) return false;
         m_calls.insert(id,Call{m,m_clock.elapsed(),false});
-        Q_EMIT incomingCall(id,m.name,m.number,m.label);return;
+        Q_EMIT incomingCall(id,m.name,m.number,m.label);return true;
     }
     auto &call=m_calls[id];call.seen=m_clock.elapsed();
     const bool updated=call.message.name!=m.name || call.message.number!=m.number || call.message.label!=m.label;
     call.message=m;
     if (m.event==QLatin1String("CONNECT")) call.answered=true;
     if (updated) Q_EMIT callerUpdated(id,m.name,m.number,m.label);
+    return true;
 }

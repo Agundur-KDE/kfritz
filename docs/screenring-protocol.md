@@ -7,8 +7,29 @@ Never log keys, caller numbers, contact names or decrypted packets.
 1. Receiver sends a fresh random 32-byte challenge as 64 lowercase hex characters
    followed by LF. It accepts one packet for that challenge, then closes.
 2. Sender sends one UTF-8, tab-separated packet followed by LF (maximum 4096 bytes).
-3. Receiver validates, applies the event and replies `OK\n`. An invalid message is
-   closed without acknowledgement. Clients must retry independently per receiver.
+3. Receiver validates and applies the event, then replies with the authenticated
+   acknowledgement below. Invalid or capacity-rejected messages are closed without
+   acknowledgement. END for an already-ended call succeeds idempotently. An unknown
+   CONNECT is not acknowledged. Clients retry independently per receiver.
+
+## Authenticated acknowledgement (ScreenRing 0.6.0-alpha.2)
+
+The response is `ACK<TAB>hex-hmac<LF>`. Its HMAC-SHA256 uses the decoded pairing
+key and authenticates the following exact UTF-8 bytes:
+
+```
+challenge-hex + LF + "ScreenRing acknowledgement v1" + LF + complete-sent-packet
+```
+
+`complete-sent-packet` includes the request HMAC, but not its final LF. The prefix
+separates response authentication from request authentication. Compare in constant
+time. Reject a bare `OK`, wrong key, different challenge or different packet. This
+rule applies to both v1 and v2 packets; there is no insecure fallback.
+
+Update the TV receiver and KFritz together with the phone sender. Older receivers
+replying OK cannot confirm delivery to an updated sender. Older senders expecting
+OK also need updating. Prepare all components before replacing installed versions.
+No new pairing key is required solely for this protocol change.
 
 Packet fields:
 

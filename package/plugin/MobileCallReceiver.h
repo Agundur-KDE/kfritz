@@ -37,7 +37,7 @@ private:
     struct Call { MobileMessage message; qint64 seen; bool answered=false; };
     void restart();
     void accept();
-    void process(const MobileMessage &message);
+    bool process(const MobileMessage &message);
     bool m_enabled=false;
     QString m_key;
     int m_port=10123;

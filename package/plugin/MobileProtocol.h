@@ -10,5 +10,6 @@ struct MobileMessage {
 namespace MobileProtocol {
 bool validKey(const QString &key);
 QByteArray newChallenge();
+QByteArray acknowledgement(const QString &key,const QByteArray &challenge,const QByteArray &line);
 std::optional<MobileMessage> verify(const QString &key, const QByteArray &challenge, const QByteArray &line);
 }
