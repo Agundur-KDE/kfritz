@@ -77,3 +77,13 @@ by Android tests. Its key and caller data are public test values, not user data.
 
 Firewall: permit TCP 10123 only from the intended home network, not the internet.
 A receiver must still require its pairing key; network location alone is not auth.
+
+## Deployed checkpoint – 20 November 2026
+
+The authenticated-acknowledgement receiver is installed in the regular Plasma
+applet. The 25 installed file hashes match the reviewed stage; Plasma was reloaded
+and owns the listener on 10123. The updated ScreenRing phone and TV alpha.2 apps
+are installed. Fresh phone-UI TEST messages received authenticated replies from
+both the TV and this regular desktop receiver. Existing pairing/configuration
+was preserved. No standalone probe is used for this result. No actual incoming
+call or playback-pause verification is claimed for this new security checkpoint.
