@@ -238,6 +238,12 @@ audio is sent and there is no developer cloud account.
 **[Download ScreenRing Phone APK](https://github.com/Agundur-KDE/ScreenRing-Phone/releases/tag/v0.6.0-alpha.2)**
 · [Setup and screenshots](https://github.com/Agundur-KDE/ScreenRing-Phone#readme)
 · [German setup](https://github.com/Agundur-KDE/ScreenRing-Phone/blob/main/INSTALL.de.md)
+· [Share your experience](https://github.com/Agundur-KDE/ScreenRing-Phone/discussions/1)
+
+Already using the Android companion? Tell us what worked and what did not in the
+linked discussion. App/KFritz versions and general device/software details help;
+never post real caller data, pairing keys or unredacted screenshots. Reports are
+voluntary feedback, not installation tracking or an endorsement requirement.
 
 The Android companion is a separately distributed signed **alpha**. It is not
 bundled into the Linux package. KFritz **0.4.1 and earlier do not contain this
