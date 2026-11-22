@@ -51,6 +51,13 @@ jobs:
           set -euxo pipefail
           mk-build-deps -i -r -t 'apt-get -y --no-install-recommends' debian/control
 
+      - name: Verify mobile protocol and receiver regressions
+        run: |
+          set -euo pipefail
+          cmake -S . -B /tmp/kfritz-tests -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release
+          cmake --build /tmp/kfritz-tests --target mobile_receiver_test --parallel 2
+          ctest --test-dir /tmp/kfritz-tests -R '^mobile_receiver$' --output-on-failure
+
       - name: Build .deb (log via tee)
         env:
           DEB_BUILD_OPTIONS: parallel=${{ runner.processorCount }}
@@ -127,5 +134,5 @@ jobs:
           set -euo pipefail
           TAG="${GITHUB_REF_NAME}"
           gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 \
-            || gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --title "$TAG" --generate-notes
+            || gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --draft --title "$TAG" --generate-notes
           gh release upload "$TAG" dist/dist/*.deb --repo "$GITHUB_REPOSITORY" --clobber

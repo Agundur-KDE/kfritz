@@ -228,160 +228,53 @@ check rejects missing, untranslated or fuzzy entries and invalid formats.
 
 GPL-3.0-or-later
 
-## ScreenRing mobile calls (feature branch)
+## Incoming Android calls with ScreenRing Phone
 
-Branch `feature/screenring-mobile-calls` adds an optional local receiver for the
-ScreenRing Android companion. It runs alongside the direct FRITZ!Box monitor;
-FRITZ!Box events do not need a phone or an intermediary desktop app.
+**New in KFritz 0.5.0:** show incoming cellular-call alerts from your Android phone
+on the KDE Plasma desktop, alongside the existing direct FRITZ!Box monitor.
+The phone and desktop must be reachable on your local network. No conversation
+audio is sent and there is no developer cloud account.
 
-In **Settings → Mobile calls**, enable reception, generate a pairing key and save.
-In ScreenRing Phone, enable the KFritz destination and enter the computer's local
-IP address, port (default 10123) and that key. Pair the TV independently if both
-should receive alerts. The computer must be running. The listener is disabled
-by default and rejects unauthenticated messages.
+**[Download ScreenRing Phone APK](https://github.com/Agundur-KDE/ScreenRing-Phone/releases/tag/v0.6.0-alpha.2)**
+· [Setup and screenshots](https://github.com/Agundur-KDE/ScreenRing-Phone#readme)
+· [German setup](https://github.com/Agundur-KDE/ScreenRing-Phone/blob/main/INSTALL.de.md)
 
-With optional Android caller-data permissions, the phone sends the incoming number
-and matching local contact name, encrypted. Otherwise KFritz receives a generic
-phone label. Mobile calls have their own source in recent history, use the normal
-notifications/OSD and respect configured blocklists when a number is available.
-Caller metadata can update an existing entry without adding duplicate history or
-notification sounds. Neither this receiver nor the phone app transfers call audio.
+The Android companion is a separately distributed signed **alpha**. It is not
+bundled into the Linux package. KFritz **0.4.1 and earlier do not contain this
+receiver**; install KFritz 0.5.0 or newer first. The Android application source is
+not included here. KFritz itself remains GPL-3.0-or-later.
 
-See [protocol details](docs/screenring-protocol.md). OpenSSL Crypto is a build
-requirement. Build/test with `cmake -S . -B build -DBUILD_TESTING=ON`,
-`cmake --build build` and `ctest --test-dir build --output-on-failure`.
-Translation catalogs include the existing DE/FR/ES/RU/NL languages.
+### Pair your phone
 
-A separate `build/bin/kfritz_mobile_probe --key-file <private-file> --port 10123`
-uses the same receiver and small OSD for a live test without a full-window applet
-preview. This is a development test; it does not update the running Plasma applet.
-At the current work checkpoint, the normal installed KFritz has not yet been
-replaced. Receiver crypto/network/QML tests pass; real caller-name lookup on the
-Moto and installation/reload of the normal applet still require completion.
+1. In KFritz **Settings → Mobile calls**, enable reception, generate a pairing
+   key and save. Reception is disabled by default.
+2. In ScreenRing Phone, enable the **KFritz/desktop** destination and enter your
+   computer's local IP address, port (default **10123**) and the pairing key.
+3. Grant Android phone-state permission, start forwarding and send a **test**.
+   Keep the computer running and reachable. If a firewall blocks the connection,
+   allow the configured TCP port only on your trusted home-network zone.
 
+Caller number and local contact name are optional and encrypted in transit.
+Without those permissions, KFritz receives a generic incoming-phone alert.
+Mobile calls use their own source in recent history, normal notifications/OSD
+and configured blocklists when a number is available. Repeated updates do not
+create duplicate history entries. This feature cannot answer or hang up calls.
 
-## Session checkpoint – 18 November 2026
+The pairing key is private; do not paste it into public issues or screenshots.
+Name, number and phone label are encrypted; device/call identifiers and event
+kind remain visible in protocol headers. The receiver uses bounded connections,
+fresh challenges and message-bound authenticated acknowledgements. Older peers
+replying with bare `OK` are incompatible; update both endpoints together.
 
-Live test completed: the Moto sent encrypted TEST messages independently to TV and
-PC, both acknowledged. Initial PC failures were a firewalld block, then the
-standalone probe used the wrong Qt platform. A LAN-only runtime rule for
-192.168.178.0/24 TCP 10123 and explicit Wayland mode fixed these. User confirmed
-the PC OSD, then confirmed that a real incoming contact name displayed correctly
-on both devices. Do not log or commit the actual contact/name/number.
+FRITZ!Box landline monitoring does **not** require ScreenRing Phone. The phone
+can also pair independently with ScreenRing TV, a separate planned Google Play
+app; KFritz is the desktop receiver, not a required relay for TV.
 
-Desktop deployment is **not completed**. Normal installed KFritz is still the old
-version. Only `kfritz_mobile_probe` uses the new receiver; a reboot does not install
-the branch and will end that probe. The firewalld rule is runtime-only and also
-needs reapplying or a scoped persistent rule for durable operation. Moto/TV 0.4
-are installed; phone has both destinations and optional caller-data permissions.
+See [protocol details](docs/screenring-protocol.md). OpenSSL Crypto is an additional
+build dependency. Development checks:
 
-Next session: install the already built/tested KFritz branch to /usr, preserve
-existing config, enable the existing applet's MobileCalls using the paired key,
-stop the standalone probe and reload Plasma so the new C++ plugin loads. No
-installation or Plasma restart has been executed yet. Staged install is in
-.local/stage (ignored). Use `cmake --install build --component kfritz`; the old
-build/install_manifest.txt is owned by nobody, while the named component has its
-own writable manifest. Private receiver key is .local/mobile-key (0600, ignored).
-Never output that file or existing FRITZ!Box credentials. Phone desktop destination
-currently points to this computer's home-network IP, port 10123, with that key.
-
-Validation before checkpoint: Android builds + 19 JVM tests pass; KFritz builds,
-all 3 CTest targets pass (appstream, protocol/network, QML runtime registration),
-all five existing KFritz translation catalogs complete (84 messages). Static
-qmllint had installed-module/environment warnings, so the built-module runtime
-registration and config/main component check was added and passed. User requested
-commit/push and #sema, then continuation tomorrow. Do not resume deployment tonight.
-
-
-## Latest state: prepared for next login, no Plasma restart
-
-Supersedes the earlier end-of-day note: at the user's later explicit request,
-the 25 reviewed staged KFritz files were installed under /usr by atomic inode
-replacement. Hashes match the stage. The running Plasma process was not stopped
-or restarted (MainPID remained 4254); its loaded old library remains valid.
-
-User explicitly declined a Plasma restart tonight. A one-time, failure-tolerant
-ExecStartPre drop-in is installed at
-~/.config/systemd/user/plasma-plasmashell.service.d/50-kfritz-mobile.conf. On the
-next normal Plasma start, tools/activate_mobile_on_start.py preserves the existing
-applet configuration and enables MobileCalls with the already paired local key.
-It backs up the private config, stops only the standalone development probe if
-still present and writes .local/mobile-activation.done. A completed activation
-will not override later user settings on subsequent logins. Activation dry-run
-passed; the marker remains absent, as intended. A missing script or error cannot
-prevent Plasma starting (ExecStartPre ignores failure). No service restart command
-is present in the new preparation tool.
-
-The LAN-only firewall rule for source 192.168.178.0/24 TCP 10123 is now permanent,
-verified by firewalld. tools/deploy_mobile.py is the no-restart preparation wrapper;
-tools/install_staged_atomic.py performs the administrator-only atomic install.
-Private system backups remain under ignored .local/system-backup-*.
-
-Next session: after the user's reboot/login, verify the activation marker,
-normal plasmashell-owned listener on 10123 and a real incoming phone call. No
-installation should be needed again if those checks pass. The user has ended
-today's session; do not continue implementation or restart Plasma tonight.
-
-
-## Deployment verification – 19 November 2026
-
-The login activation completed, but the installed RPM `kfritz-0.4.1-2.3`
-replaced the development files before this login (installed file change times:
-08:22 CET). Configuration and the activation marker survived, while the installed
-QML and library lacked the mobile receiver. A loaded library path alone does not
-prove its version. Restored the reviewed stage, verified all 25 installed hashes,
-and restarted Plasma with the user's authorization today. The regular plasmashell
-process now listens on TCP 10123 and acknowledged an authenticated local TEST.
-All three CTest targets pass outside the socket-restricted sandbox. The first
-handshake attempts during startup timed out; later challenge and full TEST passed.
-A fresh real incoming call has not yet been tested. Moto USB ADB is unauthorized.
-
-`python3 tools/verify_deployment.py` now checks installed hashes against the stage.
-The login hook checks these even when the activation marker exists; a mismatch is
-reported in the service journal without preventing Plasma from starting. The
-preparation wrapper verifies after installation. RPM updates can still overwrite
-this development build; rerun verification after package updates and restore the
-reviewed build if needed. No automatic administrator reinstall is performed.
-
-
-### Phone delivery after reload – 19 November 2026
-
-After USB authorization and unlocking the Moto, triggered a fresh TEST through
-the phone UI using its stable resource ID. A new `target=desktop event=TEST`
-acknowledgement confirms encrypted delivery to the regular KFritz applet after
-the Plasma reload. Phone forwarding remains a foreground service. Existing
-pairing/settings were preserved. No fresh TV acknowledgement: phone TV status
-reports connection_failed and the configured TV is currently unreachable on
-receiver port 10123 / ADB port 5555. No real incoming call was tested today.
-
-
-Real incoming Moto call on 19 November: fresh desktop RING acknowledgements at
-08:45:00.650 and 08:45:01.673, followed by END at 08:45:02.703 (phone log clock).
-Actual incoming call and end delivery to the regular KFritz receiver after reload
-are confirmed. No CONNECT observed. Visual card/caller-name confirmation for this
-call remains pending; no caller identity or number was captured in this note.
-
-
-### TV reconnected – 19 November 2026
-
-User confirmed the real mobile caller card with name was visible in KFritz.
-After the TV was powered on, ADB reconnected on its known LAN transport. The TV
-RingService was initially absent and was started explicitly in the background,
-without a full-screen activity. Existing phone reception, overlay and targeted
-pause settings remain enabled; no pairing/settings changes. After unlocking the
-Moto, a fresh UI-triggered TEST was acknowledged independently by TV and desktop;
-the TV also logged a fresh authenticated TEST. Both Android foreground services
-are running. TEST does not pause playback. Today's TV card visibility and real
-call/pause remain unconfirmed. TV automatic startup has not been demonstrated.
-
-
-### Real mobile call to both destinations – 19 November 2026
-
-User reports the TV stopped during the next real incoming mobile call. Phone
-logs confirm fresh RING and END acknowledgements from both TV and desktop.
-TV independently logs authenticated RING, overlay and targeted pause request
-for `com.google.android.youtube.tv`, followed by END. Pause is visually confirmed
-by the user; no pause-confirmation callback appeared in the filtered log.
-Phone/TV clocks differ; no cross-device latency is inferred. The user was asked
-to test with the phone locked but did not explicitly confirm lock state.
-Automatic restart/startup and automatic playback resume remain unimplemented.
+```sh
+cmake -S . -B build -DBUILD_TESTING=ON
+cmake --build build --parallel 2
+ctest --test-dir build --output-on-failure
+```

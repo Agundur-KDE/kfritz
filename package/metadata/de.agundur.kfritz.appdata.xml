@@ -30,6 +30,11 @@
         <id>plasma-applet-de.agundur.kfritz</id>
     </provides>
     <releases>
+        <release version="0.5.0" date="2026-11-22">
+            <description>
+                <p>Optional encrypted incoming mobile-call alerts from the separately downloaded ScreenRing Phone Android companion. Includes receiver pairing settings, authenticated acknowledgements, caller details and integration with existing notifications, OSD and blocklists. Direct FRITZ!Box monitoring remains independent.</p>
+            </description>
+        </release>
         <release version="0.4.1" date="2026-11-12">
             <description>
                 <p>Fix compilation with older LayerShellQt versions, including Debian Trixie.</p>
@@ -49,5 +54,8 @@
         <keyword>AVM</keyword>
         <keyword>Phonebook</keyword>
         <keyword>Telephony</keyword>
+        <keyword>ScreenRing</keyword>
+        <keyword>Android</keyword>
+        <keyword>Mobile calls</keyword>
     </keywords>
 </component>

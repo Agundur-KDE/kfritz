@@ -1,3 +1,12 @@
+kfritz (0.5.0-1) unstable; urgency=medium
+
+  * Add optional encrypted ScreenRing Phone reception with per-receiver pairing
+    and authenticated, message-bound delivery acknowledgements.
+  * Integrate mobile caller details with existing notifications, OSD and blocklists.
+  * Link the separately distributed signed Android companion APK and setup guide.
+
+ -- Agundur <info@agundur.de>  Sun, 22 Nov 2026 12:00:00 +0100
+
 kfritz (0.4.1-1) unstable; urgency=medium
 
   * Fix the LayerShellQt compatibility preprocessor check with older versions,

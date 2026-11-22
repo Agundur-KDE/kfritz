@@ -3,7 +3,7 @@
 %endif
 
 Name:           kfritz
-Version:        0.4.1
+Version:        0.5.0
 Release:        1%{?dist}
 Summary:        KDE Plasma 6 callmonitor plasmoid for the AVM FRITZ!Box
 
@@ -85,6 +85,12 @@ fi
 %{_datadir}/locale/*/LC_MESSAGES/plasma_applet_de.agundur.kfritz.mo
 
 %changelog
+* Sun Nov 22 2026 Alec <info@agundur.de> - 0.5.0
+- Receive encrypted incoming mobile-call alerts from ScreenRing Phone
+- Add opt-in LAN receiver, pairing settings and authenticated delivery receipts
+- Preserve direct FRITZ!Box monitoring, caller blocklists and the existing OSD
+- Document the separately downloaded signed Android companion APK
+
 * Thu Nov 12 2026 Alec <info@agundur.de> - 0.4.1
 - Fix compilation with older LayerShellQt releases and strict undefined-macro checks
 
